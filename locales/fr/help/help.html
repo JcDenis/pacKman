@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>pacKman</title>
+</head>
+<body>
+
+<h3>À propos</h3>
+<p>Cette extension permet de créer des paquetages au format zip de plugins et thèmes directement depuis l'interface d'administration de Dotclear.</p>
+<h3>Racine</h3>
+<dl>
+  <dt>Chemin vers le dépôt</dt>
+  <dd>Le chemin sur le serveur ou seront stockés les paquetages générés par ce plugin. Il est recommandé d'utiliser sous répertoire d'un dossier public d'un blog. Ce répertoire doit être accessible en lecture/écriture pour le plugin.</dd>
+</dl>
+
+<h3>Fichiers</h3>
+<dl>
+  <dt>Nom du paquetage exporté</dt>
+  <dd>C'est le nom du paquetage qui sera créé. 
+  Il ne faut pas ajouter l'extension zip  à la fin car elle est automatiquement ajoutée. 
+  Ce nom peut être précédé d'un nom de repertoire mais ce dernier doit exister dans le dépôt. 
+  Les balises suivantes seront automiquement remplacées par les propriétés correspondantes du module&nbsp;: 
+  <ul>
+   <li>%type% : plugin ou thème,</li>
+   <li>%id% : id du module,</li>
+   <li>%version% : version du module,</li>
+   <li>%author% : auteur du module,</li>
+   <li>%time% : le timestamp actuel.</li>
+  </ul>
+  Par exemple:<br />%type%-%id%
+  </dd>
+ 
+  <dt>Nom du second paquetage exporté</dt>
+  <dd>Un deuxième paquetage peut être créé en même temps. Cela peut être pratique pour sauvegarder chaque version.<br />
+  Ce champ suit les mêmes règles que le précédent.<br />
+  Par exemple:<br />old/%type%-%id%-%version%</dd>
+ 
+  <dt>Écraser les paquetages existants</dt>
+  <dd>Si un paquetage de même nom existe déjà dans le répertoire, le paquetage sera alors remplacé par celui fraichement créé.</dd>
+</dl>
+
+<h3>Contenu</h3>
+  <dt>Fichiers supplémentaires à exclure du paquetage</dt>
+  <dd>Simple liste de noms des fichiers à exclure. Le joker * peut être utilisé dans ces noms. Les noms sont séparées par des points-virgules.<br />
+  Par exemple:<br />*.zip;*.tar;*.tar.gz<br />
+  Par défaut les fichiers suivants sont toujours exclus:<br />.;..;__MACOSX;.svn;.hg*;.git*;CVS;.DS_Store;Thumbs.db</dd>
+
+  <dt>Retirer les commentaires des fichiers</dt>
+  <dd>Lors de la création du paquetage les commentaires des fichiers PHP sont retirés à la volée, cela n'affecte pas les fichiers sources.</dd>
+</dl>
+
+<h3>Support</h3>
+<p>Si vous souhaitez plus d'aide ou apporter votre contribution à cette extension, voici quelques liens utiles.</p>
+<ul>
+  <li><a href="http://forum.dotclear.org/viewtopic.php?id=40066">Sujet sur le forum Dotclear</a></li>
+  <li><a href="http://lab.dotclear.org/wiki/plugin/pacKman">Dépôt svn</a></li>
+  <li><a href="https://bitbucket.org/JcDenis/packman">Dépôt hg</a></li>
+  <li><a href="http://jcd.lv/pacKman">Billet dédié sur le blog de l'auteur</a></li>
+</ul>
+
+</body>
+</html>

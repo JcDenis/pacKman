@@ -1,0 +1,182 @@
+# Language: Français
+# Module: pacKman - 2013.10.25
+# Date: 2013-10-26 15:19:23
+# Translated with translater 2013.05.11
+
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: pacKman 2013.10.25\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-10-26T15:19:23+00:00\n"
+"Last-Translator: Jean-Christian Denis\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: _admin.php:28
+#: _admin.php:43
+#: index.php:356
+msgid "Packages repository"
+msgstr "Dépôt de paquetages"
+
+#: _config.php:62
+msgid "Configuration has been successfully updated."
+msgstr "La configuration a été mise à jour avec succés."
+
+#: _config.php:79
+#: inc/lib.packman.php:89
+msgid "Root"
+msgstr "Racine"
+
+#: _config.php:81
+msgid "Path to repository:"
+msgstr "Chemin vers le dépôt :"
+
+#: _config.php:84
+#: _config.php:95
+#: _config.php:100
+#: _config.php:114
+msgid "Preconization: %s"
+msgstr "Préconisation : %s"
+
+#: _config.php:85
+msgid "Blog's public directory"
+msgstr "Répertoire public du blog"
+
+#: _config.php:90
+msgid "Files"
+msgstr "Fichiers"
+
+#: _config.php:92
+msgid "Name of exported package:"
+msgstr "Nom du paquetage exporté :"
+
+#: _config.php:97
+msgid "Name of second exported package:"
+msgstr "Nom du second paquetage exporté :"
+
+#: _config.php:104
+msgid "Overwrite existing package"
+msgstr "Écraser les paquetages existants"
+
+#: _config.php:109
+msgid "Content"
+msgstr "Contenu"
+
+#: _config.php:111
+msgid "Extra files to exclude from package:"
+msgstr "Fichiers supplémentaires à exclure du paquetage :"
+
+#: _config.php:118
+msgid "Remove comments from files"
+msgstr "Retirer les commentaires des fichiers"
+
+#: inc/lib.packman.php:26
+msgid "Cache directory is not writable."
+msgstr "Le répertoire de cache n'est pas accessible en écriture."
+
+#: inc/lib.packman.php:31
+msgid "Path to repository is not writable."
+msgstr "Le chemin vers le dépôt n'est pas accessible en écriture."
+
+#: inc/lib.packman.php:37
+msgid "You must specify the name of package to export."
+msgstr "Vous devez spécifier le nom du paquetage exporté."
+
+#: inc/lib.packman.php:43
+msgid "Path to first export package is not writable."
+msgstr "Le chemin vers le premier paquetage exporté n'est pas accessible en écriture."
+
+#: inc/lib.packman.php:50
+msgid "Path to second export package is not writable."
+msgstr "Le chemin vers le second paquetage exporté n'est pas accessible en écriture."
+
+#: inc/lib.packman.php:77
+msgid "There are no modules."
+msgstr "Il n'y a pas de modules."
+
+#: inc/lib.packman.php:125
+msgid "Pack up selected modules"
+msgstr "Emballer les modules sélectionnés"
+
+#: inc/lib.packman.php:146
+msgid "There are no packages"
+msgstr "Il n'y a pas de paquetages."
+
+#: inc/lib.packman.php:155
+msgid "install"
+msgstr "installer"
+
+#: inc/lib.packman.php:158
+#: inc/lib.packman.php:162
+#: inc/lib.packman.php:166
+msgid "copy to %s directory"
+msgstr "copier dans le répertoire des %s"
+
+#: inc/lib.packman.php:158
+#: inc/lib.packman.php:159
+msgid "plugins"
+msgstr "extensions"
+
+#: inc/lib.packman.php:159
+#: inc/lib.packman.php:163
+#: inc/lib.packman.php:167
+msgid "move to %s directory"
+msgstr "déplacer dans le repertoire des %s"
+
+#: inc/lib.packman.php:162
+#: inc/lib.packman.php:163
+msgid "themes"
+msgstr "thèmes"
+
+#: inc/lib.packman.php:166
+#: inc/lib.packman.php:167
+msgid "repository"
+msgstr "dépôt"
+
+#: inc/lib.packman.php:176
+msgid "File"
+msgstr "Fichier"
+
+#: inc/lib.packman.php:212
+msgid "Selected modules action:"
+msgstr "Action sur les modules sélectionnés :"
+
+#: index.php:145
+msgid "Package successfully created."
+msgstr "Paquetage créé avec succés"
+
+#: index.php:174
+msgid "Package successfully deleted."
+msgstr "Paquetage effacé avec succés"
+
+#: index.php:202
+msgid "Package successfully installed."
+msgstr "Paquetage installé avec succés"
+
+#: index.php:233
+msgid "Package successfully copied."
+msgstr "Paquetage copié avec succés"
+
+#: index.php:265
+msgid "Package successfully moved."
+msgstr "Paquetage déplacé avec succés"
+
+#: index.php:298
+msgid "pacKman is not well configured."
+msgstr "pacKman n'est pas correctement configuré."
+
+#: index.php:300
+#: index.php:369
+msgid "Configuration"
+msgstr "Configuration"
+
+#: index.php:342
+msgid "Plugins root"
+msgstr "Racine des plugins"
+
+#: index.php:349
+msgid "Themes root"
+msgstr "Racine des themes"
+

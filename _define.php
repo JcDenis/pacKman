@@ -13,25 +13,19 @@
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_RC_PATH')) {
-
-	return null;
+    return null;
 }
 
 $this->registerModule(
-	/* Name */
-	"pacKman",
-	/* Description*/
-	"Manage your Dotclear packages",
-	/* Author */
-	"Jean-Christian Denis",
-	/* Version */
-	'2013.11.15',
-	/* Properies */
-	array(
-		'permissions' => null,
-		'type' => 'plugin',
-		'dc_min' => '2.6',
-		'support' => 'http://jcd.lv/q=pacKman',
-		'details' => 'http://plugins.dotaddict.org/dc2/details/pacKman'
-	)
+    'pacKman',                          // Name
+    'Manage your Dotclear packages',    // Description
+    'Jean-Christian Denis',             // Author
+    '2021.08.17',                       // Version
+    [
+        'permissions'   => null,
+        'type'          => 'plugin',
+        'dc_min'        => '2.19',
+        'support'       => 'https://github.com/JcDenis/pacKman',
+        'details'       => 'https://plugins.dotaddict.org/dc2/details/pacKman'
+    ]
 );

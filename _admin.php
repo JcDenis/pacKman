@@ -13,49 +13,45 @@
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_CONTEXT_ADMIN')) {
-
-	return null;
+    return null;
 }
 
 $core->blog->settings->addNamespace('pacKman');
 
-$core->addBehavior(
-	'adminDashboardFavorites',
-	array('packmanBehaviors', 'adminDashboardFavorites')
-);
+$core->addBehavior('adminDashboardFavorites', ['packmanBehaviors', 'adminDashboardFavorites']);
 
 $_menu['Plugins']->addItem(
-	__('Packages repository'),
-	'plugin.php?p=pacKman#packman-repository-repository',
-	'index.php?pf=pacKman/icon.png',
-	preg_match(
-		'/plugin.php\?p=pacKman(&.*)?$/',
-		$_SERVER['REQUEST_URI']
-	),
-	$core->auth->isSuperAdmin()
+    __('Packages repository'),
+    'plugin.php?p=pacKman#packman-repository-repository',
+    'index.php?pf=pacKman/icon.png',
+    preg_match(
+        '/plugin.php\?p=pacKman(&.*)?$/',
+        $_SERVER['REQUEST_URI']
+    ),
+    $core->auth->isSuperAdmin()
 );
 
 class packmanBehaviors
 {
-	public static function adminDashboardFavorites($core, $favs)
-	{
-		$favs->register('pacKman', array(
-			'title'		=> __('Packages repository'),
-			'url'		=> 'plugin.php?p=pacKman#packman-repository-repository',
-			'small-icon'	=> 'index.php?pf=pacKman/icon.png',
-			'large-icon'	=> 'index.php?pf=pacKman/icon-big.png',
-			'permissions'	=> $core->auth->isSuperAdmin(),
-			'active_cb'	=> array(
-				'packmanBehaviors', 
-				'adminDashboardFavoritesActive'
-			)
-		));
-	}
+    public static function adminDashboardFavorites($core, $favs)
+    {
+        $favs->register('pacKman', [
+            'title'     => __('Packages repository'),
+            'url'       => 'plugin.php?p=pacKman#packman-repository-repository',
+            'small-icon'    => 'index.php?pf=pacKman/icon.png',
+            'large-icon'    => 'index.php?pf=pacKman/icon-big.png',
+            'permissions'   => $core->auth->isSuperAdmin(),
+            'active_cb' => array(
+                'packmanBehaviors', 
+                'adminDashboardFavoritesActive'
+            )
+        ]);
+    }
 
-	public static function adminDashboardFavoritesActive($request, $params)
-	{
-		return $request == 'plugin.php' 
-			&& isset($params['p']) 
-			&& $params['p'] == 'pacKman';
-	}
+    public static function adminDashboardFavoritesActive($request, $params)
+    {
+        return $request == 'plugin.php' 
+            && isset($params['p']) 
+            && $params['p'] == 'pacKman';
+    }
 }

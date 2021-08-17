@@ -27,3 +27,9 @@ go to ''configure plugin'', fill in form.
 
 Once it's done you can manage your packages from menu 
 ''Packages repository'' on sidebar or you can add dashboard icon.
+
+## MORE
+
+ * License : GNU GPL v2
+ * Source & contribution : [GitHub Page](https://github.com/JcDenis/pacKman)
+ * Packages & details:  [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/pacKman)

@@ -13,10 +13,9 @@
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_RC_PATH')) {
-
-	return null;
+    return null;
 }
 
-if (!empty($_REQUEST['module']) && $_REQUEST['module'] == 'pacKman') {
-	$__resources['help']['core_plugins_conf'] = dirname(__FILE__).'/help/help.html';
+if (!isset($__resources['help']['pacKman'])) {
+    $__resources['help']['pacKman'] = dirname(__FILE__) . '/help/help.html';
 }

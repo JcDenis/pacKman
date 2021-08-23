@@ -65,8 +65,7 @@ if (!empty($_POST['save'])) {
                 $list->getRedir())
             );
         }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
         $core->error->add($e->getMessage());
     }
 }

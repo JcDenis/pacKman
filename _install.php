@@ -18,52 +18,52 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 # -- Module specs --
 
-$dc_min = '2.6';
+$dc_min = '2.18';
 $mod_id = 'pacKman';
-$mod_conf = array(
-    array(
+$mod_conf = [
+    [
         'packman_menu_plugins',
         'Add link to pacKman in plugins page',
         false,
         'boolean'
-    ),
-    array(
+    ],
+    [
         'packman_pack_nocomment',
         'Remove comments from files',
         false,
         'boolean'
-    ),
-    array(
+    ],
+    [
         'packman_pack_overwrite',
         'Overwrite existing package',
         false,
         'boolean'
-    ),
-    array(
+    ],
+    [
         'packman_pack_filename',
         'Name of package',
         '%type%-%id%',
         'string'
-    ),
-    array(
+    ],
+    [
         'packman_secondpack_filename',
         'Name of second package',
         '%type%-%id%-%version%',
         'string'
-    ),
-    array(
+    ],
+    [
         'packman_pack_repository',
         'Path to package repository',
         '',
         'string'
-    ),
-    array(
+    ],
+    [
         'packman_pack_excludefiles',
         'Extra files to exclude from package',
         '*.zip,*.tar,*.tar.gz,.directory,.hg',
         'string'
-    )
-);
+    ]
+];
 
 # -- Nothing to change below --
 
@@ -73,9 +73,7 @@ try {
     if (version_compare(
         $core->getVersion($mod_id),
         $core->plugins->moduleInfo($mod_id, 'version'),
-        '>='
-    )) {
-
+        '>=')) {
         return null;
     }
 

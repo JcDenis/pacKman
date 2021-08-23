@@ -36,15 +36,15 @@ class packmanBehaviors
     public static function adminDashboardFavorites($core, $favs)
     {
         $favs->register('pacKman', [
-            'title'     => __('Packages repository'),
-            'url'       => 'plugin.php?p=pacKman#packman-repository-repository',
-            'small-icon'    => 'index.php?pf=pacKman/icon.png',
-            'large-icon'    => 'index.php?pf=pacKman/icon-big.png',
-            'permissions'   => $core->auth->isSuperAdmin(),
-            'active_cb' => array(
+            'title' => __('Packages repository'),
+            'url' => 'plugin.php?p=pacKman#packman-repository-repository',
+            'small-icon' => 'index.php?pf=pacKman/icon.png',
+            'large-icon' => 'index.php?pf=pacKman/icon-big.png',
+            'permissions' => $core->auth->isSuperAdmin(),
+            'active_cb' => [
                 'packmanBehaviors', 
                 'adminDashboardFavoritesActive'
-            )
+            ]
         ]);
     }
 

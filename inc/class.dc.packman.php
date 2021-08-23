@@ -13,225 +13,216 @@
 # -- END LICENSE BLOCK ------------------------------------
 
 if (!defined('DC_CONTEXT_ADMIN')) {
-
-	return null;
+    return null;
 }
 
 class dcPackman
 {
-	public static $exclude = array(
-		'.',
-		'..',
-		'__MACOSX',
-		'.svn',
-		'.hg*',
-		'.git*',
-		'CVS',
-		'.DS_Store',
-		'Thumbs.db'
-	);
+    public static $exclude = [
+        '.',
+        '..',
+        '__MACOSX',
+        '.svn',
+        '.hg*',
+        '.git*',
+        'CVS',
+        '.DS_Store',
+        'Thumbs.db'
+    ];
 
-	public static function quote_exclude($exclude)
-	{
-		foreach($exclude AS $k => $v) {
-			$exclude[$k] = '#(^|/)('.str_replace(
-				array('.', '*'),
-				array('\.', '.*?'),
-				trim($v)
-			).')(/|$)#';
-		}
+    public static function quote_exclude($exclude)
+    {
+        foreach($exclude AS $k => $v) {
+            $exclude[$k] = '#(^|/)(' . str_replace(
+                ['.', '*'],
+                ['\.', '.*?'],
+                trim($v)
+            ) . ')(/|$)#';
+        }
 
-		return $exclude;
-	}
+        return $exclude;
+    }
 
-	public static function getPackages($core, $root)
-	{
-		$res = array();
+    public static function getPackages($core, $root)
+    {
+        $res = array();
 
-		$cache = self::getCache().'/';
-		if (!is_dir($root) || !is_readable($root)) {
+        $cache = self::getCache() . '/';
+        if (!is_dir($root) || !is_readable($root)) {
+            return $res;
+        }
 
-			return $res;
-		}
+        $files = files::scanDir($root);
+        $zip_files = array();
+        foreach($files AS $file) {
+            if (!preg_match('#(^|/)(.*?)\.zip(/|$)#', $file)) {
+                continue;
+            }
+            $zip_files[] = $file;
+        }
 
-		$files = files::scanDir($root);
-		$zip_files = array();
-		foreach($files AS $file) {
-			if (!preg_match('#(^|/)(.*?)\.zip(/|$)#', $file)) {
-				continue;
-			}
-			$zip_files[] = $file;
-		}
+        if (empty($zip_files)) {
+            return $res;
+        }
 
-		if (empty($zip_files)) {
+        $modules = new dcModules($core);
+        $themes = new dcThemes($core);
 
-			return $res;
-		}
+        $i = 0;
+        foreach($zip_files AS $zip_file) {
+            $zip = new fileUnzip($root . '/' . $zip_file);
 
-		$modules = new dcModules($core);
-		$themes = new dcThemes($core);
+            $zip_root_dir = $zip->getRootDir();
 
-		$i = 0;
-		foreach($zip_files AS $zip_file) {
-			$zip = new fileUnzip($root.'/'.$zip_file);
+            if ($zip_root_dir != false) {
+                $define = $zip_root_dir . '/_define.php';
+                $has_define = $zip->hasFile($define);
+            } else {
+                $define = '_define.php';
+                $has_define = $zip->hasFile($define);
+            }
 
-			$zip_root_dir = $zip->getRootDir();
+            if (!$has_define) {
+                continue;
+            }
 
-			if ($zip_root_dir != false) {
-				$define = $zip_root_dir.'/_define.php';
-				$has_define = $zip->hasFile($define);
-			}
-			else {
-				$define = '_define.php';
-				$has_define = $zip->hasFile($define);
-			}
+            $zip->unzip($define, $cache . '/_define.php');
 
-			if (!$has_define) {
-				continue;
-			}
+            $modules->requireDefine($cache, $zip_root_dir);
+            if ($modules->moduleExists($zip_root_dir)) {
+                $res[$i] = $modules->getModules($zip_root_dir);
+            } else {
+                $themes->requireDefine($cache, $zip_root_dir);
+                $res[$i] = $themes->getModules($zip_root_dir);
+            }
+            $res[$i]['id'] = $zip_root_dir;
+            $res[$i]['root'] = $root . '/' . $zip_file;
 
-			$zip->unzip($define,$cache.'/_define.php');
+            unlink($cache . '_define.php');
+            $i++;
+        }
 
-			$modules->requireDefine($cache, $zip_root_dir);
-			if ($modules->moduleExists($zip_root_dir)) {
-				$res[$i] = $modules->getModules($zip_root_dir);
-			} else {
-				$themes->requireDefine($cache, $zip_root_dir);
-				$res[$i] = $themes->getModules($zip_root_dir);
-			}
-			$res[$i]['id'] = $zip_root_dir;
-			$res[$i]['root'] = $root.'/'.$zip_file;
+        return $res;
+    }
 
-			unlink($cache.'_define.php');
-			$i++;
-		}
+    public static function pack($info, $root, $files, $overwrite = false, $exclude = [], $nocomment = false)
+    {
+        if (!($info = self::getInfo($info))
+         || !($root = self::getRoot($root))) {
+            return false;
+        }
 
-		return $res;
-	}
+        $exclude = self::getExclude($exclude);
 
-	public static function pack($info, $root, $files, $overwrite=false, $exclude=array(), $nocomment=false)
-	{
-		if (!($info = self::getInfo($info))
-		 || !($root = self::getRoot($root))
-		) {
+        foreach($files as $file) {
+            if (!($file = self::getFile($file, $info))
+             || !($dest = self::getOverwrite($overwrite, $root, $file))) {
+                continue;
+            }
 
-			return false;
-		}
+            @set_time_limit(300);
+            $fp = fopen($dest, 'wb');
 
-		$exclude = self::getExclude($exclude);
+            $zip = $nocomment ? 
+                new packmanFileZip($fp) : new fileZip($fp);
 
-		foreach($files as $file) {
-			if (!($file = self::getFile($file, $info))
-			 || !($dest = self::getOverwrite($overwrite, $root, $file))
-			) {
-				continue;
-			}
+            foreach($exclude AS $e) {
+                $zip->addExclusion($e);
+            }
+            $zip->addDirectory(
+                path::real($info['root']),
+                $info['id'],
+                true
+            );
 
-			@set_time_limit(300);
-			$fp = fopen($dest,'wb');
+            $zip->write();
+            $zip->close();
+            unset($zip);
+        }
 
-			$zip = $nocomment ? 
-				new packmanFileZip($fp) : new fileZip($fp);
+        return true;
+    }
 
-			foreach($exclude AS $e) {
-				$zip->addExclusion($e);
-			}
-			$zip->addDirectory(
-				path::real($info['root']),
-				$info['id'],
-				true
-			);
+    private static function getRoot($root)
+    {
+        $root = path::real($root);
+        if (!is_dir($root) || !is_writable($root)) {
+            throw new Exception('Directory is not writable');
+        }
 
-			$zip->write();
-			$zip->close();
-			unset($zip);
-		}
+        return $root;
+    }
 
-		return true;
-	}
+    private static function getInfo($info)
+    {
+        if (!isset($info['root']) 
+         || !isset($info['id']) 
+         || !is_dir($info['root'])) {
+            throw new Exception('Failed to get module info');
+        }
 
-	private static function getRoot($root)
-	{
-		$root = path::real($root);
-		if (!is_dir($root) || !is_writable($root)) {
-			throw new Exception('Directory is not writable');
-		}
+        return $info;
+    }
 
-		return $root;
-	}
+    private static function getExclude($exclude)
+    {
+        $exclude = array_merge(self::$exclude, $exclude);
 
-	private static function getInfo($info)
-	{
-		if (!isset($info['root']) 
-		 || !isset($info['id']) 
-		 || !is_dir($info['root']))
-		{
-			throw new Exception('Failed to get module info');
-		}
+        return self::quote_exclude($exclude);
+    }
 
-		return $info;
-	}
+    private static function getFile($file, $info)
+    {
+        if (empty($file) || empty($info)) {
+            return null;
+        }
 
-	private static function getExclude($exclude)
-	{
-		$exclude = array_merge(self::$exclude, $exclude);
+        $file = str_replace(
+            [
+                '%type%',
+                '%id%',
+                '%version%',
+                '%author%',
+                '%time%'
+            ],
+            [
+                $info['type'],
+                $info['id'],
+                $info['version'],
+                $info['author'],
+                time()
+            ],
+            $file
+        );
+        $parts = explode('/', $file);
+        foreach($parts as $i => $part) {
+            $parts[$i] = files::tidyFileName($part);
+        }
+        return implode('/', $parts) . '.zip';
+    }
 
-		return self::quote_exclude($exclude);
-	}
+    private static function getOverwrite($overwrite, $root, $file)
+    {
+        $path = $root . '/' . $file;
+        if (file_exists($path) && !$overwrite) {
+            // don't break loop
+            //throw new Exception('File already exists');
+            return null;
+        }
 
-	private static function getFile($file, $info)
-	{
-		if (empty($file) || empty($info)) {
+        return $path;
+    }
 
-			return null;
-		}
+    private static function getCache()
+    {
+        $c = DC_TPL_CACHE . '/packman';
+        if (!file_exists($c)) {
+            @mkdir($c);
+        }
+        if (!is_writable($c)) {
+            throw new Exception('Failed to get temporary directory');
+        }
 
-		$file = str_replace(
-			array(
-				'%type%',
-				'%id%',
-				'%version%',
-				'%author%',
-				'%time%'
-			),
-			array(
-				$info['type'],
-				$info['id'],
-				$info['version'],
-				$info['author'],
-				time()
-			),
-			$file
-		);
-		$parts = explode('/', $file);
-		foreach($parts as $i => $part) {
-			$parts[$i] = files::tidyFileName($part);
-		}
-		return implode('/', $parts).'.zip';
-	}
-
-	private static function getOverwrite($overwrite, $root, $file)
-	{
-		$path = $root.'/'.$file;
-		if (file_exists($path) && !$overwrite) {
-			// don't break loop
-			//throw new Exception('File already exists');
-			return null;
-		}
-
-		return $path;
-	}
-
-	private static function getCache()
-	{
-		$c = DC_TPL_CACHE.'/packman';
-		if (!file_exists($c)) {
-			@mkdir($c);
-		}
-		if (!is_writable($c)) {
-			throw new Exception('Failed to get temporary directory');
-		}
-
-		return $c;
-	}
+        return $c;
+    }
 }

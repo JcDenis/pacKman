@@ -1,3 +1,8 @@
+pacKman 2021.08.22
+ * fix PSR2 coding style
+ * update license
+ * fix help
+
 pacKman 2021.08.17
  * move to Franck style
 

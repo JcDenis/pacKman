@@ -21,8 +21,7 @@ dcPage::checkSuper();
 # Queries
 $p_url = 'plugin.php?p=pacKman';
 $action = isset($_POST['action']) ? $_POST['action'] : '';
-$type = isset($_POST['type']) && in_array($_POST['type'],
-    array('plugins', 'themes', 'repository')) ? $_POST['type'] : '';
+$type = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository']) ? $_POST['type'] : '';
 
 # Settings
 $core->blog->settings->addNamespace('pacKman');
@@ -66,14 +65,12 @@ try
     # Download
     if (isset($_REQUEST['package']) && empty($type)) {
 
-        $modules = array();
+        $modules = [];
         if ($type == 'plugins') {
             $modules = dcPackman::getPackages($core, $plugins_path);
-        }
-        elseif ($type == 'themes') {
+        } elseif ($type == 'themes') {
             $modules = dcPackman::getPackages($core, $themes_path);
-        }
-        else {
+        } else {
             $modules = array_merge(
                 dcPackman::getPackages($core, dirname($repo_path . '/' . $s->packman_pack_filename)),
                 dcPackman::getPackages($core, dirname($repo_path . '/' . $s->packman_secondpack_filename))
@@ -83,8 +80,7 @@ try
         foreach($modules as $f) {
 
             if (preg_match('/' . preg_quote($_REQUEST['package']) . '$/', $f['root'])
-             && is_file($f['root']) && is_readable($f['root'])
-            ) {
+             && is_file($f['root']) && is_readable($f['root'])) {
 
                 # --BEHAVIOR-- packmanBeforeDownloadPackage
                 $core->callBehavior('packmanBeforeDownloadPackage', $f, $type);
@@ -105,13 +101,11 @@ try
         header('Content-Type: text/plain');
         http::head(404, 'Not Found');
         exit;
-    }
-    elseif (!empty($action) && !$is_editable) {
+    } elseif (!empty($action) && !$is_editable) {
         throw new Exception('No selected modules');
-    }
 
     # Pack
-    elseif ($action == 'packup') {
+    } elseif ($action == 'packup') {
 
         foreach ($_POST['modules'] as $root => $id) {
 
@@ -124,10 +118,10 @@ try
             $module['type'] = $type == 'themes' ? 'theme' : 'plugin';
 
             $root = $s->packman_pack_repository;
-            $files = array(
+            $files = [
                 $s->packman_pack_filename,
                 $s->packman_secondpack_filename
-            );
+            ];
             $nocomment = $s->packman_pack_nocomment;
             $overwrite = $s->packman_pack_overwrite;
             $exclude = explode(',', $s->packman_pack_excludefiles);
@@ -148,10 +142,9 @@ try
         http::redirect(empty($_POST['redir']) ? 
             $p_url . '#packman-' . $type : $_POST['redir']
         );
-    }
 
     # Delete
-    elseif ($action == 'delete') {
+    } elseif ($action == 'delete') {
 
         foreach ($_POST['modules'] as $root => $id) {
             if (!file_exists($root) || !files::isDeletable($root))  {
@@ -167,10 +160,9 @@ try
         http::redirect(
             $p_url . '#packman-repository-' . $type
         );
-    }
 
     # Install
-    elseif ($action == 'install') {
+    } elseif ($action == 'install') {
 
         foreach ($_POST['modules'] as $root => $id) {
 
@@ -195,18 +187,15 @@ try
         http::redirect(
             $p_url . '#packman-repository-' . $type
         );
-    }
 
     # Copy
-    elseif (strpos($action, 'copy_to_') !== false) {
+    } elseif (strpos($action, 'copy_to_') !== false) {
 
         if ($action == 'copy_to_plugins') {
             $dest = $plugins_path;
-        }
-        elseif ($action == 'copy_to_themes') {
+        } elseif ($action == 'copy_to_themes') {
             $dest = $themes_path;
-        }
-        elseif ($action == 'copy_to_repository') {
+        } elseif ($action == 'copy_to_repository') {
             $dest = $repo_path;
         }
 
@@ -223,18 +212,15 @@ try
         http::redirect(
             $p_url . '#packman-repository-' . $type
         );
-    }
 
     # Move
-    elseif (strpos($action, 'move_to_') !== false) {
+    } elseif (strpos($action, 'move_to_') !== false) {
 
         if ($action == 'move_to_plugins') {
             $dest = $plugins_path;
-        }
-        elseif ($action == 'move_to_themes') {
+        } elseif ($action == 'move_to_themes') {
             $dest = $themes_path;
-        }
-        elseif ($action == 'move_to_repository') {
+        } elseif ($action == 'move_to_repository') {
             $dest = $repo_path;
         }
 
@@ -253,8 +239,7 @@ try
             $p_url . '#packman-repository-' . $type
         );
     }
-}
-catch(Exception $e) {
+} catch(Exception $e) {
     $core->error->add($e->getMessage());
 }
 
@@ -270,12 +255,10 @@ $core->callBehavior('packmanAdminHeader', $core);
 echo 
 '</head><body>' .
 
-dcPage::breadcrumb(
-    array(
+dcPage::breadcrumb([
         __('Plugins') => '',
         __('pacKman') => ''
-    )
-).
+]).
 dcPage::notices();
 
 if ($core->error->flag()) {
@@ -284,9 +267,8 @@ if ($core->error->flag()) {
     '<a href="plugins.php?module=pacKman&amp;conf=1&amp;redir=' .
     urlencode('plugin.php?p=pacKman') . '">' . __('Configuration') . '</a>' .
     '</p>';
-}
-else {
 
+} else {
     $repo_path_modules = array_merge(
         dcPackman::getPackages(
             $core,

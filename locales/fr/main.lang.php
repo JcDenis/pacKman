@@ -133,4 +133,3 @@ $GLOBALS['__l10n']['Plugins root'] = 'Racine des plugins';
 
 #index.php:316
 $GLOBALS['__l10n']['Themes root'] = 'Racine des themes';
-

@@ -23,6 +23,7 @@ $core->blog->settings->addNamespace('pacKman');
 $s = $core->blog->settings->pacKman;
 
 $packman_pack_nocomment = $s->packman_pack_nocomment;
+$packman_pack_fixnewline = $s->packman_pack_fixnewline;
 $packman_pack_overwrite = $s->packman_pack_overwrite;
 $packman_pack_filename = $s->packman_pack_filename;
 $packman_secondpack_filename = $s->packman_secondpack_filename;
@@ -34,6 +35,7 @@ if (!empty($_POST['save'])) {
 
     try {
         $packman_pack_nocomment = !empty($_POST['packman_pack_nocomment']);
+        $packman_pack_fixnewline = !empty($_POST['packman_pack_fixnewline']);
         $packman_pack_overwrite = !empty($_POST['packman_pack_overwrite']);
         $packman_pack_filename = $_POST['packman_pack_filename'];
         $packman_secondpack_filename = $_POST['packman_secondpack_filename'];
@@ -50,6 +52,7 @@ if (!empty($_POST['save'])) {
         if ($check) {
 
             $s->put('packman_pack_nocomment', $packman_pack_nocomment);
+            $s->put('packman_pack_fixnewline', $packman_pack_fixnewline);
             $s->put('packman_pack_overwrite', $packman_pack_overwrite);
             $s->put('packman_pack_filename', $packman_pack_filename);
             $s->put('packman_secondpack_filename', $packman_secondpack_filename);
@@ -112,5 +115,9 @@ form::field('packman_pack_excludefiles', 65, 255, $packman_pack_excludefiles, 'm
 <p><label class="classic" for="packman_pack_nocomment">' .
 form::checkbox('packman_pack_nocomment', 1, $packman_pack_nocomment) . ' ' .
 __('Remove comments from files') . '</label></p>
+
+<p><label class="classic" for="packman_pack_fixnewline">' .
+form::checkbox('packman_pack_fixnewline', 1, $packman_pack_fixnewline) . ' ' .
+__('Fix newline style from files content') . '</label></p>
 
 </div>';

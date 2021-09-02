@@ -16,15 +16,16 @@ if (!defined('DC_RC_PATH')) {
 }
 
 $this->registerModule(
-    'pacKman',                          // Name
-    'Manage your Dotclear packages',    // Description
-    'Jean-Christian Denis',             // Author
-    '2021.08.22.1',                       // Version
+    'pacKman',
+    'Manage your Dotclear packages',
+    'Jean-Christian Denis',
+    '2021.08.22.1',
     [
+        'requires' => [['core', '2.19']],
         'permissions'   => null,
         'type'          => 'plugin',
-        'dc_min'        => '2.19',
         'support'       => 'https://github.com/JcDenis/pacKman',
-        'details'       => 'https://plugins.dotaddict.org/dc2/details/pacKman'
+        'details'       => 'https://plugins.dotaddict.org/dc2/details/pacKman',
+        'repository' => 'https://raw.githubusercontent.com/JcDenis/pacKman/master/dcstore.xml'
     ]
 );

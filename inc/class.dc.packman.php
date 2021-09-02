@@ -104,7 +104,7 @@ class dcPackman
         return $res;
     }
 
-    public static function pack($info, $root, $files, $overwrite = false, $exclude = [], $nocomment = false)
+    public static function pack($info, $root, $files, $overwrite = false, $exclude = [], $nocomment = false, $fixnewline = false)
     {
         if (!($info = self::getInfo($info))
          || !($root = self::getRoot($root))) {
@@ -122,8 +122,13 @@ class dcPackman
             @set_time_limit(300);
             $fp = fopen($dest, 'wb');
 
-            $zip = $nocomment ? 
-                new packmanFileZip($fp) : new fileZip($fp);
+            if ($nocomment) {
+                packmanFileZip::$remove_comment = true;
+            }
+            if ($fixnewline) {
+                packmanFileZip::$fix_newline = true;
+            }
+            $zip = new packmanFileZip($fp);
 
             foreach($exclude AS $e) {
                 $zip->addExclusion($e);

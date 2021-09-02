@@ -122,13 +122,14 @@ try
                 $s->packman_secondpack_filename
             ];
             $nocomment = $s->packman_pack_nocomment;
+            $fixnewline = $s->packman_pack_fixnewline;
             $overwrite = $s->packman_pack_overwrite;
             $exclude = explode(',', $s->packman_pack_excludefiles);
 
             # --BEHAVIOR-- packmanBeforeCreatePackage
             $core->callBehavior('packmanBeforeCreatePackage', $core, $module);
 
-            dcPackman::pack($module, $root, $files, $overwrite, $exclude, $nocomment);
+            dcPackman::pack($module, $root, $files, $overwrite, $exclude, $nocomment, $fixnewline);
 
             # --BEHAVIOR-- packmanAfterCreatePackage
             $core->callBehavior('packmanAfterCreatePackage', $core, $module);

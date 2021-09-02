@@ -1,22 +1,23 @@
 # Language: Français
-# Module: pacKman - 2013.10.25
-# Date: 2013-10-26 15:19:23
-# Translated with translater 2013.05.11
+# Module: pacKman - 2021.08.22
+# Date: 2021-08-28 21:50:52
+# Translated with translater 2021.08.18
 
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: pacKman 2013.10.25\n"
+"Project-Id-Version: pacKman 2021.08.22\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-10-26T15:19:23+00:00\n"
+"PO-Revision-Date: 2021-08-28T21:50:52+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: _admin.php:28
-#: _admin.php:43
-#: index.php:356
+#: _admin.php:23
+#: _admin.php:38
+#: index.php:323
 msgid "Packages repository"
 msgstr "Dépôt de paquetages"
 
@@ -24,159 +25,162 @@ msgstr "Dépôt de paquetages"
 msgid "Configuration has been successfully updated."
 msgstr "La configuration a été mise à jour avec succés."
 
-#: _config.php:79
-#: inc/lib.packman.php:89
+#: _config.php:77
+#: inc/lib.packman.php:87
 msgid "Root"
 msgstr "Racine"
 
-#: _config.php:81
+#: _config.php:79
 msgid "Path to repository:"
 msgstr "Chemin vers le dépôt :"
 
-#: _config.php:84
-#: _config.php:95
-#: _config.php:100
-#: _config.php:114
+#: _config.php:82
+#: _config.php:93
+#: _config.php:98
+#: _config.php:112
 msgid "Preconization: %s"
 msgstr "Préconisation : %s"
 
-#: _config.php:85
+#: _config.php:83
 msgid "Blog's public directory"
 msgstr "Répertoire public du blog"
 
-#: _config.php:90
+#: _config.php:88
 msgid "Files"
 msgstr "Fichiers"
 
-#: _config.php:92
+#: _config.php:90
 msgid "Name of exported package:"
 msgstr "Nom du paquetage exporté :"
 
-#: _config.php:97
+#: _config.php:95
 msgid "Name of second exported package:"
 msgstr "Nom du second paquetage exporté :"
 
-#: _config.php:104
+#: _config.php:102
 msgid "Overwrite existing package"
 msgstr "Écraser les paquetages existants"
 
-#: _config.php:109
+#: _config.php:107
 msgid "Content"
 msgstr "Contenu"
 
-#: _config.php:111
+#: _config.php:109
 msgid "Extra files to exclude from package:"
 msgstr "Fichiers supplémentaires à exclure du paquetage :"
 
-#: _config.php:118
+#: _config.php:116
 msgid "Remove comments from files"
 msgstr "Retirer les commentaires des fichiers"
 
-#: inc/lib.packman.php:26
+#: _config.php:120
+msgid "Fix newline style from files content"
+msgstr "Corriger les retour chariot du contenu des fichiers"
+
+#: inc/lib.packman.php:24
 msgid "Cache directory is not writable."
 msgstr "Le répertoire de cache n'est pas accessible en écriture."
 
-#: inc/lib.packman.php:31
+#: inc/lib.packman.php:29
 msgid "Path to repository is not writable."
 msgstr "Le chemin vers le dépôt n'est pas accessible en écriture."
 
-#: inc/lib.packman.php:37
+#: inc/lib.packman.php:35
 msgid "You must specify the name of package to export."
 msgstr "Vous devez spécifier le nom du paquetage exporté."
 
-#: inc/lib.packman.php:43
+#: inc/lib.packman.php:41
 msgid "Path to first export package is not writable."
 msgstr "Le chemin vers le premier paquetage exporté n'est pas accessible en écriture."
 
-#: inc/lib.packman.php:50
+#: inc/lib.packman.php:48
 msgid "Path to second export package is not writable."
 msgstr "Le chemin vers le second paquetage exporté n'est pas accessible en écriture."
 
-#: inc/lib.packman.php:77
+#: inc/lib.packman.php:75
 msgid "There are no modules."
 msgstr "Il n'y a pas de modules."
 
-#: inc/lib.packman.php:125
+#: inc/lib.packman.php:123
 msgid "Pack up selected modules"
 msgstr "Emballer les modules sélectionnés"
 
-#: inc/lib.packman.php:146
+#: inc/lib.packman.php:143
 msgid "There are no packages"
 msgstr "Il n'y a pas de paquetages."
 
-#: inc/lib.packman.php:155
+#: inc/lib.packman.php:152
 msgid "install"
 msgstr "installer"
 
-#: inc/lib.packman.php:158
-#: inc/lib.packman.php:162
-#: inc/lib.packman.php:166
+#: inc/lib.packman.php:155
+#: inc/lib.packman.php:159
+#: inc/lib.packman.php:163
 msgid "copy to %s directory"
 msgstr "copier dans le répertoire des %s"
 
-#: inc/lib.packman.php:158
-#: inc/lib.packman.php:159
+#: inc/lib.packman.php:155
+#: inc/lib.packman.php:156
 msgid "plugins"
 msgstr "extensions"
 
-#: inc/lib.packman.php:159
-#: inc/lib.packman.php:163
-#: inc/lib.packman.php:167
+#: inc/lib.packman.php:156
+#: inc/lib.packman.php:160
+#: inc/lib.packman.php:164
 msgid "move to %s directory"
 msgstr "déplacer dans le repertoire des %s"
 
-#: inc/lib.packman.php:162
-#: inc/lib.packman.php:163
+#: inc/lib.packman.php:159
+#: inc/lib.packman.php:160
 msgid "themes"
 msgstr "thèmes"
 
-#: inc/lib.packman.php:166
-#: inc/lib.packman.php:167
+#: inc/lib.packman.php:163
+#: inc/lib.packman.php:164
 msgid "repository"
 msgstr "dépôt"
 
-#: inc/lib.packman.php:176
+#: inc/lib.packman.php:173
 msgid "File"
 msgstr "Fichier"
 
-#: inc/lib.packman.php:212
+#: inc/lib.packman.php:210
 msgid "Selected modules action:"
 msgstr "Action sur les modules sélectionnés :"
 
-#: index.php:145
+#: index.php:140
 msgid "Package successfully created."
 msgstr "Paquetage créé avec succés"
 
-#: index.php:174
+#: index.php:158
 msgid "Package successfully deleted."
 msgstr "Paquetage effacé avec succés"
 
-#: index.php:202
+#: index.php:185
 msgid "Package successfully installed."
 msgstr "Paquetage installé avec succés"
 
-#: index.php:233
+#: index.php:210
 msgid "Package successfully copied."
 msgstr "Paquetage copié avec succés"
 
-#: index.php:265
+#: index.php:236
 msgid "Package successfully moved."
 msgstr "Paquetage déplacé avec succés"
 
-#: index.php:298
+#: index.php:266
 msgid "pacKman is not well configured."
 msgstr "pacKman n'est pas correctement configuré."
 
-#: index.php:300
-#: index.php:369
+#: index.php:268
 msgid "Configuration"
 msgstr "Configuration"
 
-#: index.php:342
+#: index.php:309
 msgid "Plugins root"
 msgstr "Racine des plugins"
 
-#: index.php:349
+#: index.php:316
 msgid "Themes root"
 msgstr "Racine des themes"
 

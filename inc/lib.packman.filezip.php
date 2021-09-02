@@ -13,6 +13,9 @@
 
 class packmanFileZip extends fileZip
 {
+    public static $remove_comment = false;
+    public static $fix_newline = false;
+
     protected function writeFile($name, $file, $size, $mtime)
     {
         if (!isset($this->entries[$name])) {
@@ -26,8 +29,11 @@ class packmanFileZip extends fileZip
 
         //cleanup file contents
         // at this time only php files
-        if (substr($file,-4) == '.php') {
+        if (self::$remove_comment && substr($file,-4) == '.php') {
             $content = self::removePHPComment($content);
+        }
+        if (self::$fix_newline && substr($file,-4) == '.php') {
+            $content = self::fixNewline($content);
         }
 
         $unc_len = strlen($content);
@@ -114,5 +120,10 @@ class packmanFileZip extends fileZip
             }
         }
         return $newStr;
+    }
+
+    protected static function fixNewline($content)
+    {
+        return str_replace("\r\n", "\n", $content);
     }
 }

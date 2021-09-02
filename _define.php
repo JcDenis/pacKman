@@ -19,7 +19,7 @@ $this->registerModule(
     'pacKman',                          // Name
     'Manage your Dotclear packages',    // Description
     'Jean-Christian Denis',             // Author
-    '2021.08.22',                       // Version
+    '2021.08.22.1',                       // Version
     [
         'permissions'   => null,
         'type'          => 'plugin',

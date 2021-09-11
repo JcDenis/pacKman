@@ -1,5 +1,11 @@
 # README
 
+[![Release version](https://img.shields.io/github/v/release/JcDenis/pacKman)](https://github.com/JcDenis/pacKman/releases)
+[![Release date](https://img.shields.io/github/release-date/JcDenis/pacKman)](https://github.com/JcDenis/pacKman/releases)
+[![Issue tracking](https://img.shields.io/github/issues/JcDenis/pacKman)](https://github.com/JcDenis/pacKman/issues)
+[![Dotclear version](https://img.shields.io/badge/dotclear-v2.19-blue.svg)](https://fr.dotclear.org/download)
+[![License](https://img.shields.io/badge/license-GPL%20v2-blue.svg)](https://github.com/JcDenis/pacKman/blob/master/LICENSE)
+
 ## WHAT IS PACKMAN ?
 
 pacKman is a plugin for the open-source 

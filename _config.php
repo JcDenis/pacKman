@@ -91,12 +91,12 @@ form::field('packman_pack_repository', 65, 255, $packman_pack_repository, 'maxim
 <p><label for="packman_pack_filename">' . __('Name of exported package:') . ' ' .
 form::field('packman_pack_filename', 65, 255, $packman_pack_filename, 'maximal') .
 '</label></p>
-<p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%-%version%') . '</p>
+<p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%') . '</p>
 
 <p><label for="packman_secondpack_filename">' . __('Name of second exported package:') . ' ' .
 form::field('packman_secondpack_filename', 65, 255, $packman_secondpack_filename, 'maximal') .
 '</label></p>
-<p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%') . '</p>
+<p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%-%version%') . '</p>
 
 <p><label class="classic" for="packman_pack_overwrite">'.
 form::checkbox('packman_pack_overwrite', 1, $packman_pack_overwrite) . ' ' .

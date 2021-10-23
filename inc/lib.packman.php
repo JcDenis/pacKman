@@ -58,22 +58,16 @@ class libPackman
 
     public static function modules($core, $modules, $type, $title)
     {
+        if (empty($modules) && !is_array($modules)) {
+            return null;
+        }
+
         $type = $type == 'themes' ? 'themes' : 'plugins';
 
         echo 
         '<div class="multi-part" ' .
         'id="packman-' . $type . '" title="' . $title . '">' .
-        '<h3>' . $title . '</h3>';
-
-        if (empty($modules) && !is_array($modules)) {
-            echo 
-            '<p><strong>' . __('There are no modules.') . '</strong></p>' .
-            '<div>';
-
-            return null;
-        }
-
-        echo
+        '<h3>' . $title . '</h3>' .
         '<form action="plugin.php" method="post">' .
         '<table class="clear"><tr>' .
         '<th class="nowrap">' . __('Id') . '</th>' .
@@ -124,6 +118,9 @@ class libPackman
 
     public static function repository($core, $modules, $type, $title)
     {
+        if (empty($modules) || !is_array($modules)) {
+            return null;
+        }
         if (!in_array($type, ['plugins', 'themes', 'repository'])) {
             return null;
         }
@@ -132,14 +129,6 @@ class libPackman
         '<div class="multi-part" ' .
         'id="packman-repository-' . $type . '" title="' . $title . '">' .
         '<h3>' . $title . '</h3>';
-
-        if (empty($modules) || !is_array($modules)) {
-            echo 
-            '<p><strong>' . __('There are no packages') . '</strong></p>' .
-            '</div>';
-
-            return null;
-        }
 
         $combo_action = [__('delete') => 'delete'];
 

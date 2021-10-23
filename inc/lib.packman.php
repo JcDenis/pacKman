@@ -222,11 +222,12 @@ class libPackman
 
     protected static function sort($modules)
     {
-        $sorter = [];
-        foreach($modules as $id => $module) {
-            $sorter[$id] = $id;
+        $key = $ver = [];
+        foreach($modules as $i => $module) {
+            $key[$i] = $module['id'] ?? $i;
+            $ver[$i] = $module['version'];
         }
-        array_multisort($sorter, SORT_ASC, $modules);
+        array_multisort($key, SORT_ASC, $ver, SORT_ASC, $modules);
 
         return $modules;
     }

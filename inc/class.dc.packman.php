@@ -64,9 +64,6 @@ class dcPackman
             return $res;
         }
 
-        $modules = new dcModules($core);
-        $themes = new dcThemes($core);
-
         $i = 0;
         foreach($zip_files AS $zip_file) {
             $zip = new fileUnzip($root . '/' . $zip_file);
@@ -87,10 +84,12 @@ class dcPackman
 
             $zip->unzip($define, $cache . '/_define.php');
 
+            $modules = new dcModules($core);
             $modules->requireDefine($cache, $zip_root_dir);
             if ($modules->moduleExists($zip_root_dir)) {
                 $res[$i] = $modules->getModules($zip_root_dir);
             } else {
+                $themes = new dcThemes($core);
                 $themes->requireDefine($cache, $zip_root_dir);
                 $res[$i] = $themes->getModules($zip_root_dir);
             }

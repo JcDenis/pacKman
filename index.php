@@ -18,7 +18,6 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 dcPage::checkSuper();
 
 # Queries
-$p_url = 'plugin.php?p=pacKman';
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $type = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository']) ? $_POST['type'] : '';
 
@@ -59,11 +58,9 @@ $is_configured = libPackman::is_configured(
 );
 
 # Actions
-try
-{
+try {
     # Download
     if (isset($_REQUEST['package']) && empty($type)) {
-
         $modules = [];
         if ($type == 'plugins') {
             $modules = dcPackman::getPackages($core, $plugins_path);
@@ -77,9 +74,9 @@ try
         }
 
         foreach($modules as $f) {
-
             if (preg_match('/' . preg_quote($_REQUEST['package']) . '$/', $f['root'])
-             && is_file($f['root']) && is_readable($f['root'])) {
+                && is_file($f['root']) && is_readable($f['root'])
+            ) {
 
                 # --BEHAVIOR-- packmanBeforeDownloadPackage
                 $core->callBehavior('packmanBeforeDownloadPackage', $f, $type);
@@ -100,14 +97,13 @@ try
         header('Content-Type: text/plain');
         http::head(404, 'Not Found');
         exit;
+
     } elseif (!empty($action) && !$is_editable) {
         throw new Exception('No selected modules');
 
     # Pack
     } elseif ($action == 'packup') {
-
         foreach ($_POST['modules'] as $root => $id) {
-
             if (!${$type}->moduleExists($id)) {
                 throw new Exception('No such module');
             }
@@ -139,13 +135,15 @@ try
         dcPage::addSuccessNotice(
             __('Package successfully created.')
         );
-        http::redirect(empty($_POST['redir']) ? 
-            $p_url . '#packman-' . $type : $_POST['redir']
-        );
+
+        if (!empty($_POST['redir'])) {
+            http::redirect($_POST['redir']);
+        } else {
+            $core->adminurl->redirect('admin.plugin.pacKman', [], '#packman-' . $type);
+        }
 
     # Delete
     } elseif ($action == 'delete') {
-
         foreach ($_POST['modules'] as $root => $id) {
             if (!file_exists($root) || !files::isDeletable($root))  {
                 throw new Exception('Undeletable file: ' . $root);
@@ -157,13 +155,15 @@ try
         dcPage::addSuccessNotice(
             __('Package successfully deleted.')
         );
-        http::redirect(
-            $p_url . '#packman-repository-' . $type
-        );
+
+        if (!empty($_POST['redir'])) {
+            http::redirect($_POST['redir']);
+        } else {
+            $core->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
+        }
 
     # Install
     } elseif ($action == 'install') {
-
         foreach ($_POST['modules'] as $root => $id) {
 
             # --BEHAVIOR-- packmanBeforeInstallPackage
@@ -184,13 +184,15 @@ try
         dcPage::addSuccessNotice(
             __('Package successfully installed.')
         );
-        http::redirect(
-            $p_url . '#packman-repository-' . $type
-        );
+
+        if (!empty($_POST['redir'])) {
+            http::redirect($_POST['redir']);
+        } else {
+            $core->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
+        }
 
     # Copy
     } elseif (strpos($action, 'copy_to_') !== false) {
-
         if ($action == 'copy_to_plugins') {
             $dest = $plugins_path;
         } elseif ($action == 'copy_to_themes') {
@@ -209,13 +211,15 @@ try
         dcPage::addSuccessNotice(
             __('Package successfully copied.')
         );
-        http::redirect(
-            $p_url . '#packman-repository-' . $type
-        );
+
+        if (!empty($_POST['redir'])) {
+            http::redirect($_POST['redir']);
+        } else {
+            $core->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
+        }
 
     # Move
     } elseif (strpos($action, 'move_to_') !== false) {
-
         if ($action == 'move_to_plugins') {
             $dest = $plugins_path;
         } elseif ($action == 'move_to_themes') {
@@ -235,9 +239,12 @@ try
         dcPage::addSuccessNotice(
             __('Package successfully moved.')
         );
-        http::redirect(
-            $p_url . '#packman-repository-' . $type
-        );
+
+        if (!empty($_POST['redir'])) {
+            http::redirect($_POST['redir']);
+        } else {
+            $core->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
+        }
     }
 } catch(Exception $e) {
     $core->error->add($e->getMessage());
@@ -247,7 +254,7 @@ try
 echo 
 '<html><head><title>' . __('pacKman') . '</title>' .
 dcPage::jsPageTabs() .
-dcPage::jsLoad('index.php?pf=pacKman/js/packman.js');
+dcPage::jsLoad(dcPage::getPF('pacKman/js/packman.js'));
 
 # --BEHAVIOR-- packmanAdminHeader
 $core->callBehavior('packmanAdminHeader', $core);

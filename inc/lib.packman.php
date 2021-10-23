@@ -42,8 +42,7 @@ class libPackman
             );
         }
 
-        if (!empty($file_b) 
-         && !is_writable(dirname($repo . '/' . $file_b))) {
+        if (!empty($file_b) && !is_writable(dirname($repo . '/' . $file_b))) {
             $core->error->add(
                 __('Path to second export package is not writable.')
             );
@@ -54,11 +53,7 @@ class libPackman
 
     public static function is_writable($path, $file)
     {
-        return !(
-            empty($path) || 
-            empty($file) || 
-            !is_writable(dirname($path . '/' . $file))
-        );
+        return !(empty($path) || empty($file) || !is_writable(dirname($path . '/' . $file)));
     }
 
     public static function modules($core, $modules, $type, $title)
@@ -175,7 +170,6 @@ class libPackman
 
         $dup = [];
         foreach(self::sort($modules) AS $module) {
-
             if (isset($dup[$module['root']])) {
                 continue;
             }

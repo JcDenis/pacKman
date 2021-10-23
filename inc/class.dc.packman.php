@@ -44,7 +44,7 @@ class dcPackman
 
     public static function getPackages($core, $root)
     {
-        $res = array();
+        $res = [];
 
         $cache = self::getCache() . '/';
         if (!is_dir($root) || !is_readable($root)) {
@@ -52,8 +52,8 @@ class dcPackman
         }
 
         $files = files::scanDir($root);
-        $zip_files = array();
-        foreach($files AS $file) {
+        $zip_files = [];
+        foreach($files as $file) {
             if (!preg_match('#(^|/)(.*?)\.zip(/|$)#', $file)) {
                 continue;
             }
@@ -65,7 +65,7 @@ class dcPackman
         }
 
         $i = 0;
-        foreach($zip_files AS $zip_file) {
+        foreach($zip_files as $zip_file) {
             $zip = new fileUnzip($root . '/' . $zip_file);
 
             $zip_root_dir = $zip->getRootDir();
@@ -106,7 +106,8 @@ class dcPackman
     public static function pack($info, $root, $files, $overwrite = false, $exclude = [], $nocomment = false, $fixnewline = false)
     {
         if (!($info = self::getInfo($info))
-         || !($root = self::getRoot($root))) {
+            || !($root = self::getRoot($root))
+        ) {
             return false;
         }
 
@@ -114,7 +115,8 @@ class dcPackman
 
         foreach($files as $file) {
             if (!($file = self::getFile($file, $info))
-             || !($dest = self::getOverwrite($overwrite, $root, $file))) {
+                || !($dest = self::getOverwrite($overwrite, $root, $file))
+            ) {
                 continue;
             }
 
@@ -159,8 +161,9 @@ class dcPackman
     private static function getInfo($info)
     {
         if (!isset($info['root']) 
-         || !isset($info['id']) 
-         || !is_dir($info['root'])) {
+            || !isset($info['id']) 
+            || !is_dir($info['root'])
+        ) {
             throw new Exception('Failed to get module info');
         }
 

@@ -1,8 +1,9 @@
-2021.08.22.1 - dev
+2021.10.28
 - add option to convert newline from files content on the fly
 - clean up again...
 - fix wrong version on repository
 - fix modules sort
+- hide empty tabs
 
 2021.08.22
 - fix PSR2 coding style

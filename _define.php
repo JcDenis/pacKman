@@ -19,13 +19,13 @@ $this->registerModule(
     'pacKman',
     'Manage your Dotclear packages',
     'Jean-Christian Denis',
-    '2021.09.10.1',
+    '2021.10.28',
     [
         'requires' => [['core', '2.19']],
         'permissions'   => null,
         'type'          => 'plugin',
         'support'       => 'https://github.com/JcDenis/pacKman',
         'details'       => 'https://plugins.dotaddict.org/dc2/details/pacKman',
-        'repository' => 'https://raw.githubusercontent.com/JcDenis/pacKman/master/dcstore.xml'
+        'repository'    => 'https://raw.githubusercontent.com/JcDenis/pacKman/master/dcstore.xml'
     ]
 );

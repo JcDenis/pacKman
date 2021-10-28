@@ -20,7 +20,7 @@ themes and plugins from Dotclear administration pages.
  pacKman requires: 
 
   * Super administrator permissions
-  * Dotclear 2.6 
+  * Dotclear 2.19 
   * A writable cache directory 
   * A writable directory to put paquetages.
 
@@ -35,8 +35,15 @@ go to ''configure plugin'', fill in form.
 Once it's done you can manage your packages from menu 
 ''Packages repository'' on sidebar or you can add dashboard icon.
 
-## MORE
+## LINKS
 
- * License : GNU GPL v2
+ * License : [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)
  * Source & contribution : [GitHub Page](https://github.com/JcDenis/pacKman)
  * Packages & details:  [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/pacKman)
+ * Discuss and help : [Dotclear Forum](https://forum.dotclear.org/viewtopic.php?id=40066)
+
+## CONTRIBUTORS
+
+ * Jean-Christian Denis
+
+ You are welcome to contribute to this code.

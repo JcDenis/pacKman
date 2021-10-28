@@ -32,7 +32,6 @@ $packman_pack_excludefiles = $s->packman_pack_excludefiles;
 
 # -- Set settings --
 if (!empty($_POST['save'])) {
-
     try {
         $packman_pack_nocomment = !empty($_POST['packman_pack_nocomment']);
         $packman_pack_fixnewline = !empty($_POST['packman_pack_fixnewline']);
@@ -50,7 +49,6 @@ if (!empty($_POST['save'])) {
         );
 
         if ($check) {
-
             $s->put('packman_pack_nocomment', $packman_pack_nocomment);
             $s->put('packman_pack_fixnewline', $packman_pack_fixnewline);
             $s->put('packman_pack_overwrite', $packman_pack_overwrite);

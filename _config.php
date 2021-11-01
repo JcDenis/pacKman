@@ -1,45 +1,44 @@
 <?php
 /**
  * @brief pacKman, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 if (!defined('DC_CONTEXT_MODULE')) {
     return null;
 }
 
-$redir = empty($_REQUEST['redir']) ? 
+$redir = empty($_REQUEST['redir']) ?
     $list->getURL() . '#plugins' : $_REQUEST['redir'];
 
 # -- Get settings --
 $core->blog->settings->addNamespace('pacKman');
 $s = $core->blog->settings->pacKman;
 
-$packman_pack_nocomment = $s->packman_pack_nocomment;
-$packman_pack_fixnewline = $s->packman_pack_fixnewline;
-$packman_pack_overwrite = $s->packman_pack_overwrite;
-$packman_pack_filename = $s->packman_pack_filename;
+$packman_pack_nocomment      = $s->packman_pack_nocomment;
+$packman_pack_fixnewline     = $s->packman_pack_fixnewline;
+$packman_pack_overwrite      = $s->packman_pack_overwrite;
+$packman_pack_filename       = $s->packman_pack_filename;
 $packman_secondpack_filename = $s->packman_secondpack_filename;
-$packman_pack_repository = $s->packman_pack_repository;
-$packman_pack_excludefiles = $s->packman_pack_excludefiles;
+$packman_pack_repository     = $s->packman_pack_repository;
+$packman_pack_excludefiles   = $s->packman_pack_excludefiles;
 
 # -- Set settings --
 if (!empty($_POST['save'])) {
     try {
-        $packman_pack_nocomment = !empty($_POST['packman_pack_nocomment']);
-        $packman_pack_fixnewline = !empty($_POST['packman_pack_fixnewline']);
-        $packman_pack_overwrite = !empty($_POST['packman_pack_overwrite']);
-        $packman_pack_filename = $_POST['packman_pack_filename'];
+        $packman_pack_nocomment      = !empty($_POST['packman_pack_nocomment']);
+        $packman_pack_fixnewline     = !empty($_POST['packman_pack_fixnewline']);
+        $packman_pack_overwrite      = !empty($_POST['packman_pack_overwrite']);
+        $packman_pack_filename       = $_POST['packman_pack_filename'];
         $packman_secondpack_filename = $_POST['packman_secondpack_filename'];
-        $packman_pack_repository = path::real($_POST['packman_pack_repository'], false);
-        $packman_pack_excludefiles = $_POST['packman_pack_excludefiles'];
+        $packman_pack_repository     = path::real($_POST['packman_pack_repository'], false);
+        $packman_pack_excludefiles   = $_POST['packman_pack_excludefiles'];
 
         $check = libPackman::is_configured(
             $core,
@@ -78,7 +77,9 @@ echo '
 <p><label for="packman_pack_repository">' . __('Path to repository:') . ' ' .
 form::field('packman_pack_repository', 65, 255, $packman_pack_repository, 'maximal') .
 '</label></p>' .
-'<p class="form-note">' . sprintf(__('Preconization: %s'), $core->blog->public_path ?
+'<p class="form-note">' . sprintf(
+    __('Preconization: %s'),
+    $core->blog->public_path ?
     $core->blog->public_path : __("Blog's public directory")
 ) . '</p>
 </div>
@@ -96,7 +97,7 @@ form::field('packman_secondpack_filename', 65, 255, $packman_secondpack_filename
 '</label></p>
 <p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%-%version%') . '</p>
 
-<p><label class="classic" for="packman_pack_overwrite">'.
+<p><label class="classic" for="packman_pack_overwrite">' .
 form::checkbox('packman_pack_overwrite', 1, $packman_pack_overwrite) . ' ' .
 __('Overwrite existing package') . '</label></p>
 

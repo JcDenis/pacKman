@@ -1,16 +1,15 @@
 <?php
 /**
  * @brief pacKman, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
@@ -64,7 +63,7 @@ class libPackman
 
         $type = $type == 'themes' ? 'themes' : 'plugins';
 
-        echo 
+        echo
         '<div class="multi-part" ' .
         'id="packman-' . $type . '" title="' . $title . '">' .
         '<h3>' . $title . '</h3>' .
@@ -76,7 +75,7 @@ class libPackman
         '<th class="nowrap">' . __('Root') . '</th>' .
         '</tr>';
 
-        foreach (self::sort($modules) as $id => $module) {  
+        foreach (self::sort($modules) as $id => $module) {
             echo
             '<tr class="line">' .
             '<td class="nowrap"><label class="classic">' .
@@ -99,7 +98,8 @@ class libPackman
         '</table>' .
         '<p class="checkboxes-helpers"></p>' .
         '<p>' .
-        (!empty($_REQUEST['redir']) ?
+        (
+            !empty($_REQUEST['redir']) ?
             form::hidden(
                 ['redir'],
                 html::escapeHTML($_REQUEST['redir'])
@@ -109,7 +109,7 @@ class libPackman
         form::hidden(['type'], $type) .
         form::hidden(['action'], 'packup') .
         '<input type="submit" name="packup" value="' .
-         __('Pack up selected modules') .'" />' .
+         __('Pack up selected modules') . '" />' .
         $core->formNonce() . '</p>' .
         '</form>' .
 
@@ -125,7 +125,7 @@ class libPackman
             return null;
         }
 
-        echo 
+        echo
         '<div class="multi-part" ' .
         'id="packman-repository-' . $type . '" title="' . $title . '">' .
         '<h3>' . $title . '</h3>';
@@ -148,7 +148,7 @@ class libPackman
             $combo_action[sprintf(__('move to %s directory'), __('repository'))] = 'move_to_repository';
         }
 
-        echo 
+        echo
         '<form action="plugin.php" method="post">' .
         '<table class="clear"><tr>' .
         '<th class="nowrap">' . __('Id') . '</th>' .
@@ -158,7 +158,7 @@ class libPackman
         '</tr>';
 
         $dup = [];
-        foreach(self::sort($modules) AS $module) {
+        foreach (self::sort($modules) as $module) {
             if (isset($dup[$module['root']])) {
                 continue;
             }
@@ -179,8 +179,8 @@ class libPackman
                 __(html::escapeHTML($module['name'])) .
             '</td>' .
             '<td class="nowrap">' .
-                '<a class="packman-download" href="plugin.php?p=pacKman&amp;package=' . 
-                basename($module['root']) . '&amp;repo=' . $type . '" title="'. __('Download') . '">' .
+                '<a class="packman-download" href="plugin.php?p=pacKman&amp;package=' .
+                basename($module['root']) . '&amp;repo=' . $type . '" title="' . __('Download') . '">' .
                 html::escapeHTML(basename($module['root'])) . '</a>' .
             '</td>' .
             '</tr>';
@@ -206,7 +206,7 @@ class libPackman
     protected static function sort($modules)
     {
         $key = $ver = [];
-        foreach($modules as $i => $module) {
+        foreach ($modules as $i => $module) {
             $key[$i] = $module['id'] ?? $i;
             $ver[$i] = $module['version'];
         }

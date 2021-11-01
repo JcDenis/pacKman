@@ -1,20 +1,19 @@
 <?php
 /**
  * @brief pacKman, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 class packmanFileZip extends fileZip
 {
     public static $remove_comment = false;
-    public static $fix_newline = false;
+    public static $fix_newline    = false;
 
     protected function writeFile($name, $file, $size, $mtime)
     {
@@ -29,17 +28,17 @@ class packmanFileZip extends fileZip
 
         //cleanup file contents
         // at this time only php files
-        if (self::$remove_comment && substr($file,-4) == '.php') {
+        if (self::$remove_comment && substr($file, -4) == '.php') {
             $content = self::removePHPComment($content);
         }
-        if (self::$fix_newline && substr($file,-4) == '.php') {
+        if (self::$fix_newline && substr($file, -4) == '.php') {
             $content = self::fixNewline($content);
         }
 
         $unc_len = strlen($content);
-        $crc = crc32($content);
-        $zdata = gzdeflate($content);
-        $c_len = strlen($zdata);
+        $crc     = crc32($content);
+        $zdata   = gzdeflate($content);
+        $c_len   = strlen($zdata);
 
         unset($content);
 
@@ -47,8 +46,7 @@ class packmanFileZip extends fileZip
         $mtime = $this->makeTime($mtime);
 
         # Data descriptor
-        $data_desc =
-        "\x50\x4b\x03\x04" .
+        $data_desc = "\x50\x4b\x03\x04" .
         "\x14\x00" .         # ver needed to extract
         "\x00\x00" .         # gen purpose bit flag
         "\x08\x00" .         # compression method
@@ -58,7 +56,7 @@ class packmanFileZip extends fileZip
         pack('V', $c_len) .       # compressed filesize
         pack('V', $unc_len) .     # uncompressed filesize
         pack('v', strlen($name)) .    # length of filename
-        pack('v' ,0) .            # extra field length
+        pack('v', 0) .            # extra field length
         $name .              # end of "local file header" segment
         $zdata .             # "file data" segment
         pack('V', $crc) .     # crc32
@@ -71,8 +69,7 @@ class packmanFileZip extends fileZip
         $new_offset = $this->old_offset + strlen($data_desc);
 
         # Add to central directory record
-        $cdrec =
-        "\x50\x4b\x01\x02" .
+        $cdrec = "\x50\x4b\x01\x02" .
         "\x00\x00" .             # version made by
         "\x14\x00" .             # version needed to extract
         "\x00\x00" .             # gen purpose bit flag
@@ -88,7 +85,7 @@ class packmanFileZip extends fileZip
         pack('v', 0) .                # disk number start
         pack('v', 0) .                # internal file attributes
         pack('V', 32) .               # external file attributes - 'archive' bit set
-        pack('V', $this->old_offset).    # relative offset of local header
+        pack('V', $this->old_offset) .    # relative offset of local header
         $name;
 
         $this->old_offset = $new_offset;
@@ -119,6 +116,7 @@ class packmanFileZip extends fileZip
                 $newStr .= $token;
             }
         }
+
         return $newStr;
     }
 

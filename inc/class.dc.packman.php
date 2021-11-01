@@ -1,16 +1,15 @@
 <?php
 /**
  * @brief pacKman, a plugin for Dotclear 2
- * 
+ *
  * @package Dotclear
  * @subpackage Plugin
- * 
+ *
  * @author Jean-Christian Denis
- * 
+ *
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
 if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
@@ -31,7 +30,7 @@ class dcPackman
 
     public static function quote_exclude($exclude)
     {
-        foreach($exclude AS $k => $v) {
+        foreach ($exclude as $k => $v) {
             $exclude[$k] = '#(^|/)(' . str_replace(
                 ['.', '*'],
                 ['\.', '.*?'],
@@ -51,9 +50,9 @@ class dcPackman
             return $res;
         }
 
-        $files = files::scanDir($root);
+        $files     = files::scanDir($root);
         $zip_files = [];
-        foreach($files as $file) {
+        foreach ($files as $file) {
             if (!preg_match('#(^|/)(.*?)\.zip(/|$)#', $file)) {
                 continue;
             }
@@ -65,16 +64,16 @@ class dcPackman
         }
 
         $i = 0;
-        foreach($zip_files as $zip_file) {
+        foreach ($zip_files as $zip_file) {
             $zip = new fileUnzip($root . '/' . $zip_file);
 
             $zip_root_dir = $zip->getRootDir();
 
             if ($zip_root_dir != false) {
-                $define = $zip_root_dir . '/_define.php';
+                $define     = $zip_root_dir . '/_define.php';
                 $has_define = $zip->hasFile($define);
             } else {
-                $define = '_define.php';
+                $define     = '_define.php';
                 $has_define = $zip->hasFile($define);
             }
 
@@ -93,7 +92,7 @@ class dcPackman
                 $themes->requireDefine($cache, $zip_root_dir);
                 $res[$i] = $themes->getModules($zip_root_dir);
             }
-            $res[$i]['id'] = $zip_root_dir;
+            $res[$i]['id']   = $zip_root_dir;
             $res[$i]['root'] = $root . '/' . $zip_file;
 
             unlink($cache . '_define.php');
@@ -113,7 +112,7 @@ class dcPackman
 
         $exclude = self::getExclude($exclude);
 
-        foreach($files as $file) {
+        foreach ($files as $file) {
             if (!($file = self::getFile($file, $info))
                 || !($dest = self::getOverwrite($overwrite, $root, $file))
             ) {
@@ -131,7 +130,7 @@ class dcPackman
             }
             $zip = new packmanFileZip($fp);
 
-            foreach($exclude AS $e) {
+            foreach ($exclude as $e) {
                 $zip->addExclusion($e);
             }
             $zip->addDirectory(
@@ -160,8 +159,8 @@ class dcPackman
 
     private static function getInfo($info)
     {
-        if (!isset($info['root']) 
-            || !isset($info['id']) 
+        if (!isset($info['root'])
+            || !isset($info['id'])
             || !is_dir($info['root'])
         ) {
             throw new Exception('Failed to get module info');
@@ -201,9 +200,10 @@ class dcPackman
             $file
         );
         $parts = explode('/', $file);
-        foreach($parts as $i => $part) {
+        foreach ($parts as $i => $part) {
             $parts[$i] = files::tidyFileName($part);
         }
+
         return implode('/', $parts) . '.zip';
     }
 

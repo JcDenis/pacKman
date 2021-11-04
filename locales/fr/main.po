@@ -23,7 +23,7 @@ msgstr "Dépôt de paquetages"
 
 #: _config.php:62
 msgid "Configuration has been successfully updated."
-msgstr "La configuration a été mise à jour avec succés."
+msgstr "La configuration a été mise à jour avec succès."
 
 #: _config.php:77
 #: inc/lib.packman.php:87
@@ -150,23 +150,23 @@ msgstr "Action sur les modules sélectionnés :"
 
 #: index.php:140
 msgid "Package successfully created."
-msgstr "Paquetage créé avec succés"
+msgstr "Paquetage créé avec succès."
 
 #: index.php:158
 msgid "Package successfully deleted."
-msgstr "Paquetage effacé avec succés"
+msgstr "Paquetage effacé avec succès."
 
 #: index.php:185
 msgid "Package successfully installed."
-msgstr "Paquetage installé avec succés"
+msgstr "Paquetage installé avec succès."
 
 #: index.php:210
 msgid "Package successfully copied."
-msgstr "Paquetage copié avec succés"
+msgstr "Paquetage copié avec succès."
 
 #: index.php:236
 msgid "Package successfully moved."
-msgstr "Paquetage déplacé avec succés"
+msgstr "Paquetage déplacé avec succès."
 
 #: index.php:266
 msgid "pacKman is not well configured."
@@ -182,5 +182,5 @@ msgstr "Racine des plugins"
 
 #: index.php:316
 msgid "Themes root"
-msgstr "Racine des themes"
+msgstr "Racine des thèmes"
 

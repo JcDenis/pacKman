@@ -18,7 +18,7 @@ $this->registerModule(
     'pacKman',
     'Manage your Dotclear packages',
     'Jean-Christian Denis',
-    '2021.10.28',
+    '2021.11.06',
     [
         'requires'    => [['core', '2.19']],
         'permissions' => null,

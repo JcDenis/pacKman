@@ -1,3 +1,7 @@
+2021.11.06
+- update translation (thanks @Philippe-dev)
+- update to PSR12
+
 2021.10.28
 - add option to convert newline from files content on the fly
 - clean up again...

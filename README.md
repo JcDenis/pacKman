@@ -45,5 +45,6 @@ Once it's done you can manage your packages from menu
 ## CONTRIBUTORS
 
  * Jean-Christian Denis
+ * Philippe aka Dissitou
 
  You are welcome to contribute to this code.

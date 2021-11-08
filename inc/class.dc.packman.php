@@ -16,6 +16,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 class dcPackman
 {
+    /** @var array Excluded files */
     public static $exclude = [
         '.',
         '..',
@@ -28,7 +29,7 @@ class dcPackman
         'Thumbs.db'
     ];
 
-    public static function quote_exclude($exclude)
+    public static function quote_exclude(array $exclude): array
     {
         foreach ($exclude as $k => $v) {
             $exclude[$k] = '#(^|/)(' . str_replace(
@@ -41,7 +42,7 @@ class dcPackman
         return $exclude;
     }
 
-    public static function getPackages($core, $root)
+    public static function getPackages(dcCore $core, string $root): array
     {
         $res = [];
 
@@ -102,7 +103,7 @@ class dcPackman
         return $res;
     }
 
-    public static function pack($info, $root, $files, $overwrite = false, $exclude = [], $nocomment = false, $fixnewline = false)
+    public static function pack(array $info, string $root, array $files, bool $overwrite = false, array $exclude = [], bool $nocomment = false, bool $fixnewline = false): bool
     {
         if (!($info = self::getInfo($info))
             || !($root = self::getRoot($root))
@@ -147,9 +148,9 @@ class dcPackman
         return true;
     }
 
-    private static function getRoot($root)
+    private static function getRoot(string $root): string
     {
-        $root = path::real($root);
+        $root = (string) path::real($root);
         if (!is_dir($root) || !is_writable($root)) {
             throw new Exception('Directory is not writable');
         }
@@ -157,7 +158,7 @@ class dcPackman
         return $root;
     }
 
-    private static function getInfo($info)
+    private static function getInfo(array $info): array
     {
         if (!isset($info['root'])
             || !isset($info['id'])
@@ -169,14 +170,14 @@ class dcPackman
         return $info;
     }
 
-    private static function getExclude($exclude)
+    private static function getExclude(array $exclude): array
     {
         $exclude = array_merge(self::$exclude, $exclude);
 
         return self::quote_exclude($exclude);
     }
 
-    private static function getFile($file, $info)
+    private static function getFile(string $file, array $info): ?string
     {
         if (empty($file) || empty($info)) {
             return null;
@@ -207,7 +208,7 @@ class dcPackman
         return implode('/', $parts) . '.zip';
     }
 
-    private static function getOverwrite($overwrite, $root, $file)
+    private static function getOverwrite(bool $overwrite, string $root, string$file): ?string
     {
         $path = $root . '/' . $file;
         if (file_exists($path) && !$overwrite) {
@@ -219,7 +220,7 @@ class dcPackman
         return $path;
     }
 
-    private static function getCache()
+    private static function getCache(): string
     {
         $c = DC_TPL_CACHE . '/packman';
         if (!file_exists($c)) {

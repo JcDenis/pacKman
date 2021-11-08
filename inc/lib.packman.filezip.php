@@ -12,9 +12,22 @@
  */
 class packmanFileZip extends fileZip
 {
+    /** @var boolean Remove comments from files content */
     public static $remove_comment = false;
-    public static $fix_newline    = false;
 
+    /** @var boolean Fix newline from files content */
+    public static $fix_newline = false;
+
+    /**
+     * Replace clearbricks fileZip::writeFile
+     *
+     * @param  string $name  Name
+     * @param  string $file  File
+     * @param  int    $size  Size
+     * @param  int    $mtime Mtime
+     *
+     * @return void
+     */
     protected function writeFile($name, $file, $size, $mtime)
     {
         if (!isset($this->entries[$name])) {
@@ -24,7 +37,7 @@ class packmanFileZip extends fileZip
         $size = filesize($file);
         $this->memoryAllocate($size * 3);
 
-        $content = file_get_contents($file);
+        $content = (string) file_get_contents($file);
 
         //cleanup file contents
         // at this time only php files
@@ -37,7 +50,7 @@ class packmanFileZip extends fileZip
 
         $unc_len = strlen($content);
         $crc     = crc32($content);
-        $zdata   = gzdeflate($content);
+        $zdata   = (string) gzdeflate($content);
         $c_len   = strlen($zdata);
 
         unset($content);
@@ -92,7 +105,7 @@ class packmanFileZip extends fileZip
         $this->ctrl_dir[] = $cdrec;
     }
 
-    protected static function removePHPComment($content)
+    protected static function removePHPComment(string $content): string
     {
         $comment = [T_COMMENT];
         if (defined('T_DOC_COMMENT')) {
@@ -120,7 +133,7 @@ class packmanFileZip extends fileZip
         return $newStr;
     }
 
-    protected static function fixNewline($content)
+    protected static function fixNewline(string $content): string
     {
         return str_replace("\r\n", "\n", $content);
     }

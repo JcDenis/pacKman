@@ -35,7 +35,7 @@ $plugins = $core->plugins;
 # Paths
 $ppexp        = explode(PATH_SEPARATOR, DC_PLUGINS_ROOT);
 $pppop        = array_pop($ppexp);
-$plugins_path = path::real($pppop);
+$plugins_path = (string) path::real($pppop);
 $themes_path  = $core->blog->themes_path;
 $repo_path    = $s->packman_pack_repository;
 
@@ -188,12 +188,11 @@ try {
 
         # Copy
     } elseif (strpos($action, 'copy_to_') !== false) {
+        $dest = $repo_path;
         if ($action == 'copy_to_plugins') {
             $dest = $plugins_path;
         } elseif ($action == 'copy_to_themes') {
             $dest = $themes_path;
-        } elseif ($action == 'copy_to_repository') {
-            $dest = $repo_path;
         }
 
         foreach ($_POST['modules'] as $root => $id) {
@@ -215,12 +214,11 @@ try {
 
         # Move
     } elseif (strpos($action, 'move_to_') !== false) {
+        $dest = $repo_path;
         if ($action == 'move_to_plugins') {
             $dest = $plugins_path;
         } elseif ($action == 'move_to_themes') {
             $dest = $themes_path;
-        } elseif ($action == 'move_to_repository') {
-            $dest = $repo_path;
         }
 
         foreach ($_POST['modules'] as $root => $id) {

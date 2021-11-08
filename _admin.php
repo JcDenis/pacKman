@@ -31,7 +31,7 @@ $_menu['Plugins']->addItem(
 
 class packmanBehaviors
 {
-    public static function adminDashboardFavorites($core, $favs)
+    public static function adminDashboardFavorites(dcCore $core, dcFavorites $favs): void
     {
         $favs->register('pacKman', [
             'title'       => __('Packages repository'),
@@ -46,7 +46,7 @@ class packmanBehaviors
         ]);
     }
 
-    public static function adminDashboardFavoritesActive($request, $params)
+    public static function adminDashboardFavoritesActive(string $request, array $params): bool
     {
         return $request == 'plugin.php'
             && isset($params['p'])

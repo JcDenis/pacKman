@@ -16,7 +16,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 class libPackman
 {
-    public static function is_configured($core, $repo, $file_a, $file_b)
+    public static function is_configured(dcCore $core, string $repo, string $file_a, string $file_b): bool
     {
         if (!is_dir(DC_TPL_CACHE) || !is_writable(DC_TPL_CACHE)) {
             $core->error->add(
@@ -50,14 +50,14 @@ class libPackman
         return !$core->error->flag();
     }
 
-    public static function is_writable($path, $file)
+    public static function is_writable(string $path, string $file): bool
     {
         return !(empty($path) || empty($file) || !is_writable(dirname($path . '/' . $file)));
     }
 
-    public static function modules($core, $modules, $type, $title)
+    public static function modules(dcCore $core, array $modules, string $type, string $title): ?bool
     {
-        if (empty($modules) && !is_array($modules)) {
+        if (empty($modules) || !is_array($modules)) {
             return null;
         }
 
@@ -89,7 +89,7 @@ class libPackman
                 __(html::escapeHTML($module['name'])) .
             '</td>' .
             '<td class="nowrap">' .
-                dirname(path::real($module['root'], false)) .
+                dirname((string) path::real($module['root'], false)) .
             '</td>' .
             '</tr>';
         }
@@ -114,9 +114,11 @@ class libPackman
         '</form>' .
 
         '</div>';
+
+        return true;
     }
 
-    public static function repository($core, $modules, $type, $title)
+    public static function repository(dcCore $core, array $modules, string $type, string $title): ?bool
     {
         if (empty($modules) || !is_array($modules)) {
             return null;
@@ -201,9 +203,11 @@ class libPackman
         '</div>' .
         '</form>' .
         '</div>';
+
+        return true;
     }
 
-    protected static function sort($modules)
+    protected static function sort(array $modules): array
     {
         $key = $ver = [];
         foreach ($modules as $i => $module) {

@@ -35,10 +35,10 @@ if (!empty($_POST['save'])) {
         $packman_pack_nocomment      = !empty($_POST['packman_pack_nocomment']);
         $packman_pack_fixnewline     = !empty($_POST['packman_pack_fixnewline']);
         $packman_pack_overwrite      = !empty($_POST['packman_pack_overwrite']);
-        $packman_pack_filename       = $_POST['packman_pack_filename'];
-        $packman_secondpack_filename = $_POST['packman_secondpack_filename'];
-        $packman_pack_repository     = path::real($_POST['packman_pack_repository'], false);
-        $packman_pack_excludefiles   = $_POST['packman_pack_excludefiles'];
+        $packman_pack_filename       = (string) $_POST['packman_pack_filename'];
+        $packman_secondpack_filename = (string) $_POST['packman_secondpack_filename'];
+        $packman_pack_repository     = (string) path::real($_POST['packman_pack_repository'], false);
+        $packman_pack_excludefiles   = (string) $_POST['packman_pack_excludefiles'];
 
         $check = libPackman::is_configured(
             $core,

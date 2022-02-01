@@ -93,11 +93,15 @@ class dcPackman
                 $themes->requireDefine($cache, $zip_root_dir);
                 $res[$i] = $themes->getModules($zip_root_dir);
             }
-            $res[$i]['id']   = $zip_root_dir;
-            $res[$i]['root'] = $root . '/' . $zip_file;
+            if (is_array($res[$i])) {
+                $res[$i] = array_merge($res[$i], [
+                    'id'   => $zip_root_dir,
+                    'root' => $root . '/' . $zip_file
+                ]);
 
-            unlink($cache . '_define.php');
-            $i++;
+                unlink($cache . '_define.php');
+                $i++;
+            }
         }
 
         return $res;

@@ -21,7 +21,7 @@ $core->addBehavior('adminDashboardFavorites', ['packmanBehaviors', 'adminDashboa
 $_menu['Plugins']->addItem(
     __('Packages repository'),
     'plugin.php?p=pacKman#packman-repository-repository',
-    'index.php?pf=pacKman/icon.png',
+    [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
     preg_match(
         '/plugin.php\?p=pacKman(&.*)?$/',
         $_SERVER['REQUEST_URI']
@@ -36,8 +36,8 @@ class packmanBehaviors
         $favs->register('pacKman', [
             'title'       => __('Packages repository'),
             'url'         => 'plugin.php?p=pacKman#packman-repository-repository',
-            'small-icon'  => 'index.php?pf=pacKman/icon.png',
-            'large-icon'  => 'index.php?pf=pacKman/icon-big.png',
+            'small-icon'  => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
+            'large-icon'  => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
             'permissions' => $core->auth->isSuperAdmin(),
             'active_cb'   => [
                 'packmanBehaviors',

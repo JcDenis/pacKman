@@ -1,6 +1,6 @@
 2022.02.01
 - fix module info (id/root) before zip
-- use dc2.21 new svg icon by @franckpaul
+- use dc2.21 new svg icon by @franck-paul
 
 2021.11.06
 - update translation (thanks @Philippe-dev)

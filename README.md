@@ -20,7 +20,7 @@ themes and plugins from Dotclear administration pages.
  pacKman requires: 
 
   * Super administrator permissions
-  * Dotclear 2.19 
+  * Dotclear 2.21 
   * A writable cache directory 
   * A writable directory to put paquetages.
 
@@ -46,5 +46,6 @@ Once it's done you can manage your packages from menu
 
  * Jean-Christian Denis
  * Philippe aka Dissitou
+ * franck-paul
 
  You are welcome to contribute to this code.

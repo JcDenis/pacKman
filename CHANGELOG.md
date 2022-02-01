@@ -1,3 +1,7 @@
+2022.02.01
+- fix module info (id/root) before zip
+- use dc2.21 new svg icon by @franckpaul
+
 2021.11.06
 - update translation (thanks @Philippe-dev)
 - update to PSR12

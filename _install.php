@@ -69,8 +69,8 @@ try {
 
     # Check module version
     if (version_compare(
-        $core->getVersion($mod_id),
-        $core->plugins->moduleInfo($mod_id, 'version'),
+        dcCore::app()->getVersion($mod_id),
+        dcCore::app()->plugins->moduleInfo($mod_id, 'version'),
         '>='
     )) {
         return null;
@@ -87,9 +87,9 @@ try {
     }
 
     # Set module settings
-    $core->blog->settings->addNamespace($mod_id);
+    dcCore::app()->blog->settings->addNamespace($mod_id);
     foreach ($mod_conf as $v) {
-        $core->blog->settings->{$mod_id}->put(
+        dcCore::app()->blog->settings->{$mod_id}->put(
             $v[0],
             $v[2],
             $v[3],
@@ -100,14 +100,14 @@ try {
     }
 
     # Set module version
-    $core->setVersion(
+    dcCore::app()->setVersion(
         $mod_id,
-        $core->plugins->moduleInfo($mod_id, 'version')
+        dcCore::app()->plugins->moduleInfo($mod_id, 'version')
     );
 
     return true;
 } catch (Exception $e) {
-    $core->error->add($e->getMessage());
+    dcCore::app()->error->add($e->getMessage());
 
     return false;
 }

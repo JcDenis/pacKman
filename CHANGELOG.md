@@ -1,3 +1,6 @@
+2022.11.12
+- prepare to DC 2.24
+
 2022.02.01
 - fix module info (id/root) before zip
 - use dc2.21 new svg icon by @franck-paul

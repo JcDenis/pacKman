@@ -14,6 +14,6 @@ if (!defined('DC_RC_PATH')) {
     return null;
 }
 
-if (!isset($__resources['help']['pacKman'])) {
-    $__resources['help']['pacKman'] = dirname(__FILE__) . '/help/help.html';
+if (!isset(dcCore::app()->resources['help']['pacKman'])) {
+    dcCore::app()->resources['help']['pacKman'] = __DIR__ . '/help/help.html';
 }

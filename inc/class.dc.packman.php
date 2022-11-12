@@ -42,7 +42,7 @@ class dcPackman
         return $exclude;
     }
 
-    public static function getPackages(dcCore $core, string $root): array
+    public static function getPackages(string $root): array
     {
         $res = [];
 
@@ -84,12 +84,12 @@ class dcPackman
 
             $zip->unzip($define, $cache . '/_define.php');
 
-            $modules = new dcModules($core);
+            $modules = new dcModules(dcCore::app());
             $modules->requireDefine($cache, $zip_root_dir);
             if ($modules->moduleExists($zip_root_dir)) {
                 $res[$i] = $modules->getModules($zip_root_dir);
             } else {
-                $themes = new dcThemes($core);
+                $themes = new dcThemes(dcCore::app());
                 $themes->requireDefine($cache, $zip_root_dir);
                 $res[$i] = $themes->getModules($zip_root_dir);
             }

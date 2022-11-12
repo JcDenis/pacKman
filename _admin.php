@@ -14,11 +14,11 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-$core->blog->settings->addNamespace('pacKman');
+dcCore::app()->blog->settings->addNamespace('pacKman');
 
-$core->addBehavior('adminDashboardFavorites', ['packmanBehaviors', 'adminDashboardFavorites']);
+dcCore::app()->addBehavior('adminDashboardFavoritesV2', ['packmanBehaviors', 'adminDashboardFavorites']);
 
-$_menu['Plugins']->addItem(
+dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
     __('Packages repository'),
     'plugin.php?p=pacKman#packman-repository-repository',
     [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
@@ -26,19 +26,19 @@ $_menu['Plugins']->addItem(
         '/plugin.php\?p=pacKman(&.*)?$/',
         $_SERVER['REQUEST_URI']
     ),
-    $core->auth->isSuperAdmin()
+    dcCore::app()->auth->isSuperAdmin()
 );
 
 class packmanBehaviors
 {
-    public static function adminDashboardFavorites(dcCore $core, dcFavorites $favs): void
+    public static function adminDashboardFavorites(dcFavorites $favs): void
     {
         $favs->register('pacKman', [
             'title'       => __('Packages repository'),
             'url'         => 'plugin.php?p=pacKman#packman-repository-repository',
             'small-icon'  => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
             'large-icon'  => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
-            'permissions' => $core->auth->isSuperAdmin(),
+            'permissions' => dcCore::app()->auth->isSuperAdmin(),
             'active_cb'   => [
                 'packmanBehaviors',
                 'adminDashboardFavoritesActive'

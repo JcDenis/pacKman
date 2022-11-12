@@ -16,38 +16,38 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 class libPackman
 {
-    public static function is_configured(dcCore $core, string $repo, string $file_a, string $file_b): bool
+    public static function is_configured(string $repo, string $file_a, string $file_b): bool
     {
         if (!is_dir(DC_TPL_CACHE) || !is_writable(DC_TPL_CACHE)) {
-            $core->error->add(
+            dcCore::app()->error->add(
                 __('Cache directory is not writable.')
             );
         }
         if (!is_writable($repo)) {
-            $core->error->add(
+            dcCore::app()->error->add(
                 __('Path to repository is not writable.')
             );
         }
 
         if (empty($file_a)) {
-            $core->error->add(
+            dcCore::app()->error->add(
                 __('You must specify the name of package to export.')
             );
         }
 
         if (!is_writable(dirname($repo . '/' . $file_a))) {
-            $core->error->add(
+            dcCore::app()->error->add(
                 __('Path to first export package is not writable.')
             );
         }
 
         if (!empty($file_b) && !is_writable(dirname($repo . '/' . $file_b))) {
-            $core->error->add(
+            dcCore::app()->error->add(
                 __('Path to second export package is not writable.')
             );
         }
 
-        return !$core->error->flag();
+        return !dcCore::app()->error->flag();
     }
 
     public static function is_writable(string $path, string $file): bool
@@ -55,7 +55,7 @@ class libPackman
         return !(empty($path) || empty($file) || !is_writable(dirname($path . '/' . $file)));
     }
 
-    public static function modules(dcCore $core, array $modules, string $type, string $title): ?bool
+    public static function modules(array $modules, string $type, string $title): ?bool
     {
         if (empty($modules) || !is_array($modules)) {
             return null;
@@ -110,7 +110,7 @@ class libPackman
         form::hidden(['action'], 'packup') .
         '<input type="submit" name="packup" value="' .
          __('Pack up selected modules') . '" />' .
-        $core->formNonce() . '</p>' .
+        dcCore::app()->formNonce() . '</p>' .
         '</form>' .
 
         '</div>';
@@ -118,7 +118,7 @@ class libPackman
         return true;
     }
 
-    public static function repository(dcCore $core, array $modules, string $type, string $title): ?bool
+    public static function repository(array $modules, string $type, string $title): ?bool
     {
         if (empty($modules) || !is_array($modules)) {
             return null;
@@ -198,7 +198,7 @@ class libPackman
         form::hidden(['p'], 'pacKman') .
         form::hidden(['tab'], 'repository') .
         form::hidden(['type'], $type) .
-        $core->formNonce() .
+        dcCore::app()->formNonce() .
         '</p>' .
         '</div>' .
         '</form>' .

@@ -15,11 +15,11 @@ if (!defined('DC_CONTEXT_MODULE')) {
 }
 
 $redir = empty($_REQUEST['redir']) ?
-    $list->getURL() . '#plugins' : $_REQUEST['redir'];
+    dcCore::app()->admin->list->getURL() . '#plugins' : $_REQUEST['redir'];
 
 # -- Get settings --
-$core->blog->settings->addNamespace('pacKman');
-$s = $core->blog->settings->pacKman;
+dcCore::app()->blog->settings->addNamespace('pacKman');
+$s = dcCore::app()->blog->settings->pacKman;
 
 $packman_pack_nocomment      = $s->packman_pack_nocomment;
 $packman_pack_fixnewline     = $s->packman_pack_fixnewline;
@@ -41,7 +41,6 @@ if (!empty($_POST['save'])) {
         $packman_pack_excludefiles   = (string) $_POST['packman_pack_excludefiles'];
 
         $check = libPackman::is_configured(
-            $core,
             $packman_pack_repository,
             $packman_pack_filename,
             $packman_secondpack_filename
@@ -60,12 +59,12 @@ if (!empty($_POST['save'])) {
                 __('Configuration has been successfully updated.')
             );
             http::redirect(
-                $list->getURL('module=pacKman&conf=1&redir=' .
-                $list->getRedir())
+                dcCore::app()->admin->list->getURL('module=pacKman&conf=1&redir=' .
+                dcCore::app()->admin->list->getRedir())
             );
         }
     } catch (Exception $e) {
-        $core->error->add($e->getMessage());
+        dcCore::app()->error->add($e->getMessage());
     }
 }
 
@@ -79,8 +78,8 @@ form::field('packman_pack_repository', 65, 255, $packman_pack_repository, 'maxim
 '</label></p>' .
 '<p class="form-note">' . sprintf(
     __('Preconization: %s'),
-    $core->blog->public_path ?
-    $core->blog->public_path : __("Blog's public directory")
+    dcCore::app()->blog->public_path ?
+    dcCore::app()->blog->public_path : __("Blog's public directory")
 ) . '</p>
 </div>
 

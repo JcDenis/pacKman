@@ -14,8 +14,8 @@ if (!defined('DC_RC_PATH')) {
     return null;
 }
 
-$d = dirname(__FILE__) . '/inc/';
+$d = __DIR__ . '/inc/';
 
-$__autoload['dcPackman']      = $d . 'class.dc.packman.php';
-$__autoload['libPackman']     = $d . 'lib.packman.php';
-$__autoload['packmanFileZip'] = $d . 'lib.packman.filezip.php';
+Clearbricks::lib()->autoload(['dcPackman'      => $d . 'class.dc.packman.php']);
+Clearbricks::lib()->autoload(['libPackman'     => $d . 'lib.packman.php']);
+Clearbricks::lib()->autoload(['packmanFileZip' => $d . 'lib.packman.filezip.php']);

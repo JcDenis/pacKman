@@ -1,5 +1,6 @@
-2022.11.12
-- prepare to DC 2.24
+
+2022.11.20
+- fix compatibility with Dotclear 2.24 (required)
 
 2022.02.01
 - fix module info (id/root) before zip

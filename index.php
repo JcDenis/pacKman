@@ -119,12 +119,12 @@ try {
             $exclude    = explode(',', $s->packman_pack_excludefiles);
 
             # --BEHAVIOR-- packmanBeforeCreatePackage
-            dcCore::app()->callBehavior('packmanBeforeCreatePackage', dcCore::app(), $module);
+            dcCore::app()->callBehavior('packmanBeforeCreatePackage', $module);
 
             dcPackman::pack($module, $root, $files, $overwrite, $exclude, $nocomment, $fixnewline);
 
             # --BEHAVIOR-- packmanAfterCreatePackage
-            dcCore::app()->callBehavior('packmanAfterCreatePackage', dcCore::app(), $module);
+            dcCore::app()->callBehavior('packmanAfterCreatePackage', $module);
         }
 
         dcPage::addSuccessNotice(
@@ -249,7 +249,7 @@ dcPage::jsPageTabs() .
 dcPage::jsLoad(dcPage::getPF('pacKman/js/packman.js'));
 
 # --BEHAVIOR-- packmanAdminHeader
-dcCore::app()->callBehavior('packmanAdminHeader', dcCore::app());
+dcCore::app()->callBehavior('packmanAdminHeader');
 
 echo
 '</head><body>' .

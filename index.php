@@ -260,12 +260,12 @@ dcPage::breadcrumb([
 ]) .
 dcPage::notices();
 
-if (dcCore::app()->error->flag()) {
+if (dcCore::app()->error->flag() || !$is_configured) {
     echo
-    '<p class="warning">' . __('pacKman is not well configured.') . ' ' .
+    '<div class="warning">' . __('pacKman is not well configured.') . ' ' .
     '<a href="plugins.php?module=pacKman&amp;conf=1&amp;redir=' .
     urlencode('plugin.php?p=pacKman') . '">' . __('Configuration') . '</a>' .
-    '</p>';
+    '</div>';
 } else {
     $repo_path_modules = array_merge(
         dcPackman::getPackages(dirname($repo_path . '/' . $s->packman_pack_filename)),

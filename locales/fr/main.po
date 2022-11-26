@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: pacKman 2021.10.28\n"
+"Project-Id-Version: pacKman 2022.11.20\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-05T00:45:06+00:00\n"
+"PO-Revision-Date: 2022-11-26T21:19:33+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -51,6 +51,15 @@ msgstr "Retirer les commentaires des fichiers"
 
 msgid "Fix newline style from files content"
 msgstr "Corriger les retour chariot du contenu des fichiers"
+
+msgid "Directory is not writable"
+msgstr "Le répertoire n'est pas accessible en écriture"
+
+msgid "Failed to get module info"
+msgstr "Impossible de retrouver les informations du module"
+
+msgid "Failed to get temporary directory"
+msgstr "Impossible de retrouver le répertoire temporaire"
 
 msgid "Cache directory is not writable."
 msgstr "Le répertoire de cache n'est pas accessible en écriture."

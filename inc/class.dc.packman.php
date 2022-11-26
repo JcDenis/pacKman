@@ -156,7 +156,7 @@ class dcPackman
     {
         $root = (string) path::real($root);
         if (!is_dir($root) || !is_writable($root)) {
-            throw new Exception('Directory is not writable');
+            throw new Exception(__('Directory is not writable'));
         }
 
         return $root;
@@ -168,7 +168,7 @@ class dcPackman
             || !isset($info['id'])
             || !is_dir($info['root'])
         ) {
-            throw new Exception('Failed to get module info');
+            throw new Exception(__('Failed to get module info'));
         }
 
         return $info;
@@ -231,7 +231,7 @@ class dcPackman
             @mkdir($c);
         }
         if (!is_writable($c)) {
-            throw new Exception('Failed to get temporary directory');
+            throw new Exception(__('Failed to get temporary directory'));
         }
 
         return $c;

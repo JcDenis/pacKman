@@ -23,50 +23,49 @@ $mod_conf = [
         'packman_menu_plugins',
         'Add link to pacKman in plugins page',
         false,
-        'boolean'
+        'boolean',
     ],
     [
         'packman_pack_nocomment',
         'Remove comments from files',
         false,
-        'boolean'
+        'boolean',
     ],
     [
         'packman_pack_overwrite',
         'Overwrite existing package',
         false,
-        'boolean'
+        'boolean',
     ],
     [
         'packman_pack_filename',
         'Name of package',
         '%type%-%id%',
-        'string'
+        'string',
     ],
     [
         'packman_secondpack_filename',
         'Name of second package',
         '%type%-%id%-%version%',
-        'string'
+        'string',
     ],
     [
         'packman_pack_repository',
         'Path to package repository',
         '',
-        'string'
+        'string',
     ],
     [
         'packman_pack_excludefiles',
         'Extra files to exclude from package',
         '*.zip,*.tar,*.tar.gz,.directory,.hg',
-        'string'
-    ]
+        'string',
+    ],
 ];
 
 # -- Nothing to change below --
 
 try {
-
     # Check module version
     if (version_compare(
         dcCore::app()->getVersion($mod_id),

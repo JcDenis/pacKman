@@ -25,6 +25,6 @@ $this->registerModule(
         'type'        => 'plugin',
         'support'     => 'https://github.com/JcDenis/pacKman',
         'details'     => 'https://plugins.dotaddict.org/dc2/details/pacKman',
-        'repository'  => 'https://raw.githubusercontent.com/JcDenis/pacKman/master/dcstore.xml'
+        'repository'  => 'https://raw.githubusercontent.com/JcDenis/pacKman/master/dcstore.xml',
     ]
 );

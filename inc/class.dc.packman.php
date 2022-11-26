@@ -26,7 +26,7 @@ class dcPackman
         '.git*',
         'CVS',
         '.DS_Store',
-        'Thumbs.db'
+        'Thumbs.db',
     ];
 
     public static function quote_exclude(array $exclude): array
@@ -96,7 +96,7 @@ class dcPackman
             if (is_array($res[$i])) {
                 $res[$i] = array_merge($res[$i], [
                     'id'   => $zip_root_dir,
-                    'root' => $root . '/' . $zip_file
+                    'root' => $root . '/' . $zip_file,
                 ]);
 
                 unlink($cache . '_define.php');
@@ -193,14 +193,14 @@ class dcPackman
                 '%id%',
                 '%version%',
                 '%author%',
-                '%time%'
+                '%time%',
             ],
             [
                 $info['type'],
                 $info['id'],
                 $info['version'],
                 $info['author'],
-                time()
+                time(),
             ],
             $file
         );

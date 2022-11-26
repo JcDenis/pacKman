@@ -74,7 +74,6 @@ try {
             if (preg_match('/' . preg_quote($_REQUEST['package']) . '$/', $f['root'])
                 && is_file($f['root']) && is_readable($f['root'])
             ) {
-
                 # --BEHAVIOR-- packmanBeforeDownloadPackage
                 dcCore::app()->callBehavior('packmanBeforeDownloadPackage', $f, $type);
 
@@ -111,7 +110,7 @@ try {
             $root  = $s->packman_pack_repository;
             $files = [
                 $s->packman_pack_filename,
-                $s->packman_secondpack_filename
+                $s->packman_secondpack_filename,
             ];
             $nocomment  = $s->packman_pack_nocomment;
             $fixnewline = $s->packman_pack_fixnewline;
@@ -137,7 +136,7 @@ try {
             dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-' . $type);
         }
 
-        # Delete
+    # Delete
     } elseif ($action == 'delete') {
         foreach ($_POST['modules'] as $root => $id) {
             if (!file_exists($root) || !files::isDeletable($root)) {
@@ -157,10 +156,9 @@ try {
             dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
         }
 
-        # Install
+    # Install
     } elseif ($action == 'install') {
         foreach ($_POST['modules'] as $root => $id) {
-
             # --BEHAVIOR-- packmanBeforeInstallPackage
             dcCore::app()->callBehavior('packmanBeforeInstallPackage', $type, $id, $root);
 
@@ -185,7 +183,7 @@ try {
             dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
         }
 
-        # Copy
+    # Copy
     } elseif (strpos($action, 'copy_to_') !== false) {
         $dest = $repo_path;
         if ($action == 'copy_to_plugins') {
@@ -211,7 +209,7 @@ try {
             dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
         }
 
-        # Move
+    # Move
     } elseif (strpos($action, 'move_to_') !== false) {
         $dest = $repo_path;
         if ($action == 'move_to_plugins') {
@@ -256,7 +254,7 @@ echo
 
 dcPage::breadcrumb([
     __('Plugins') => '',
-    __('pacKman') => ''
+    __('pacKman') => '',
 ]) .
 dcPage::notices();
 
@@ -272,7 +270,7 @@ if (dcCore::app()->error->flag() || !$is_configured) {
         dcPackman::getPackages(dirname($repo_path . '/' . $s->packman_secondpack_filename))
     );
     $plugins_path_modules = dcPackman::getPackages($plugins_path);
-    $themes_path_modules = dcPackman::getPackages($themes_path);
+    $themes_path_modules  = dcPackman::getPackages($themes_path);
 
     libPackman::modules(
         $plugins->getModules(),

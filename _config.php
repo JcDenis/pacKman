@@ -15,7 +15,7 @@ if (!defined('DC_CONTEXT_MODULE')) {
 }
 
 $redir = empty($_REQUEST['redir']) ?
-    dcCore::app()->admin->list->getURL() . '#plugins' : $_REQUEST['redir'];
+    dcCore::app()->admin->__get('list')->getURL() . '#plugins' : $_REQUEST['redir'];
 
 # -- Get settings --
 dcCore::app()->blog->settings->addNamespace('pacKman');
@@ -59,8 +59,8 @@ if (!empty($_POST['save'])) {
                 __('Configuration has been successfully updated.')
             );
             http::redirect(
-                dcCore::app()->admin->list->getURL('module=pacKman&conf=1&redir=' .
-                dcCore::app()->admin->list->getRedir())
+                dcCore::app()->admin->__get('list')->getURL('module=pacKman&conf=1&redir=' .
+                dcCore::app()->admin->__get('list')->getRedir())
             );
         }
     } catch (Exception $e) {

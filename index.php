@@ -25,8 +25,8 @@ dcCore::app()->blog->settings->addNamespace('pacKman');
 $s = dcCore::app()->blog->settings->pacKman;
 
 # Modules
-if (!isset(dcCore::app()->themes)) {
-    dcCore::app()->themes = new dcThemes(dcCore::app());
+if (!(dcCore::app()->themes instanceof dcThemes)) {
+    dcCore::app()->themes = new dcThemes();
     dcCore::app()->themes->loadModules(dcCore::app()->blog->themes_path, null);
 }
 $themes  = dcCore::app()->themes;

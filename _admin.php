@@ -18,10 +18,10 @@ dcCore::app()->blog->settings->addNamespace('pacKman');
 
 dcCore::app()->addBehavior('adminDashboardFavoritesV2', function (dcFavorites $favs): void {
     $favs->register('pacKman', [
-        'title'       => __('Packages repository'),
-        'url'         => dcCore::app()->adminurl->get('admin.plugin.pacKman') . '#packman-repository-repository',
-        'small-icon'  => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
-        'large-icon'  => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
+        'title'      => __('Packages repository'),
+        'url'        => dcCore::app()->adminurl->get('admin.plugin.pacKman') . '#packman-repository-repository',
+        'small-icon' => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
+        'large-icon' => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
         //'permissions' => dcCore::app()->auth->isSuperAdmin(),
     ]);
 });

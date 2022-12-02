@@ -16,8 +16,6 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 # -- Module specs --
 
-$dc_min   = '2.18';
-$mod_id   = 'pacKman';
 $mod_conf = [
     [
         'packman_menu_plugins',
@@ -66,6 +64,10 @@ $mod_conf = [
 # -- Nothing to change below --
 
 try {
+    # Grab info
+    $mod_id = basename(__DIR__);
+    $dc_min = dcCore::app()->plugins->moduleInfo($mod_id, 'requires')[0][1];
+
     # Check module version
     if (version_compare(
         dcCore::app()->getVersion($mod_id),

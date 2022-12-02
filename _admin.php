@@ -22,7 +22,7 @@ dcCore::app()->addBehavior('adminDashboardFavoritesV2', function (dcFavorites $f
         'url'         => dcCore::app()->adminurl->get('admin.plugin.pacKman') . '#packman-repository-repository',
         'small-icon'  => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
         'large-icon'  => [dcPage::getPF('pacKman/icon.svg'), dcPage::getPF('pacKman/icon-dark.svg')],
-        'permissions' => dcCore::app()->auth->isSuperAdmin(),
+        //'permissions' => dcCore::app()->auth->isSuperAdmin(),
     ]);
 });
 

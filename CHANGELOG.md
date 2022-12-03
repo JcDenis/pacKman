@@ -1,3 +1,5 @@
+2022.12.03
+- cope with disabled modules
 
 2022.11.20
 - fix compatibility with Dotclear 2.24 (required)

@@ -99,11 +99,11 @@ try {
     # Pack
     } elseif ($action == 'packup') {
         foreach ($_POST['modules'] as $root => $id) {
-            if (!${$type}->moduleExists($id)) {
+            if (!libPackman::moduleExists($type, $id)) {
                 throw new Exception('No such module');
             }
 
-            $module         = ${$type}->getModules($id);
+            $module         = libPackman::getModules($type, $id);
             $module['id']   = $id;
             $module['type'] = $type == 'themes' ? 'theme' : 'plugin';
 
@@ -261,8 +261,7 @@ dcPage::notices();
 if (dcCore::app()->error->flag() || !$is_configured) {
     echo
     '<div class="warning">' . __('pacKman is not well configured.') . ' ' .
-    '<a href="plugins.php?module=pacKman&amp;conf=1&amp;redir=' .
-    urlencode('plugin.php?p=pacKman') . '">' . __('Configuration') . '</a>' .
+    '<a href="' . dcCore::app()->adminurl->get('admin.plugins', ['module' => 'pacKman', 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.pacKman')]) . '">' . __('Configuration') . '</a>' .
     '</div>';
 } else {
     $repo_path_modules = array_merge(
@@ -273,13 +272,13 @@ if (dcCore::app()->error->flag() || !$is_configured) {
     $themes_path_modules  = dcPackman::getPackages($themes_path);
 
     libPackman::modules(
-        $plugins->getModules(),
+        libPackman::getModules('plugins'),
         'plugins',
         __('Installed plugins')
     );
 
     libPackman::modules(
-        $themes->getModules(),
+        libPackman::getModules('themes'),
         'themes',
         __('Installed themes')
     );

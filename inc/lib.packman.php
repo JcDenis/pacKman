@@ -55,6 +55,28 @@ class libPackman
         return !(empty($path) || empty($file) || !is_writable(dirname($path . '/' . $file)));
     }
 
+    public static function getModules(string $type, ?string $id = null): ?array
+    {
+        $type = $type == 'themes' ? 'themes' : 'plugins';
+
+        $modules = array_merge(dcCore::app()->{$type}->getDisabledModules(), dcCore::app()->{$type}->getModules());
+
+        if (empty($id)) {
+            return $modules;
+        } elseif (array_key_exists($id, $modules)) {
+            return $modules[$id];
+        }
+
+        return null;
+    }
+
+    public static function moduleExists(string $type, ?string $id): bool
+    {
+        $type = $type == 'themes' ? 'themes' : 'plugins';
+
+        return array_key_exists($id, array_merge(dcCore::app()->{$type}->getDisabledModules(), dcCore::app()->{$type}->getModules()));
+    }
+
     public static function modules(array $modules, string $type, string $title): ?bool
     {
         if (empty($modules) || !is_array($modules)) {

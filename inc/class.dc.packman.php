@@ -27,6 +27,7 @@ class dcPackman
         'CVS',
         '.DS_Store',
         'Thumbs.db',
+        '_disabled',
     ];
 
     public static function quote_exclude(array $exclude): array

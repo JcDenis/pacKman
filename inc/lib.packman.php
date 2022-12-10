@@ -127,7 +127,7 @@ class libPackman
                 html::escapeHTML($_REQUEST['redir'])
             ) : ''
         ) .
-        form::hidden(['p'], 'pacKman') .
+        form::hidden(['p'], basename(dirname('../' . __DIR__))) .
         form::hidden(['type'], $type) .
         form::hidden(['action'], 'packup') .
         '<input type="submit" name="packup" value="' .
@@ -203,8 +203,11 @@ class libPackman
                 __(html::escapeHTML($module['name'])) .
             '</td>' .
             '<td class="nowrap">' .
-                '<a class="packman-download" href="plugin.php?p=pacKman&amp;package=' .
-                basename($module['root']) . '&amp;repo=' . $type . '" title="' . __('Download') . '">' .
+                '<a class="packman-download" href="' . 
+                dcCore::app()->adminurl->get('admin.plugin.' . basename(dirname('../' . __DIR__)), [
+                    'package' => basename($module['root']),
+                    'repo' => $type,
+                ]) . '" title="' . __('Download') . '">' .
                 html::escapeHTML(basename($module['root'])) . '</a>' .
             '</td>' .
             '</tr>';
@@ -217,7 +220,7 @@ class libPackman
         '<p class="col right">' . __('Selected modules action:') . ' ' .
         form::combo(['action'], $combo_action) .
         '<input type="submit" name="packup" value="' . __('ok') . '" />' .
-        form::hidden(['p'], 'pacKman') .
+        form::hidden(['p'], basename(dirname('../' . __DIR__))) .
         form::hidden(['tab'], 'repository') .
         form::hidden(['type'], $type) .
         dcCore::app()->formNonce() .

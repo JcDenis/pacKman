@@ -14,15 +14,13 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-$mod_id = 'pacKman';
-
 $this->addUserAction(
     /* type */
     'settings',
     /* action */
     'delete_all',
     /* ns */
-    $mod_id,
+    basename(__DIR__),
     /* desc */
     __('delete all settings')
 );
@@ -33,7 +31,7 @@ $this->addUserAction(
     /* action */
     'delete',
     /* ns */
-    $mod_id,
+    basename(__DIR__),
     /* desc */
     __('delete plugin files')
 );
@@ -44,7 +42,7 @@ $this->addUserAction(
     /* action */
     'delete',
     /* ns */
-    $mod_id,
+    basename(__DIR__),
     /* desc */
     __('delete the version number')
 );
@@ -55,9 +53,9 @@ $this->addDirectAction(
     /* action */
     'delete_all',
     /* ns */
-    $mod_id,
+    basename(__DIR__),
     /* desc */
-    sprintf(__('delete all %s settings'), $mod_id)
+    sprintf(__('delete all %s settings'), basename(__DIR__))
 );
 
 $this->addDirectAction(
@@ -66,9 +64,9 @@ $this->addDirectAction(
     /* action */
     'delete',
     /* ns */
-    $mod_id,
+    basename(__DIR__),
     /* desc */
-    sprintf(__('delete %s plugin files'), $mod_id)
+    sprintf(__('delete %s plugin files'), basename(__DIR__))
 );
 
 $this->addDirectAction(
@@ -77,7 +75,7 @@ $this->addDirectAction(
     /* action */
     'delete',
     /* ns */
-    $mod_id,
+    basename(__DIR__),
     /* desc */
-    sprintf(__('delete %s version number'), $mod_id)
+    sprintf(__('delete %s version number'), basename(__DIR__))
 );

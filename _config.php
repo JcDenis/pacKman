@@ -18,8 +18,8 @@ $redir = empty($_REQUEST['redir']) ?
     dcCore::app()->admin->__get('list')->getURL() . '#plugins' : $_REQUEST['redir'];
 
 # -- Get settings --
-dcCore::app()->blog->settings->addNamespace('pacKman');
-$s = dcCore::app()->blog->settings->pacKman;
+dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
+$s = dcCore::app()->blog->settings->__get(basename(__DIR__));
 
 $packman_pack_nocomment      = $s->packman_pack_nocomment;
 $packman_pack_fixnewline     = $s->packman_pack_fixnewline;
@@ -59,7 +59,7 @@ if (!empty($_POST['save'])) {
                 __('Configuration has been successfully updated.')
             );
             http::redirect(
-                dcCore::app()->admin->__get('list')->getURL('module=pacKman&conf=1&redir=' .
+                dcCore::app()->admin->__get('list')->getURL('module=' . basename(__DIR__) . '&conf=1&redir=' .
                 dcCore::app()->admin->__get('list')->getRedir())
             );
         }

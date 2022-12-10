@@ -21,8 +21,8 @@ $action = $_POST['action'] ?? '';
 $type   = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository']) ? $_POST['type'] : '';
 
 # Settings
-dcCore::app()->blog->settings->addNamespace('pacKman');
-$s = dcCore::app()->blog->settings->pacKman;
+dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
+$s = dcCore::app()->blog->settings->__get(basename(__DIR__));
 
 # Modules
 if (!(dcCore::app()->themes instanceof dcThemes)) {
@@ -133,7 +133,7 @@ try {
         if (!empty($_POST['redir'])) {
             http::redirect($_POST['redir']);
         } else {
-            dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-' . $type);
+            dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-' . $type);
         }
 
     # Delete
@@ -153,7 +153,7 @@ try {
         if (!empty($_POST['redir'])) {
             http::redirect($_POST['redir']);
         } else {
-            dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
+            dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-repository-' . $type);
         }
 
     # Install
@@ -180,7 +180,7 @@ try {
         if (!empty($_POST['redir'])) {
             http::redirect($_POST['redir']);
         } else {
-            dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
+            dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-repository-' . $type);
         }
 
     # Copy
@@ -206,7 +206,7 @@ try {
         if (!empty($_POST['redir'])) {
             http::redirect($_POST['redir']);
         } else {
-            dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
+            dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-repository-' . $type);
         }
 
     # Move
@@ -233,7 +233,7 @@ try {
         if (!empty($_POST['redir'])) {
             http::redirect($_POST['redir']);
         } else {
-            dcCore::app()->adminurl->redirect('admin.plugin.pacKman', [], '#packman-repository-' . $type);
+            dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-repository-' . $type);
         }
     }
 } catch (Exception $e) {
@@ -244,7 +244,7 @@ try {
 echo
 '<html><head><title>' . __('pacKman') . '</title>' .
 dcPage::jsPageTabs() .
-dcPage::jsLoad(dcPage::getPF('pacKman/js/packman.js'));
+dcPage::jsLoad(dcPage::getPF(basename(__DIR__) . '/js/packman.js'));
 
 # --BEHAVIOR-- packmanAdminHeader
 dcCore::app()->callBehavior('packmanAdminHeader');
@@ -261,7 +261,7 @@ dcPage::notices();
 if (dcCore::app()->error->flag() || !$is_configured) {
     echo
     '<div class="warning">' . __('pacKman is not well configured.') . ' ' .
-    '<a href="' . dcCore::app()->adminurl->get('admin.plugins', ['module' => 'pacKman', 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.pacKman')]) . '">' . __('Configuration') . '</a>' .
+    '<a href="' . dcCore::app()->adminurl->get('admin.plugins', ['module' => basename(__DIR__), 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__))]) . '">' . __('Configuration') . '</a>' .
     '</div>';
 } else {
     $repo_path_modules = array_merge(

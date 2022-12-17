@@ -19,9 +19,9 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 }
 
 /* clearbricks ns */
-use fileZip;
+//use fileZip;
 
-class FileZip extends fileZip
+class FileZip extends \fileZip
 {
     /** @var boolean Remove comments from files content */
     public static $remove_comment = false;

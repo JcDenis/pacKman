@@ -30,7 +30,7 @@ use path;
 /* php ns */
 use Exception;
 
-class config
+class Config
 {
     public static function init(): void
     {
@@ -149,6 +149,6 @@ class config
     }
 }
 
-config::init();
-config::process();
-config::render();
+Config::init();
+Config::process();
+Config::render();

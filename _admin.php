@@ -24,7 +24,7 @@ use dcCore;
 use dcFavorites;
 use dcPage;
 
-class admin
+class Admin
 {
     public static function init()
     {
@@ -53,5 +53,5 @@ class admin
     }
 }
 
-admin::init();
-admin::process();
+Admin::init();
+Admin::process();

@@ -31,7 +31,7 @@ use path;
 /* php ns */
 use Exception;
 
-class index
+class Index
 {
     private static $plugins_path = '';
     private static $themes_path  = '';
@@ -344,6 +344,6 @@ class index
     }
 }
 
-index::init();
-index::process();
-index::render();
+Index::init();
+Index::process();
+Index::render();

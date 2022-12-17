@@ -24,7 +24,7 @@ use dcCore;
 /* php ns */
 use Exception;
 
-class install
+class Install
 {
     # -- Module specs --
     private static $mod_conf = [
@@ -106,4 +106,4 @@ class install
     }
 }
 
-return install::process();
+return Install::process();

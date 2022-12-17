@@ -10,7 +10,18 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class packmanFileZip extends fileZip
+declare(strict_types=1);
+
+namespace plugins\pacKman;
+
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return null;
+}
+
+/* clearbricks ns */
+use fileZip;
+
+class FileZip extends fileZip
 {
     /** @var boolean Remove comments from files content */
     public static $remove_comment = false;

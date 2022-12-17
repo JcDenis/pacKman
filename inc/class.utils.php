@@ -10,11 +10,23 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+declare(strict_types=1);
+
+namespace plugins\pacKman;
+
 if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-class libPackman
+/* dotclear ns */
+use dcCore;
+
+/* clearbricks ns */
+use form;
+use html;
+use path;
+
+class Utils
 {
     public static function is_configured(string $repo, string $file_a, string $file_b): bool
     {
@@ -203,10 +215,10 @@ class libPackman
                 __(html::escapeHTML($module['name'])) .
             '</td>' .
             '<td class="nowrap">' .
-                '<a class="packman-download" href="' . 
+                '<a class="packman-download" href="' .
                 dcCore::app()->adminurl->get('admin.plugin.' . basename(dirname('../' . __DIR__)), [
                     'package' => basename($module['root']),
-                    'repo' => $type,
+                    'repo'    => $type,
                 ]) . '" title="' . __('Download') . '">' .
                 html::escapeHTML(basename($module['root'])) . '</a>' .
             '</td>' .

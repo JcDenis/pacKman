@@ -10,11 +10,29 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+declare(strict_types=1);
+
+namespace plugins\pacKman;
+
 if (!defined('DC_CONTEXT_ADMIN')) {
     return null;
 }
 
-class dcPackman
+/* dotclear ns */
+use dcModules;
+use dcThemes;
+
+/* clearbricks ns */
+use files;
+use fileUnzip;
+use path;
+
+/* packman ns */
+
+/* php ns */
+use Exception;
+
+class Core
 {
     /** @var array Excluded files */
     public static $exclude = [
@@ -129,12 +147,12 @@ class dcPackman
             $fp = fopen($dest, 'wb');
 
             if ($nocomment) {
-                packmanFileZip::$remove_comment = true;
+                FileZip::$remove_comment = true;
             }
             if ($fixnewline) {
-                packmanFileZip::$fix_newline = true;
+                FileZip::$fix_newline = true;
             }
-            $zip = new packmanFileZip($fp);
+            $zip = new FileZip($fp);
 
             foreach ($exclude as $e) {
                 $zip->addExclusion($e);

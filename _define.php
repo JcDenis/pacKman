@@ -10,6 +10,11 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
+declare(strict_types=1);
+
+// can not use namespace as it is included inside a class method,
+// and also can be included in third party plugins class methods.
+
 if (!defined('DC_RC_PATH')) {
     return null;
 }

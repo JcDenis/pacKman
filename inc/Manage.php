@@ -12,11 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace plugins\pacKman;
-
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return null;
-}
+namespace Dotclear\Plugin\pacKman;
 
 /* dotclear ns */
 use dcCore;
@@ -31,31 +27,41 @@ use path;
 /* php ns */
 use Exception;
 
-class Index
+class Manage
 {
     private static $plugins_path = '';
     private static $themes_path  = '';
+    private static $init         = false;
 
-    public static function init()
+    public static function init(): bool
     {
-        dcPage::checkSuper();
-        dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
+        if (defined('DC_CONTEXT_ADMIN')) {
+            dcPage::checkSuper();
+            dcCore::app()->blog->settings->addNamespace(Core::id());
 
-        # Paths
-        $e                  = explode(PATH_SEPARATOR, DC_PLUGINS_ROOT);
-        $p                  = array_pop($e);
-        self::$plugins_path = (string) path::real($p);
-        self::$themes_path  = dcCore::app()->blog->themes_path;
+            # Paths
+            $e                  = explode(PATH_SEPARATOR, DC_PLUGINS_ROOT);
+            $p                  = array_pop($e);
+            self::$plugins_path = (string) path::real($p);
+            self::$themes_path  = dcCore::app()->blog->themes_path;
+            self::$init         = true;
+        }
+
+        return self::$init;
     }
 
-    public static function process()
+    public static function process(): void
     {
+        if (!self::$init) {
+            return;
+        }
+
         # Queries
         $action = $_POST['action'] ?? '';
         $type   = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository']) ? $_POST['type'] : '';
 
         # Settings
-        $s = dcCore::app()->blog->settings->__get(basename(__DIR__));
+        $s = dcCore::app()->blog->settings->get(Core::id());
 
         # Modules
         if (!(dcCore::app()->themes instanceof dcThemes)) {
@@ -67,8 +73,8 @@ class Index
 
         # Rights
         $is_writable = Utils::is_writable(
-            $s->packman_pack_repository,
-            $s->packman_pack_filename
+            $s->get('packman_pack_repository'),
+            $s->get('packman_pack_filename')
         );
         $is_editable = !empty($type)
             && !empty($_POST['modules'])
@@ -85,8 +91,8 @@ class Index
                     $modules = Core::getPackages(self::$themes_path);
                 } else {
                     $modules = array_merge(
-                        Core::getPackages(dirname($s->packman_pack_repository . '/' . $s->packman_pack_filename)),
-                        Core::getPackages(dirname($s->packman_pack_repository . '/' . $s->packman_secondpack_filename))
+                        Core::getPackages(dirname($s->get('packman_pack_repository') . '/' . $s->get('packman_pack_filename'))),
+                        Core::getPackages(dirname($s->get('packman_pack_repository') . '/' . $s->get('packman_secondpack_filename')))
                     );
                 }
 
@@ -127,15 +133,15 @@ class Index
                     $module['id']   = $id;
                     $module['type'] = $type == 'themes' ? 'theme' : 'plugin';
 
-                    $root  = (string) $s->packman_pack_repository;
+                    $root  = (string) $s->get('packman_pack_repository');
                     $files = [
-                        (string) $s->packman_pack_filename,
-                        (string) $s->packman_secondpack_filename,
+                        (string) $s->get('packman_pack_filename'),
+                        (string) $s->get('packman_secondpack_filename'),
                     ];
-                    $nocomment  = (bool) $s->packman_pack_nocomment;
-                    $fixnewline = (bool) $s->packman_pack_fixnewline;
-                    $overwrite  = (bool) $s->packman_pack_overwrite;
-                    $exclude    = explode(',', (string) $s->packman_pack_excludefiles);
+                    $nocomment  = (bool) $s->get('packman_pack_nocomment');
+                    $fixnewline = (bool) $s->get('packman_pack_fixnewline');
+                    $overwrite  = (bool) $s->get('packman_pack_overwrite');
+                    $exclude    = explode(',', (string) $s->get('packman_pack_excludefiles'));
 
                     # --BEHAVIOR-- packmanBeforeCreatePackage
                     dcCore::app()->callBehavior('packmanBeforeCreatePackage', $module);
@@ -153,7 +159,7 @@ class Index
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . Core::id(), [], '#packman-' . $type);
                 }
 
             # Delete
@@ -173,7 +179,7 @@ class Index
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-repository-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . Core::id(), [], '#packman-repository-' . $type);
                 }
 
             # Install
@@ -200,12 +206,12 @@ class Index
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-repository-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . Core::id(), [], '#packman-repository-' . $type);
                 }
 
             # Copy
             } elseif (strpos($action, 'copy_to_') !== false) {
-                $dest = $s->packman_pack_repository;
+                $dest = (string) $s->get('packman_pack_repository');
                 if ($action == 'copy_to_plugins') {
                     $dest = self::$plugins_path;
                 } elseif ($action == 'copy_to_themes') {
@@ -226,12 +232,12 @@ class Index
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-repository-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . Core::id(), [], '#packman-repository-' . $type);
                 }
 
             # Move
             } elseif (strpos($action, 'move_to_') !== false) {
-                $dest = $s->packman_pack_repository;
+                $dest = (string) $s->get('packman_pack_repository');
                 if ($action == 'move_to_plugins') {
                     $dest = self::$plugins_path;
                 } elseif ($action == 'move_to_themes') {
@@ -253,7 +259,7 @@ class Index
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . basename(__DIR__), [], '#packman-repository-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . Core::id(), [], '#packman-repository-' . $type);
                 }
             }
         } catch (Exception $e) {
@@ -263,20 +269,24 @@ class Index
 
     public static function render()
     {
+        if (!self::$init) {
+            return false;
+        }
+
         # Settings
-        $s = dcCore::app()->blog->settings->__get(basename(__DIR__));
+        $s = dcCore::app()->blog->settings->get(Core::id());
 
         $is_configured = Utils::is_configured(
-            $s->packman_pack_repository,
-            $s->packman_pack_filename,
-            $s->packman_secondpack_filename
+            $s->get('packman_pack_repository'),
+            $s->get('packman_pack_filename'),
+            $s->get('packman_secondpack_filename')
         );
 
         # Display
         echo
         '<html><head><title>' . __('pacKman') . '</title>' .
         dcPage::jsPageTabs() .
-        dcPage::jsLoad(dcPage::getPF(basename(__DIR__) . '/js/packman.js'));
+        dcPage::jsLoad(dcPage::getPF(Core::id() . '/js/packman.js'));
 
         # --BEHAVIOR-- packmanAdminHeader
         dcCore::app()->callBehavior('packmanAdminHeader');
@@ -293,12 +303,12 @@ class Index
         if (dcCore::app()->error->flag() || !$is_configured) {
             echo
             '<div class="warning">' . __('pacKman is not well configured.') . ' ' .
-            '<a href="' . dcCore::app()->adminurl->get('admin.plugins', ['module' => basename(__DIR__), 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.' . basename(__DIR__))]) . '">' . __('Configuration') . '</a>' .
+            '<a href="' . dcCore::app()->adminurl->get('admin.plugins', ['module' => Core::id(), 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.' . Core::id())]) . '">' . __('Configuration') . '</a>' .
             '</div>';
         } else {
             $repo_path_modules = array_merge(
-                Core::getPackages(dirname($s->packman_pack_repository . '/' . $s->packman_pack_filename)),
-                Core::getPackages(dirname($s->packman_pack_repository . '/' . $s->packman_secondpack_filename))
+                Core::getPackages(dirname($s->get('packman_pack_repository') . '/' . $s->get('packman_pack_filename'))),
+                Core::getPackages(dirname($s->get('packman_pack_repository') . '/' . $s->get('packman_secondpack_filename')))
             );
             $plugins_path_modules = Core::getPackages(self::$plugins_path);
             $themes_path_modules  = Core::getPackages(self::$themes_path);
@@ -343,7 +353,3 @@ class Index
         '</body></html>';
     }
 }
-
-Index::init();
-Index::process();
-Index::render();

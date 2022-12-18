@@ -12,11 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace plugins\pacKman;
-
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return null;
-}
+namespace Dotclear\Plugin\pacKman;
 
 /* dotclear ns */
 use dcCore;
@@ -73,21 +69,26 @@ class Install
     ];
 
     # -- Nothing to change below --
+    private static $init = false;
+
+    public static function init(): bool
+    {
+        self::$init = defined('DC_CONTEXT_ADMIN') && dcCore::app()->newVersion(Core::id(), dcCore::app()->plugins->moduleInfo(Core::id(), 'version'));
+
+        return self::$init;
+    }
+
     public static function process()
     {
-        try {
-            # Check module version
-            if (!dcCore::app()->newVersion(
-                basename(__DIR__),
-                dcCore::app()->plugins->moduleInfo(basename(__DIR__), 'version')
-            )) {
-                return null;
-            }
+        if (!self::$init) {
+            return false;
+        }
 
+        try {
             # Set module settings
-            dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
+            dcCore::app()->blog->settings->addNamespace(Core::id());
             foreach (self::$mod_conf as $v) {
-                dcCore::app()->blog->settings->__get(basename(__DIR__))->put(
+                dcCore::app()->blog->settings->__get(Core::id())->put(
                     $v[0],
                     $v[2],
                     $v[3],
@@ -105,5 +106,3 @@ class Install
         }
     }
 }
-
-return Install::process();

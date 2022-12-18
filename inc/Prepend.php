@@ -12,25 +12,43 @@
  */
 declare(strict_types=1);
 
-namespace plugins\pacKman;
-
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
+namespace Dotclear\Plugin\pacKman;
 
 /* clearbricks ns */
 use Clearbricks;
 
 class Prepend
 {
-    public static function init()
+    private const LIBS = [
+        'Admin',
+        'Config',
+        'Core',
+        'Filezip',
+        'Install',
+        'Manage',
+        'Prepend',
+        'Uninstall',
+        'Utils',
+    ];
+    private static $init = false;
+
+    public static function init(): bool
     {
-        Clearbricks::lib()->autoload([
-            'plugins\\pacKman\\Core'    => __DIR__ . '/inc/class.core.php',
-            'plugins\\pacKman\\Utils'   => __DIR__ . '/inc/class.utils.php',
-            'plugins\\pacKman\\FileZip' => __DIR__ . '/inc/class.filezip.php',
-        ]);
+        self::$init = defined('DC_RC_PATH');
+
+        return self::$init;
+    }
+
+    public static function process()
+    {
+        if (!self::$init) {
+            return false;
+        }
+
+        foreach (self::LIBS as $lib) {
+            Clearbricks::lib()->autoload(['Dotclear\\Plugin\\pacKman\\' . $lib => __DIR__ . DIRECTORY_SEPARATOR . $lib . '.php']);
+        }
+
+        return true;
     }
 }
-
-Prepend::init();

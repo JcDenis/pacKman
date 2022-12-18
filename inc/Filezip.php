@@ -12,16 +12,12 @@
  */
 declare(strict_types=1);
 
-namespace plugins\pacKman;
-
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return null;
-}
+namespace Dotclear\Plugin\pacKman;
 
 /* clearbricks ns */
 //use fileZip;
 
-class FileZip extends \fileZip
+class Filezip extends \fileZip
 {
     /** @var boolean Remove comments from files content */
     public static $remove_comment = false;

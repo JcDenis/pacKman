@@ -12,11 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace plugins\pacKman;
-
-if (!defined('DC_CONTEXT_MODULE')) {
-    return null;
-}
+namespace Dotclear\Plugin\pacKman;
 
 /* dotclear ns */
 use dcCore;
@@ -32,13 +28,24 @@ use Exception;
 
 class Config
 {
-    public static function init(): void
+    private static $init = false;
+
+    public static function init(): bool
     {
-        dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
+        if (defined('DC_CONTEXT_ADMIN')) {
+            dcCore::app()->blog->settings->addNamespace(Core::id());
+            self::$init = true;
+        }
+
+        return self::$init;
     }
 
     public static function process(): void
     {
+        if (!self::$init) {
+            return;
+        }
+
         if (empty($_POST['save'])) {
             return;
         }
@@ -60,7 +67,7 @@ class Config
             );
 
             if ($check) {
-                $s = dcCore::app()->blog->settings->__get(basename(__DIR__));
+                $s = dcCore::app()->blog->settings->__get(Core::id());
                 $s->put('packman_pack_nocomment', $packman_pack_nocomment);
                 $s->put('packman_pack_fixnewline', $packman_pack_fixnewline);
                 $s->put('packman_pack_overwrite', $packman_pack_overwrite);
@@ -73,7 +80,7 @@ class Config
                     __('Configuration has been successfully updated.')
                 );
                 http::redirect(
-                    dcCore::app()->admin->__get('list')->getURL('module=' . basename(__DIR__) . '&conf=1&redir=' .
+                    dcCore::app()->admin->__get('list')->getURL('module=' . Core::id() . '&conf=1&redir=' .
                     dcCore::app()->admin->__get('list')->getRedir())
                 );
             }
@@ -82,18 +89,14 @@ class Config
         }
     }
 
-    public static function render(): void
+    public static function render()
     {
-        # -- Get settings --
-        $s = dcCore::app()->blog->settings->__get(basename(__DIR__));
+        if (!self::$init) {
+            return false;
+        }
 
-        $packman_pack_nocomment      = $s->packman_pack_nocomment;
-        $packman_pack_fixnewline     = $s->packman_pack_fixnewline;
-        $packman_pack_overwrite      = $s->packman_pack_overwrite;
-        $packman_pack_filename       = $s->packman_pack_filename;
-        $packman_secondpack_filename = $s->packman_secondpack_filename;
-        $packman_pack_repository     = $s->packman_pack_repository;
-        $packman_pack_excludefiles   = $s->packman_pack_excludefiles;
+        # -- Get settings --
+        $s = dcCore::app()->blog->settings->__get(Core::id());
 
         # -- Display form --
         echo '
@@ -101,7 +104,7 @@ class Config
         <h4>' . __('Root') . '</h4>
 
         <p><label for="packman_pack_repository">' . __('Path to repository:') . ' ' .
-        form::field('packman_pack_repository', 65, 255, $packman_pack_repository, 'maximal') .
+        form::field('packman_pack_repository', 65, 255, (string) $s->get('packman_pack_repository'), 'maximal') .
         '</label></p>' .
         '<p class="form-note">' . sprintf(
             __('Preconization: %s'),
@@ -114,17 +117,17 @@ class Config
         <h4>' . __('Files') . '</h4>
 
         <p><label for="packman_pack_filename">' . __('Name of exported package:') . ' ' .
-        form::field('packman_pack_filename', 65, 255, $packman_pack_filename, 'maximal') .
+        form::field('packman_pack_filename', 65, 255, (string) $s->get('packman_pack_filename'), 'maximal') .
         '</label></p>
         <p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%') . '</p>
 
         <p><label for="packman_secondpack_filename">' . __('Name of second exported package:') . ' ' .
-        form::field('packman_secondpack_filename', 65, 255, $packman_secondpack_filename, 'maximal') .
+        form::field('packman_secondpack_filename', 65, 255, (string) $s->get('packman_secondpack_filename'), 'maximal') .
         '</label></p>
         <p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%-%version%') . '</p>
 
         <p><label class="classic" for="packman_pack_overwrite">' .
-        form::checkbox('packman_pack_overwrite', 1, $packman_pack_overwrite) . ' ' .
+        form::checkbox('packman_pack_overwrite', 1, (bool) $s->get('packman_pack_overwrite')) . ' ' .
         __('Overwrite existing package') . '</label></p>
 
         </div>
@@ -133,22 +136,18 @@ class Config
         <h4>' . __('Content') . '</h4>
 
         <p><label for="packman_pack_excludefiles">' . __('Extra files to exclude from package:') . ' ' .
-        form::field('packman_pack_excludefiles', 65, 255, $packman_pack_excludefiles, 'maximal') .
+        form::field('packman_pack_excludefiles', 65, 255, (string) $s->get('packman_pack_excludefiles'), 'maximal') .
         '</label></p>
         <p class="form-note">' . sprintf(__('Preconization: %s'), '*.zip,*.tar,*.tar.gz') . '</p>
 
         <p><label class="classic" for="packman_pack_nocomment">' .
-        form::checkbox('packman_pack_nocomment', 1, $packman_pack_nocomment) . ' ' .
+        form::checkbox('packman_pack_nocomment', 1, (bool) $s->get('packman_pack_nocomment')) . ' ' .
         __('Remove comments from files') . '</label></p>
 
         <p><label class="classic" for="packman_pack_fixnewline">' .
-        form::checkbox('packman_pack_fixnewline', 1, $packman_pack_fixnewline) . ' ' .
+        form::checkbox('packman_pack_fixnewline', 1, (bool) $s->get('packman_pack_fixnewline')) . ' ' .
         __('Fix newline style from files content') . '</label></p>
 
         </div>';
     }
 }
-
-Config::init();
-Config::process();
-Config::render();

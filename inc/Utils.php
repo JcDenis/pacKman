@@ -12,11 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace plugins\pacKman;
-
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return null;
-}
+namespace Dotclear\Plugin\pacKman;
 
 /* dotclear ns */
 use dcCore;

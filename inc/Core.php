@@ -12,11 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace plugins\pacKman;
-
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return null;
-}
+namespace Dotclear\Plugin\pacKman;
 
 /* dotclear ns */
 use dcModules;
@@ -34,6 +30,11 @@ use Exception;
 
 class Core
 {
+    public static function id()
+    {
+        return basename(dirname(__DIR__));
+    }
+
     /** @var array Excluded files */
     public static $exclude = [
         '.',
@@ -147,12 +148,12 @@ class Core
             $fp = fopen($dest, 'wb');
 
             if ($nocomment) {
-                FileZip::$remove_comment = true;
+                Filezip::$remove_comment = true;
             }
             if ($fixnewline) {
-                FileZip::$fix_newline = true;
+                Filezip::$fix_newline = true;
             }
-            $zip = new FileZip($fp);
+            $zip = new Filezip($fp);
 
             foreach ($exclude as $e) {
                 $zip->addExclusion($e);

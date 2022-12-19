@@ -1,3 +1,6 @@
+2022.12.19.1
+- playing with namespace
+
 2022.12.03
 - cope with disabled modules
 

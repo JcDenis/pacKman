@@ -13,7 +13,7 @@
 declare(strict_types=1);
 
 if (!class_exists('Dotclear\Plugin\pacKman\Prepend')) {
-    require __DIR__ . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'prepend.php';
+    require __DIR__ . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'Prepend.php';
 
     if (Dotclear\Plugin\pacKman\Prepend::init()) {
         Dotclear\Plugin\pacKman\Prepend::process();

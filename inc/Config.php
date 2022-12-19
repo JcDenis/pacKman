@@ -52,29 +52,29 @@ class Config
 
         # -- Set settings --
         try {
-            $packman_pack_nocomment      = !empty($_POST['packman_pack_nocomment']);
-            $packman_pack_fixnewline     = !empty($_POST['packman_pack_fixnewline']);
-            $packman_pack_overwrite      = !empty($_POST['packman_pack_overwrite']);
-            $packman_pack_filename       = (string) $_POST['packman_pack_filename'];
-            $packman_secondpack_filename = (string) $_POST['packman_secondpack_filename'];
-            $packman_pack_repository     = (string) path::real($_POST['packman_pack_repository'], false);
-            $packman_pack_excludefiles   = (string) $_POST['packman_pack_excludefiles'];
+            $pack_nocomment      = !empty($_POST['pack_nocomment']);
+            $pack_fixnewline     = !empty($_POST['pack_fixnewline']);
+            $pack_overwrite      = !empty($_POST['pack_overwrite']);
+            $pack_filename       = (string) $_POST['pack_filename'];
+            $secondpack_filename = (string) $_POST['secondpack_filename'];
+            $pack_repository     = (string) path::real($_POST['pack_repository'], false);
+            $pack_excludefiles   = (string) $_POST['pack_excludefiles'];
 
             $check = Utils::is_configured(
-                $packman_pack_repository,
-                $packman_pack_filename,
-                $packman_secondpack_filename
+                $pack_repository,
+                $pack_filename,
+                $secondpack_filename
             );
 
             if ($check) {
                 $s = dcCore::app()->blog->settings->__get(Core::id());
-                $s->put('packman_pack_nocomment', $packman_pack_nocomment);
-                $s->put('packman_pack_fixnewline', $packman_pack_fixnewline);
-                $s->put('packman_pack_overwrite', $packman_pack_overwrite);
-                $s->put('packman_pack_filename', $packman_pack_filename);
-                $s->put('packman_secondpack_filename', $packman_secondpack_filename);
-                $s->put('packman_pack_repository', $packman_pack_repository);
-                $s->put('packman_pack_excludefiles', $packman_pack_excludefiles);
+                $s->put('pack_nocomment', $pack_nocomment);
+                $s->put('pack_fixnewline', $pack_fixnewline);
+                $s->put('pack_overwrite', $pack_overwrite);
+                $s->put('pack_filename', $pack_filename);
+                $s->put('secondpack_filename', $secondpack_filename);
+                $s->put('pack_repository', $pack_repository);
+                $s->put('pack_excludefiles', $pack_excludefiles);
 
                 dcPage::addSuccessNotice(
                     __('Configuration has been successfully updated.')
@@ -103,8 +103,8 @@ class Config
         <div class="fieldset">
         <h4>' . __('Root') . '</h4>
 
-        <p><label for="packman_pack_repository">' . __('Path to repository:') . ' ' .
-        form::field('packman_pack_repository', 65, 255, (string) $s->get('packman_pack_repository'), 'maximal') .
+        <p><label for="pack_repository">' . __('Path to repository:') . ' ' .
+        form::field('pack_repository', 65, 255, (string) $s->get('pack_repository'), 'maximal') .
         '</label></p>' .
         '<p class="form-note">' . sprintf(
             __('Preconization: %s'),
@@ -116,18 +116,18 @@ class Config
         <div class="fieldset">
         <h4>' . __('Files') . '</h4>
 
-        <p><label for="packman_pack_filename">' . __('Name of exported package:') . ' ' .
-        form::field('packman_pack_filename', 65, 255, (string) $s->get('packman_pack_filename'), 'maximal') .
+        <p><label for="pack_filename">' . __('Name of exported package:') . ' ' .
+        form::field('pack_filename', 65, 255, (string) $s->get('pack_filename'), 'maximal') .
         '</label></p>
         <p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%') . '</p>
 
-        <p><label for="packman_secondpack_filename">' . __('Name of second exported package:') . ' ' .
-        form::field('packman_secondpack_filename', 65, 255, (string) $s->get('packman_secondpack_filename'), 'maximal') .
+        <p><label for="secondpack_filename">' . __('Name of second exported package:') . ' ' .
+        form::field('secondpack_filename', 65, 255, (string) $s->get('secondpack_filename'), 'maximal') .
         '</label></p>
         <p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%-%version%') . '</p>
 
-        <p><label class="classic" for="packman_pack_overwrite">' .
-        form::checkbox('packman_pack_overwrite', 1, (bool) $s->get('packman_pack_overwrite')) . ' ' .
+        <p><label class="classic" for="pack_overwrite">' .
+        form::checkbox('pack_overwrite', 1, (bool) $s->get('pack_overwrite')) . ' ' .
         __('Overwrite existing package') . '</label></p>
 
         </div>
@@ -135,17 +135,17 @@ class Config
         <div class="fieldset">
         <h4>' . __('Content') . '</h4>
 
-        <p><label for="packman_pack_excludefiles">' . __('Extra files to exclude from package:') . ' ' .
-        form::field('packman_pack_excludefiles', 65, 255, (string) $s->get('packman_pack_excludefiles'), 'maximal') .
+        <p><label for="pack_excludefiles">' . __('Extra files to exclude from package:') . ' ' .
+        form::field('pack_excludefiles', 65, 255, (string) $s->get('pack_excludefiles'), 'maximal') .
         '</label></p>
         <p class="form-note">' . sprintf(__('Preconization: %s'), '*.zip,*.tar,*.tar.gz') . '</p>
 
-        <p><label class="classic" for="packman_pack_nocomment">' .
-        form::checkbox('packman_pack_nocomment', 1, (bool) $s->get('packman_pack_nocomment')) . ' ' .
+        <p><label class="classic" for="pack_nocomment">' .
+        form::checkbox('pack_nocomment', 1, (bool) $s->get('pack_nocomment')) . ' ' .
         __('Remove comments from files') . '</label></p>
 
-        <p><label class="classic" for="packman_pack_fixnewline">' .
-        form::checkbox('packman_pack_fixnewline', 1, (bool) $s->get('packman_pack_fixnewline')) . ' ' .
+        <p><label class="classic" for="pack_fixnewline">' .
+        form::checkbox('pack_fixnewline', 1, (bool) $s->get('pack_fixnewline')) . ' ' .
         __('Fix newline style from files content') . '</label></p>
 
         </div>';

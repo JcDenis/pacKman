@@ -73,8 +73,8 @@ class Manage
 
         # Rights
         $is_writable = Utils::is_writable(
-            $s->get('packman_pack_repository'),
-            $s->get('packman_pack_filename')
+            $s->get('pack_repository'),
+            $s->get('pack_filename')
         );
         $is_editable = !empty($type)
             && !empty($_POST['modules'])
@@ -91,8 +91,8 @@ class Manage
                     $modules = Core::getPackages(self::$themes_path);
                 } else {
                     $modules = array_merge(
-                        Core::getPackages(dirname($s->get('packman_pack_repository') . '/' . $s->get('packman_pack_filename'))),
-                        Core::getPackages(dirname($s->get('packman_pack_repository') . '/' . $s->get('packman_secondpack_filename')))
+                        Core::getPackages(dirname($s->get('pack_repository') . '/' . $s->get('pack_filename'))),
+                        Core::getPackages(dirname($s->get('pack_repository') . '/' . $s->get('secondpack_filename')))
                     );
                 }
 
@@ -133,15 +133,15 @@ class Manage
                     $module['id']   = $id;
                     $module['type'] = $type == 'themes' ? 'theme' : 'plugin';
 
-                    $root  = (string) $s->get('packman_pack_repository');
+                    $root  = (string) $s->get('pack_repository');
                     $files = [
-                        (string) $s->get('packman_pack_filename'),
-                        (string) $s->get('packman_secondpack_filename'),
+                        (string) $s->get('pack_filename'),
+                        (string) $s->get('secondpack_filename'),
                     ];
-                    $nocomment  = (bool) $s->get('packman_pack_nocomment');
-                    $fixnewline = (bool) $s->get('packman_pack_fixnewline');
-                    $overwrite  = (bool) $s->get('packman_pack_overwrite');
-                    $exclude    = explode(',', (string) $s->get('packman_pack_excludefiles'));
+                    $nocomment  = (bool) $s->get('pack_nocomment');
+                    $fixnewline = (bool) $s->get('pack_fixnewline');
+                    $overwrite  = (bool) $s->get('pack_overwrite');
+                    $exclude    = explode(',', (string) $s->get('pack_excludefiles'));
 
                     # --BEHAVIOR-- packmanBeforeCreatePackage
                     dcCore::app()->callBehavior('packmanBeforeCreatePackage', $module);
@@ -211,7 +211,7 @@ class Manage
 
             # Copy
             } elseif (strpos($action, 'copy_to_') !== false) {
-                $dest = (string) $s->get('packman_pack_repository');
+                $dest = (string) $s->get('pack_repository');
                 if ($action == 'copy_to_plugins') {
                     $dest = self::$plugins_path;
                 } elseif ($action == 'copy_to_themes') {
@@ -237,7 +237,7 @@ class Manage
 
             # Move
             } elseif (strpos($action, 'move_to_') !== false) {
-                $dest = (string) $s->get('packman_pack_repository');
+                $dest = (string) $s->get('pack_repository');
                 if ($action == 'move_to_plugins') {
                     $dest = self::$plugins_path;
                 } elseif ($action == 'move_to_themes') {
@@ -277,9 +277,9 @@ class Manage
         $s = dcCore::app()->blog->settings->get(Core::id());
 
         $is_configured = Utils::is_configured(
-            $s->get('packman_pack_repository'),
-            $s->get('packman_pack_filename'),
-            $s->get('packman_secondpack_filename')
+            $s->get('pack_repository'),
+            $s->get('pack_filename'),
+            $s->get('secondpack_filename')
         );
 
         # Display
@@ -307,8 +307,8 @@ class Manage
             '</div>';
         } else {
             $repo_path_modules = array_merge(
-                Core::getPackages(dirname($s->get('packman_pack_repository') . '/' . $s->get('packman_pack_filename'))),
-                Core::getPackages(dirname($s->get('packman_pack_repository') . '/' . $s->get('packman_secondpack_filename')))
+                Core::getPackages(dirname($s->get('pack_repository') . '/' . $s->get('pack_filename'))),
+                Core::getPackages(dirname($s->get('pack_repository') . '/' . $s->get('secondpack_filename')))
             );
             $plugins_path_modules = Core::getPackages(self::$plugins_path);
             $themes_path_modules  = Core::getPackages(self::$themes_path);

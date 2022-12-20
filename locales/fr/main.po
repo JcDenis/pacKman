@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: pacKman 2022.11.20\n"
+"Project-Id-Version: pacKman 2022.12.19.3\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-26T21:19:33+00:00\n"
+"PO-Revision-Date: 2022-12-20T00:29:17+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,6 +27,9 @@ msgstr "Préconisation : %s"
 
 msgid "Blog's public directory"
 msgstr "Répertoire public du blog"
+
+msgid "Leave it empty to use Dotclear VAR directory"
+msgstr "Laisser vide pour utiliser le répertoire VAR de Dotclear"
 
 msgid "Files"
 msgstr "Fichiers"
@@ -60,6 +63,39 @@ msgstr "Impossible de retrouver les informations du module"
 
 msgid "Failed to get temporary directory"
 msgstr "Impossible de retrouver le répertoire temporaire"
+
+msgid "No modules selected."
+msgstr "Aucun module sélectionné."
+
+msgid "Package successfully created."
+msgstr "Paquetage créé avec succès."
+
+msgid "Undeletable file \"%s\""
+msgstr "Impossible de supprimer le fichier \"%s\""
+
+msgid "Package successfully deleted."
+msgstr "Paquetage effacé avec succès."
+
+msgid "Package successfully installed."
+msgstr "Paquetage installé avec succès."
+
+msgid "Package successfully copied."
+msgstr "Paquetage copié avec succès."
+
+msgid "Package successfully moved."
+msgstr "Paquetage déplacé avec succès."
+
+msgid "pacKman is not well configured."
+msgstr "pacKman n'est pas correctement configuré."
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Plugins root"
+msgstr "Racine des plugins"
+
+msgid "Themes root"
+msgstr "Racine des thèmes"
 
 msgid "Cache directory is not writable."
 msgstr "Le répertoire de cache n'est pas accessible en écriture."
@@ -102,37 +138,4 @@ msgstr "Fichier"
 
 msgid "Selected modules action:"
 msgstr "Action sur les modules sélectionnés :"
-
-msgid "Package successfully created."
-msgstr "Paquetage créé avec succès."
-
-msgid "Package successfully deleted."
-msgstr "Paquetage effacé avec succès."
-
-msgid "Package successfully installed."
-msgstr "Paquetage installé avec succès."
-
-msgid "Package successfully copied."
-msgstr "Paquetage copié avec succès."
-
-msgid "Package successfully moved."
-msgstr "Paquetage déplacé avec succès."
-
-msgid "pacKman is not well configured."
-msgstr "pacKman n'est pas correctement configuré."
-
-msgid "Configuration"
-msgstr "Configuration"
-
-msgid "Plugins root"
-msgstr "Racine des plugins"
-
-msgid "Themes root"
-msgstr "Racine des thèmes"
-
-msgid "There are no modules."
-msgstr "Il n'y a pas de modules."
-
-msgid "There are no packages"
-msgstr "Il n'y a pas de paquetages."
 

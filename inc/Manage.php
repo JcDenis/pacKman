@@ -120,7 +120,15 @@ class Manage
                 http::head(404, 'Not Found');
                 exit;
             } elseif (!empty($action) && !$is_editable) {
-                throw new Exception('No selected modules');
+                dcPage::addErrorNotice(
+                    __('No modules selected.')
+                );
+
+                if (!empty($_POST['redir'])) {
+                    http::redirect($_POST['redir']);
+                } else {
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . Core::id(), [], '#packman-' . $type);
+                }
 
             # Pack
             } elseif ($action == 'packup') {
@@ -164,17 +172,22 @@ class Manage
 
             # Delete
             } elseif ($action == 'delete') {
+                $del_success= false;
                 foreach ($_POST['modules'] as $root => $id) {
                     if (!file_exists($root) || !files::isDeletable($root)) {
-                        throw new Exception('Undeletable file: ' . $root);
+                        dcPage::addWarningNotice(sprintf(__('Undeletable file "%s"', $root)));
+                    } else {
+                        $del_success = true;
                     }
 
                     unlink($root);
                 }
 
-                dcPage::addSuccessNotice(
-                    __('Package successfully deleted.')
-                );
+                if ($del_success) {
+                    dcPage::addSuccessNotice(
+                        __('Package successfully deleted.')
+                    );
+                }
 
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);

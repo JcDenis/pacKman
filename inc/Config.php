@@ -57,11 +57,11 @@ class Config
             $pack_overwrite      = !empty($_POST['pack_overwrite']);
             $pack_filename       = (string) $_POST['pack_filename'];
             $secondpack_filename = (string) $_POST['secondpack_filename'];
-            $pack_repository     = (string) path::real($_POST['pack_repository'], false);
+            $pack_repository     = (string) $_POST['pack_repository'];
             $pack_excludefiles   = (string) $_POST['pack_excludefiles'];
 
             $check = Utils::is_configured(
-                $pack_repository,
+                Utils::getRepositoryDir($pack_repository),
                 $pack_filename,
                 $secondpack_filename
             );
@@ -110,7 +110,7 @@ class Config
             __('Preconization: %s'),
             dcCore::app()->blog->public_path ?
             dcCore::app()->blog->public_path : __("Blog's public directory")
-        ) . '</p>
+        ) . '<br />' . __('Leave it empty to use Dotclear VAR directory') . '</p>
         </div>
 
         <div class="fieldset">

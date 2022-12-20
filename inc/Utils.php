@@ -18,6 +18,8 @@ namespace Dotclear\Plugin\pacKman;
 use dcCore;
 
 /* clearbricks ns */
+use dt;
+use files;
 use form;
 use html;
 use path;
@@ -61,6 +63,20 @@ class Utils
     public static function is_writable(string $path, string $file): bool
     {
         return !(empty($path) || empty($file) || !is_writable(dirname($path . '/' . $file)));
+    }
+
+    public static function getRepositoryDir($dir)
+    {
+        if (empty($dir)) {
+            try {
+                $dir = DC_VAR . DIRECTORY_SEPARATOR . 'packman';
+                @files::makeDir($dir, true);
+            } catch (Exception $e) {
+                $dir = '';
+            }
+        }
+
+        return $dir;
     }
 
     public static function getModules(string $type, ?string $id = null): ?array
@@ -187,6 +203,7 @@ class Utils
         '<th class="nowrap">' . __('Version') . '</th>' .
         '<th class="nowrap">' . __('Name') . '</th>' .
         '<th class="nowrap">' . __('File') . '</th>' .
+        '<th class="nowrap">' . __('Date') . '</th>' .
         '</tr>';
 
         $dup = [];
@@ -217,6 +234,9 @@ class Utils
                     'repo'    => $type,
                 ]) . '" title="' . __('Download') . '">' .
                 html::escapeHTML(basename($module['root'])) . '</a>' .
+            '</td>' .
+            '<td class="nowrap">' . 
+                html::escapeHTML(dt::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($module['root']))) . 
             '</td>' .
             '</tr>';
         }

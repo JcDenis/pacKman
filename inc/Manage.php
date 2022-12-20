@@ -62,6 +62,7 @@ class Manage
 
         # Settings
         $s = dcCore::app()->blog->settings->get(Core::id());
+        $dir = Utils::getRepositoryDir($s->get('pack_repository'));
 
         # Modules
         if (!(dcCore::app()->themes instanceof dcThemes)) {
@@ -73,7 +74,7 @@ class Manage
 
         # Rights
         $is_writable = Utils::is_writable(
-            $s->get('pack_repository'),
+            $dir,
             $s->get('pack_filename')
         );
         $is_editable = !empty($type)
@@ -91,8 +92,8 @@ class Manage
                     $modules = Core::getPackages(self::$themes_path);
                 } else {
                     $modules = array_merge(
-                        Core::getPackages(dirname($s->get('pack_repository') . '/' . $s->get('pack_filename'))),
-                        Core::getPackages(dirname($s->get('pack_repository') . '/' . $s->get('secondpack_filename')))
+                        Core::getPackages(dirname($dir . '/' . $s->get('pack_filename'))),
+                        Core::getPackages(dirname($dir . '/' . $s->get('secondpack_filename')))
                     );
                 }
 
@@ -141,7 +142,6 @@ class Manage
                     $module['id']   = $id;
                     $module['type'] = $type == 'themes' ? 'theme' : 'plugin';
 
-                    $root  = (string) $s->get('pack_repository');
                     $files = [
                         (string) $s->get('pack_filename'),
                         (string) $s->get('secondpack_filename'),
@@ -154,7 +154,7 @@ class Manage
                     # --BEHAVIOR-- packmanBeforeCreatePackage
                     dcCore::app()->callBehavior('packmanBeforeCreatePackage', $module);
 
-                    Core::pack($module, $root, $files, $overwrite, $exclude, $nocomment, $fixnewline);
+                    Core::pack($module, $dir, $files, $overwrite, $exclude, $nocomment, $fixnewline);
 
                     # --BEHAVIOR-- packmanAfterCreatePackage
                     dcCore::app()->callBehavior('packmanAfterCreatePackage', $module);
@@ -224,7 +224,7 @@ class Manage
 
             # Copy
             } elseif (strpos($action, 'copy_to_') !== false) {
-                $dest = (string) $s->get('pack_repository');
+                $dest = (string) $dir;
                 if ($action == 'copy_to_plugins') {
                     $dest = self::$plugins_path;
                 } elseif ($action == 'copy_to_themes') {
@@ -250,7 +250,7 @@ class Manage
 
             # Move
             } elseif (strpos($action, 'move_to_') !== false) {
-                $dest = (string) $s->get('pack_repository');
+                $dest = (string) $dir;
                 if ($action == 'move_to_plugins') {
                     $dest = self::$plugins_path;
                 } elseif ($action == 'move_to_themes') {
@@ -288,9 +288,10 @@ class Manage
 
         # Settings
         $s = dcCore::app()->blog->settings->get(Core::id());
+        $dir = Utils::getRepositoryDir($s->get('pack_repository'));
 
         $is_configured = Utils::is_configured(
-            $s->get('pack_repository'),
+            $dir,
             $s->get('pack_filename'),
             $s->get('secondpack_filename')
         );
@@ -320,8 +321,8 @@ class Manage
             '</div>';
         } else {
             $repo_path_modules = array_merge(
-                Core::getPackages(dirname($s->get('pack_repository') . '/' . $s->get('pack_filename'))),
-                Core::getPackages(dirname($s->get('pack_repository') . '/' . $s->get('secondpack_filename')))
+                Core::getPackages(dirname($dir . '/' . $s->get('pack_filename'))),
+                Core::getPackages(dirname($dir . '/' . $s->get('secondpack_filename')))
             );
             $plugins_path_modules = Core::getPackages(self::$plugins_path);
             $themes_path_modules  = Core::getPackages(self::$themes_path);

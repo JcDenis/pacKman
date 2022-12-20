@@ -248,7 +248,7 @@ class Core
     {
         $c = DC_TPL_CACHE . '/packman';
         if (!file_exists($c)) {
-            @mkdir($c);
+            @files::makeDir($c);
         }
         if (!is_writable($c)) {
             throw new Exception(__('Failed to get temporary directory'));

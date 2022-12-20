@@ -1,3 +1,9 @@
+2022.12.20
+- use shorter settings names
+- use dotclear VAR as default repository
+- use notice for errors
+- declare strict_type
+
 2022.12.19.1
 - playing with namespace
 

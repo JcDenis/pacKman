@@ -24,6 +24,9 @@ use form;
 use html;
 use path;
 
+/* php */
+use Exception;
+
 class Utils
 {
     public static function is_configured(string $repo, string $file_a, string $file_b): bool
@@ -235,8 +238,8 @@ class Utils
                 ]) . '" title="' . __('Download') . '">' .
                 html::escapeHTML(basename($module['root'])) . '</a>' .
             '</td>' .
-            '<td class="nowrap">' . 
-                html::escapeHTML(dt::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($module['root']))) . 
+            '<td class="nowrap">' .
+                html::escapeHTML(dt::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($module['root']))) .
             '</td>' .
             '</tr>';
         }

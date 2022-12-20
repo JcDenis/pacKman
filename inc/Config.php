@@ -21,7 +21,6 @@ use dcPage;
 /* clearbricks ns */
 use form;
 use http;
-use path;
 
 /* php ns */
 use Exception;

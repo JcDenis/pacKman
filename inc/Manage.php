@@ -61,7 +61,7 @@ class Manage
         $type   = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository']) ? $_POST['type'] : '';
 
         # Settings
-        $s = dcCore::app()->blog->settings->get(Core::id());
+        $s   = dcCore::app()->blog->settings->get(Core::id());
         $dir = Utils::getRepositoryDir($s->get('pack_repository'));
 
         # Modules
@@ -172,7 +172,7 @@ class Manage
 
             # Delete
             } elseif ($action == 'delete') {
-                $del_success= false;
+                $del_success = false;
                 foreach ($_POST['modules'] as $root => $id) {
                     if (!file_exists($root) || !files::isDeletable($root)) {
                         dcPage::addWarningNotice(sprintf(__('Undeletable file "%s"', $root)));
@@ -287,7 +287,7 @@ class Manage
         }
 
         # Settings
-        $s = dcCore::app()->blog->settings->get(Core::id());
+        $s   = dcCore::app()->blog->settings->get(Core::id());
         $dir = Utils::getRepositoryDir($s->get('pack_repository'));
 
         $is_configured = Utils::is_configured(

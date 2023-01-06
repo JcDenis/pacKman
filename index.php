@@ -12,7 +12,8 @@
  */
 declare(strict_types=1);
 
-if (Dotclear\Plugin\pacKman\Manage::init()) {
-    Dotclear\Plugin\pacKman\Manage::process();
-    Dotclear\Plugin\pacKman\Manage::render();
+$manage = implode('\\', ['Dotclear', 'Plugin', basename(__DIR__), 'Manage']);
+if ($manage::init()) {
+    $manage::process();
+    $manage::render();
 }

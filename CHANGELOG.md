@@ -1,3 +1,6 @@
+2023.01.05
+- harmonise structure (with my plugins)
+
 2022.12.20
 - use shorter settings names
 - use dotclear VAR as default repository

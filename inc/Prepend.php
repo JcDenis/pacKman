@@ -30,7 +30,7 @@ class Prepend
         'Uninstall',
         'Utils',
     ];
-    private static $init = false;
+    protected static $init = false;
 
     public static function init(): bool
     {
@@ -39,14 +39,16 @@ class Prepend
         return self::$init;
     }
 
-    public static function process()
+    public static function process(): ?bool
     {
         if (!self::$init) {
             return false;
         }
 
         foreach (self::LIBS as $lib) {
-            Clearbricks::lib()->autoload(['Dotclear\\Plugin\\pacKman\\' . $lib => __DIR__ . DIRECTORY_SEPARATOR . $lib . '.php']);
+            Clearbricks::lib()->autoload([
+                implode('\\', ['Dotclear','Plugin', basename(__NAMESPACE__), $lib]) => __DIR__ . DIRECTORY_SEPARATOR . $lib . '.php',
+            ]);
         }
 
         return true;

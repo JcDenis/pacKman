@@ -31,13 +31,12 @@ class Manage
 {
     private static $plugins_path = '';
     private static $themes_path  = '';
-    private static $init         = false;
+    protected static $init       = false;
 
     public static function init(): bool
     {
         if (defined('DC_CONTEXT_ADMIN')) {
             dcPage::checkSuper();
-            dcCore::app()->blog->settings->addNamespace(Core::id());
 
             # Paths
             $e                  = explode(PATH_SEPARATOR, DC_PLUGINS_ROOT);

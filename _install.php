@@ -12,8 +12,9 @@
  */
 declare(strict_types=1);
 
-if (Dotclear\Plugin\pacKman\Install::init()) {
-    return Dotclear\Plugin\pacKman\Install::process();
+$install = implode('\\', ['Dotclear', 'Plugin', basename(__DIR__), 'Install']);
+if ($install::init()) {
+    return $install::process();
 }
 
 return null;

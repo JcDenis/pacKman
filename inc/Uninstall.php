@@ -16,7 +16,7 @@ namespace Dotclear\Plugin\pacKman;
 
 class Uninstall
 {
-    private static $init = false;
+    protected static $init = false;
 
     public static function init(): bool
     {
@@ -25,7 +25,7 @@ class Uninstall
         return self::$init;
     }
 
-    public static function process($uninstaller)
+    public static function process($uninstaller): ?bool
     {
         if (!self::$init) {
             return false;
@@ -96,5 +96,7 @@ class Uninstall
             /* desc */
             sprintf(__('delete %s version number'), Core::id())
         );
+
+        return true;
     }
 }

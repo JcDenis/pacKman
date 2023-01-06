@@ -27,26 +27,25 @@ use Exception;
 
 class Config
 {
-    private static $init = false;
+    protected static $init = false;
 
     public static function init(): bool
     {
-        if (defined('DC_CONTEXT_ADMIN')) {
-            dcCore::app()->blog->settings->addNamespace(Core::id());
+        if (defined('DC_CONTEXT_ADMIN') && defined('DC_CONTEXT_MODULE')) {
             self::$init = true;
         }
 
         return self::$init;
     }
 
-    public static function process(): void
+    public static function process(): ?bool
     {
         if (!self::$init) {
-            return;
+            return false;
         }
 
         if (empty($_POST['save'])) {
-            return;
+            return null;
         }
 
         # -- Set settings --
@@ -82,10 +81,14 @@ class Config
                     dcCore::app()->admin->__get('list')->getURL('module=' . Core::id() . '&conf=1&redir=' .
                     dcCore::app()->admin->__get('list')->getRedir())
                 );
+
+                return true;
             }
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }
+
+        return null;
     }
 
     public static function render()

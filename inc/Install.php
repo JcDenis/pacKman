@@ -70,7 +70,7 @@ class Install
     ];
 
     // Nothing to change below
-    private static $init = false;
+    protected static $init = false;
 
     public static function init(): bool
     {
@@ -79,7 +79,7 @@ class Install
         return self::$init;
     }
 
-    public static function process()
+    public static function process(): ?bool
     {
         if (!self::$init) {
             return false;
@@ -90,7 +90,6 @@ class Install
             self::growUp();
 
             // Set module settings
-            dcCore::app()->blog->settings->addNamespace(Core::id());
             foreach (self::$mod_conf as $v) {
                 dcCore::app()->blog->settings->__get(Core::id())->put(
                     $v[0],
@@ -110,7 +109,7 @@ class Install
         }
     }
 
-    public static function growUp()
+    public static function growUp(): void
     {
         $current = dcCore::app()->getVersion(Core::id());
 

@@ -22,19 +22,18 @@ use dcPage;
 
 class Admin
 {
-    private static $init = false;
+    protected static $init = false;
 
     public static function init(): bool
     {
         if (defined('DC_CONTEXT_ADMIN')) {
-            dcCore::app()->blog->settings->addNamespace(Core::id());
             self::$init = true;
         }
 
         return self::$init;
     }
 
-    public static function process()
+    public static function process(): ?bool
     {
         if (!self::$init) {
             return false;
@@ -57,5 +56,7 @@ class Admin
             preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . Core::id())) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
             dcCore::app()->auth->isSuperAdmin()
         );
+
+        return true;
     }
 }

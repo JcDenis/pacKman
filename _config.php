@@ -12,11 +12,8 @@
  */
 declare(strict_types=1);
 
-if (!defined('DC_CONTEXT_MODULE')) {
-    return null;
-}
-
-if (Dotclear\Plugin\pacKman\Config::init()) {
-    Dotclear\Plugin\pacKman\Config::process();
-    Dotclear\Plugin\pacKman\Config::render();
+$config = implode('\\', ['Dotclear', 'Plugin', basename(__DIR__), 'Config']);
+if ($config::init()) {
+    $config::process();
+    $config::render();
 }

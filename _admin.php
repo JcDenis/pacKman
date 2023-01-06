@@ -12,6 +12,7 @@
  */
 declare(strict_types=1);
 
-if (Dotclear\Plugin\pacKman\Admin::init()) {
-    Dotclear\Plugin\pacKman\Admin::process();
+$admin = implode('\\', ['Dotclear', 'Plugin', basename(__DIR__), 'Admin']);
+if ($admin::init()) {
+    $admin::process();
 }

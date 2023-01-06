@@ -37,7 +37,7 @@ class Uninstall
             /* action */
             'delete_all',
             /* ns */
-            Core::id(),
+            basename(__NAMESPACE__),
             /* desc */
             __('delete all settings')
         );
@@ -48,7 +48,7 @@ class Uninstall
             /* action */
             'delete',
             /* ns */
-            Core::id(),
+            basename(__NAMESPACE__),
             /* desc */
             __('delete plugin files')
         );
@@ -59,7 +59,7 @@ class Uninstall
             /* action */
             'delete',
             /* ns */
-            Core::id(),
+            basename(__NAMESPACE__),
             /* desc */
             __('delete the version number')
         );
@@ -70,9 +70,9 @@ class Uninstall
             /* action */
             'delete_all',
             /* ns */
-            Core::id(),
+            basename(__NAMESPACE__),
             /* desc */
-            sprintf(__('delete all %s settings'), Core::id())
+            sprintf(__('delete all %s settings'), basename(__NAMESPACE__))
         );
 
         $uninstaller->addDirectAction(
@@ -81,9 +81,9 @@ class Uninstall
             /* action */
             'delete',
             /* ns */
-            Core::id(),
+            basename(__NAMESPACE__),
             /* desc */
-            sprintf(__('delete %s plugin files'), Core::id())
+            sprintf(__('delete %s plugin files'), basename(__NAMESPACE__))
         );
 
         $uninstaller->addDirectAction(
@@ -92,9 +92,9 @@ class Uninstall
             /* action */
             'delete',
             /* ns */
-            Core::id(),
+            basename(__NAMESPACE__),
             /* desc */
-            sprintf(__('delete %s version number'), Core::id())
+            sprintf(__('delete %s version number'), basename(__NAMESPACE__))
         );
 
         return true;

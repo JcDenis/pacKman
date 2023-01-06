@@ -30,11 +30,6 @@ use Exception;
 
 class Core
 {
-    public static function id()
-    {
-        return basename(dirname(__DIR__));
-    }
-
     /** @var array Excluded files */
     public static $exclude = [
         '.',

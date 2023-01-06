@@ -65,7 +65,7 @@ class Config
             );
 
             if ($check) {
-                $s = dcCore::app()->blog->settings->__get(Core::id());
+                $s = dcCore::app()->blog->settings->__get(basename(__NAMESPACE__));
                 $s->put('pack_nocomment', $pack_nocomment);
                 $s->put('pack_fixnewline', $pack_fixnewline);
                 $s->put('pack_overwrite', $pack_overwrite);
@@ -78,7 +78,7 @@ class Config
                     __('Configuration has been successfully updated.')
                 );
                 http::redirect(
-                    dcCore::app()->admin->__get('list')->getURL('module=' . Core::id() . '&conf=1&redir=' .
+                    dcCore::app()->admin->__get('list')->getURL('module=' . basename(__NAMESPACE__) . '&conf=1&redir=' .
                     dcCore::app()->admin->__get('list')->getRedir())
                 );
 
@@ -98,7 +98,7 @@ class Config
         }
 
         # -- Get settings --
-        $s = dcCore::app()->blog->settings->__get(Core::id());
+        $s = dcCore::app()->blog->settings->__get(basename(__NAMESPACE__));
 
         # -- Display form --
         echo '

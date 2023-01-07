@@ -70,11 +70,13 @@ class Install
     ];
 
     // Nothing to change below
+    private static $pid    = '';
     protected static $init = false;
 
     public static function init(): bool
     {
-        self::$init = defined('DC_CONTEXT_ADMIN') && dcCore::app()->newVersion(basename(__NAMESPACE__), dcCore::app()->plugins->moduleInfo(basename(__NAMESPACE__), 'version'));
+        self::$pid  = basename(dirname(__DIR__));
+        self::$init = defined('DC_CONTEXT_ADMIN') && dcCore::app()->newVersion(self::$pid, dcCore::app()->plugins->moduleInfo(self::$pid, 'version'));
 
         return self::$init;
     }
@@ -91,7 +93,7 @@ class Install
 
             // Set module settings
             foreach (self::$mod_conf as $v) {
-                dcCore::app()->blog->settings->__get(basename(__NAMESPACE__))->put(
+                dcCore::app()->blog->settings->__get(self::$pid)->put(
                     $v[0],
                     $v[2],
                     $v[3],
@@ -111,7 +113,7 @@ class Install
 
     public static function growUp(): void
     {
-        $current = dcCore::app()->getVersion(basename(__NAMESPACE__));
+        $current = dcCore::app()->getVersion(self::$pid);
 
         // Update settings id, ns
         if ($current && version_compare($current, '2022.12.19.1', '<=')) {
@@ -124,7 +126,7 @@ class Install
                 if (preg_match('/^packman_(.*?)$/', $record->setting_id, $match)) {
                     $cur             = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcNamespace::NS_TABLE_NAME);
                     $cur->setting_id = $match[1];
-                    $cur->setting_ns = basename(__NAMESPACE__);
+                    $cur->setting_ns = self::$pid;
                     $cur->update(
                         "WHERE setting_id = '" . $record->setting_id . "' and setting_ns = 'pacKman' " .
                         'AND blog_id ' . (null === $record->blog_id ? 'IS NULL ' : ("= '" . dcCore::app()->con->escape($record->blog_id) . "' "))

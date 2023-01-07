@@ -1,3 +1,6 @@
+2023.01.07
+- fix previously introduced unix bug
+
 2023.01.05
 - harmonise structure (with my plugins)
 

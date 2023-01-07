@@ -2,10 +2,10 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="pacKman">
     <name>pacKman</name>
-    <version>2023.01.05</version>
+    <version>2023.01.07</version>
     <author>Jean-Christian Denis</author>
     <desc>Manage your Dotclear packages</desc>
-    <file>https://github.com/JcDenis/pacKman/releases/download/v2023.01.05/plugin-pacKman.zip</file>
+    <file>https://github.com/JcDenis/pacKman/releases/download/v2023.01.07/plugin-pacKman.zip</file>
     <da:dcmin>2.24</da:dcmin>
     <da:details>https://plugins.dotaddict.org/dc2/details/pacKman</da:details>
     <da:support>https://github.com/JcDenis/pacKman</da:support>

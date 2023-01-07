@@ -22,7 +22,7 @@ themes and plugins from Dotclear administration pages.
   * Super administrator permissions
   * Dotclear 2.24 
   * A writable cache directory 
-  * A writable directory to put paquetages.
+  * A writable directory to put packages. (can be VAR dir)
 
 ## USAGE
 

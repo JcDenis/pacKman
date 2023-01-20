@@ -17,6 +17,7 @@ namespace Dotclear\Plugin\pacKman;
 /* dotclear ns */
 use dcCore;
 use dcPage;
+use dcNsProcess;
 
 /* clearbricks ns */
 use form;
@@ -25,14 +26,13 @@ use http;
 /* php ns */
 use Exception;
 
-class Config
+class Config extends dcNsProcess
 {
     private static $pid    = '';
-    protected static $init = false;
 
     public static function init(): bool
     {
-        if (defined('DC_CONTEXT_ADMIN') && defined('DC_CONTEXT_MODULE')) {
+        if (defined('DC_CONTEXT_ADMIN')) {
             self::$pid  = basename(dirname(__DIR__));
             self::$init = true;
         }
@@ -40,14 +40,14 @@ class Config
         return self::$init;
     }
 
-    public static function process(): ?bool
+    public static function process(): bool
     {
-        if (!self::$init) {
+        if (!self::$init || !defined('DC_CONTEXT_MODULE')) {
             return false;
         }
 
         if (empty($_POST['save'])) {
-            return null;
+            return true;
         }
 
         # -- Set settings --
@@ -83,20 +83,18 @@ class Config
                     dcCore::app()->admin->__get('list')->getURL('module=' . self::$pid . '&conf=1&redir=' .
                     dcCore::app()->admin->__get('list')->getRedir())
                 );
-
-                return true;
             }
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }
 
-        return null;
+        return true;
     }
 
-    public static function render()
+    public static function render(): void
     {
         if (!self::$init) {
-            return false;
+            return;
         }
 
         # -- Get settings --

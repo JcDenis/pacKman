@@ -17,11 +17,12 @@ namespace Dotclear\Plugin\pacKman;
 /* dotclear ns */
 use dcCore;
 use dcNamespace;
+use dcNsProcess;
 
 /* php ns */
 use Exception;
 
-class Install
+class Install extends dcNsProcess
 {
     // Module specs
     private static $mod_conf = [
@@ -71,7 +72,6 @@ class Install
 
     // Nothing to change below
     private static $pid    = '';
-    protected static $init = false;
 
     public static function init(): bool
     {
@@ -81,7 +81,7 @@ class Install
         return self::$init;
     }
 
-    public static function process(): ?bool
+    public static function process(): bool
     {
         if (!self::$init) {
             return false;

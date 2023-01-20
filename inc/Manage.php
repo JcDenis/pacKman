@@ -18,6 +18,7 @@ namespace Dotclear\Plugin\pacKman;
 use dcCore;
 use dcPage;
 use dcThemes;
+use dcNsProcess;
 
 /* clearbricks ns */
 use files;
@@ -27,12 +28,11 @@ use path;
 /* php ns */
 use Exception;
 
-class Manage
+class Manage extends dcNsProcess
 {
     private static $plugins_path = '';
     private static $themes_path  = '';
     private static $pid          = '';
-    protected static $init       = false;
 
     public static function init(): bool
     {
@@ -51,10 +51,10 @@ class Manage
         return self::$init;
     }
 
-    public static function process(): void
+    public static function process(): bool
     {
         if (!self::$init) {
-            return;
+            return false;
         }
 
         # Queries
@@ -279,12 +279,14 @@ class Manage
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }
+
+        return true;
     }
 
-    public static function render()
+    public static function render(): void
     {
         if (!self::$init) {
-            return false;
+            return;
         }
 
         # Settings

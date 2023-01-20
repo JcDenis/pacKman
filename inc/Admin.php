@@ -19,11 +19,11 @@ use dcAdmin;
 use dcCore;
 use dcFavorites;
 use dcPage;
+use dcNsProcess;
 
-class Admin
+class Admin extends dcNsProcess
 {
     private static $pid    = '';
-    protected static $init = false;
 
     public static function init(): bool
     {
@@ -35,7 +35,7 @@ class Admin
         return self::$init;
     }
 
-    public static function process(): ?bool
+    public static function process(): bool
     {
         if (!self::$init) {
             return false;

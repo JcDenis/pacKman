@@ -21,7 +21,7 @@ use dcFavorites;
 use dcPage;
 use dcNsProcess;
 
-class Admin extends dcNsProcess
+class Backend extends dcNsProcess
 {
     private static $pid    = '';
 

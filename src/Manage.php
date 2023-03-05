@@ -300,17 +300,16 @@ class Manage extends dcNsProcess
         );
 
         # Display
-        echo
-        '<html><head><title>' . __('pacKman') . '</title>' .
-        dcPage::jsPageTabs() .
-        dcPage::jsModuleLoad(self::$pid . '/js/packman.js');
+        dcPage::openModule(
+            __('pacKman'),
+            dcPage::jsPageTabs() .
+            dcPage::jsModuleLoad(self::$pid . '/js/packman.js') .
 
-        # --BEHAVIOR-- packmanAdminHeader
-        dcCore::app()->callBehavior('packmanAdminHeader');
+            # --BEHAVIOR-- packmanAdminHeader
+            dcCore::app()->callBehavior('packmanAdminHeader')
+        );
 
-        echo
-        '</head><body>' .
-
+        echo 
         dcPage::breadcrumb([
             __('Plugins') => '',
             __('pacKman') => '',
@@ -365,8 +364,6 @@ class Manage extends dcNsProcess
         dcCore::app()->callBehavior('packmanAdminTabs');
 
         dcPage::helpBlock('pacKman');
-
-        echo
-        '</body></html>';
+        dcPage::closeModule();
     }
 }

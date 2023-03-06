@@ -301,7 +301,7 @@ class Manage extends dcNsProcess
 
         # Display
         dcPage::openModule(
-            __('pacKman'),
+            Core::name(),
             dcPage::jsPageTabs() .
             dcPage::jsModuleLoad(self::$pid . '/js/packman.js') .
 
@@ -312,7 +312,7 @@ class Manage extends dcNsProcess
         echo 
         dcPage::breadcrumb([
             __('Plugins') => '',
-            __('pacKman') => '',
+            Core::name()  => '',
         ]) .
         dcPage::notices();
 

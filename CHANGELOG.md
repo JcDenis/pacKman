@@ -1,3 +1,9 @@
+xxxx.xx.xx
+- require Dotclear 2.26
+- use PHP namespace
+- use dcPage open/close module
+- manage modules structure > dc 2.24
+
 2023.01.07
 - fix previously introduced unix bug
 

@@ -23,9 +23,9 @@ $this->registerModule(
     'pacKman',
     'Manage your Dotclear packages',
     'Jean-Christian Denis',
-    '2023.01.09-dev',
+    '2023.03.05-dev',
     [
-        'requires'    => [['core', '2.24']],
+        'requires'    => [['core', '2.26-dev']],
         'permissions' => null,
         'type'        => 'plugin',
         'support'     => 'https://github.com/JcDenis/' . basename(__DIR__),

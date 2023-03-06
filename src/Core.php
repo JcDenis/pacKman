@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\pacKman;
 
 /* dotclear ns */
+use dcCore;
 use dcModules;
 use dcThemes;
 
@@ -43,6 +44,16 @@ class Core
         'Thumbs.db',
         '_disabled',
     ];
+
+    public static function id()
+    {
+        return basename(dirname(__DIR__));
+    }
+
+    public static function name()
+    {
+        return __('pacKman');
+    }
 
     public static function quote_exclude(array $exclude): array
     {
@@ -79,43 +90,97 @@ class Core
             return $res;
         }
 
+        $sandboxes = [
+            'theme'  => clone dcCore::app()->themes,
+            'plugin' => clone dcCore::app()->plugins,
+        ];
+
+
         $i = 0;
         foreach ($zip_files as $zip_file) {
-            $zip = new fileUnzip($root . '/' . $zip_file);
+            $zip_file = $root . DIRECTORY_SEPARATOR . $zip_file;
+            $zip      = new fileUnzip($zip_file);
+            $zip->getList(false, '#(^|/)(__MACOSX|\.svn|\.hg.*|\.git.*|\.DS_Store|\.directory|Thumbs\.db)(/|$)#');
 
             $zip_root_dir = $zip->getRootDir();
-
+            $define       = '';
             if ($zip_root_dir != false) {
-                $define     = $zip_root_dir . '/_define.php';
-                $has_define = $zip->hasFile($define);
+                $target      = dirname($zip_file);
+                $destination = $target . DIRECTORY_SEPARATOR . $zip_root_dir;
+                $define      = $zip_root_dir . '/' . dcModules::MODULE_FILE_DEFINE;
+                $init        = $zip_root_dir . '/' . dcModules::MODULE_FILE_INIT;
+                $has_define  = $zip->hasFile($define);
             } else {
-                $define     = '_define.php';
-                $has_define = $zip->hasFile($define);
+                $target      = dirname($zip_file) . DIRECTORY_SEPARATOR . preg_replace('/\.([^.]+)$/', '', basename($zip_file));
+                $destination = $target;
+                $define      = dcModules::MODULE_FILE_DEFINE;
+                $init        = dcModules::MODULE_FILE_INIT;
+                $has_define  = $zip->hasFile($define);
             }
 
-            if (!$has_define) {
+            if ($zip->isEmpty()) {
+                $zip->close();
+
                 continue;
             }
 
-            $zip->unzip($define, $cache . '/_define.php');
+            if (!$has_define) {
+                $zip->close();
 
-            $modules = new dcModules();
-            $modules->requireDefine($cache, $zip_root_dir);
-            if ($modules->moduleExists($zip_root_dir)) {
-                $res[$i] = $modules->getModules($zip_root_dir);
-            } else {
-                $themes = new dcThemes();
-                $themes->requireDefine($cache, $zip_root_dir);
-                $res[$i] = $themes->getModules($zip_root_dir);
+                continue;
             }
-            if (is_array($res[$i])) {
-                $res[$i] = array_merge($res[$i], [
-                    'id'   => $zip_root_dir,
-                    'root' => $root . '/' . $zip_file,
-                ]);
 
-                unlink($cache . '_define.php');
-                $i++;
+            foreach ($sandboxes as $type => $sandbox) {
+                try {
+                    files::makeDir($destination, true);
+
+                    // can't load twice _init.php file !
+                    $unlink = false;
+                    if ($zip->hasFile($init)
+                     && !dcCore::app()->plugins->getDefine(basename($destination))->isDefined()
+                     && !dcCore::app()->themes->getDefine(basename($destination))->isDefined()
+                    ) {
+                        $unlink = true;
+                        $zip->unzip($init, $destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_INIT);
+                    }
+
+                    $zip->unzip($define, $destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_DEFINE);
+
+                    $sandbox->resetModulesList();
+                    $sandbox->requireDefine($destination, basename($destination));
+
+                    if ($unlink) {
+                        unlink($destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_INIT);
+                    }
+
+                    unlink($destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_DEFINE);
+
+                    $new_errors = $sandbox->getErrors();
+                    if (!empty($new_errors)) {
+                        $new_errors = implode(" \n", $new_errors);
+
+                        throw new Exception($new_errors);
+                    }
+
+                    $module = $sandbox->getDefine(basename($destination));
+                    if (!$module->isDefined() || $module->get('type') != $type) {
+
+                        throw new Exception('bad module type');
+                    }
+
+                    $res[$i]         = $module->dump();
+                    $res[$i]['root'] = $zip_file;
+                    $i++;
+
+                    $zip->close();
+                    files::deltree($destination);
+
+                } catch (Exception $e) {
+                    $zip->close();
+                    files::deltree($destination);
+
+                    continue;
+                }
             }
         }
 

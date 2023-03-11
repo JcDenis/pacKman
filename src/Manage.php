@@ -32,7 +32,6 @@ class Manage extends dcNsProcess
 {
     private static $plugins_path = '';
     private static $themes_path  = '';
-    private static $pid          = '';
 
     public static function init(): bool
     {
@@ -44,8 +43,6 @@ class Manage extends dcNsProcess
             $p                  = array_pop($e);
             self::$plugins_path = (string) path::real($p);
             self::$themes_path  = dcCore::app()->blog->themes_path;
-            self::$pid          = basename(dirname(__DIR__));
-            self::$init         = true;
         }
 
         return self::$init;
@@ -62,7 +59,7 @@ class Manage extends dcNsProcess
         $type   = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository']) ? $_POST['type'] : '';
 
         # Settings
-        $s   = dcCore::app()->blog->settings->get(self::$pid);
+        $s   = dcCore::app()->blog->settings->get(My::id());
         $dir = Utils::getRepositoryDir($s->get('pack_repository'));
 
         # Modules
@@ -129,7 +126,7 @@ class Manage extends dcNsProcess
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . self::$pid, [], '#packman-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id(), [], '#packman-' . $type);
                 }
 
             # Pack
@@ -168,7 +165,7 @@ class Manage extends dcNsProcess
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . self::$pid, [], '#packman-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id(), [], '#packman-' . $type);
                 }
 
             # Delete
@@ -193,7 +190,7 @@ class Manage extends dcNsProcess
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . self::$pid, [], '#packman-repository-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
                 }
 
             # Install
@@ -220,7 +217,7 @@ class Manage extends dcNsProcess
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . self::$pid, [], '#packman-repository-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
                 }
 
             # Copy
@@ -246,7 +243,7 @@ class Manage extends dcNsProcess
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . self::$pid, [], '#packman-repository-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
                 }
 
             # Move
@@ -273,7 +270,7 @@ class Manage extends dcNsProcess
                 if (!empty($_POST['redir'])) {
                     http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . self::$pid, [], '#packman-repository-' . $type);
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
                 }
             }
         } catch (Exception $e) {
@@ -290,7 +287,7 @@ class Manage extends dcNsProcess
         }
 
         # Settings
-        $s   = dcCore::app()->blog->settings->get(self::$pid);
+        $s   = dcCore::app()->blog->settings->get(My::id());
         $dir = Utils::getRepositoryDir($s->get('pack_repository'));
 
         $is_configured = Utils::is_configured(
@@ -301,25 +298,25 @@ class Manage extends dcNsProcess
 
         # Display
         dcPage::openModule(
-            Core::name(),
+            My::name(),
             dcPage::jsPageTabs() .
-            dcPage::jsModuleLoad(self::$pid . '/js/packman.js') .
+            dcPage::jsModuleLoad(My::id() . '/js/backend.js') .
 
             # --BEHAVIOR-- packmanAdminHeader
             dcCore::app()->callBehavior('packmanAdminHeader')
         );
 
-        echo 
+        echo
         dcPage::breadcrumb([
             __('Plugins') => '',
-            Core::name()  => '',
+            My::name()    => '',
         ]) .
         dcPage::notices();
 
         if (dcCore::app()->error->flag() || !$is_configured) {
             echo
             '<div class="warning">' . __('pacKman is not well configured.') . ' ' .
-            '<a href="' . dcCore::app()->adminurl->get('admin.plugins', ['module' => self::$pid, 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.' . self::$pid)]) . '">' . __('Configuration') . '</a>' .
+            '<a href="' . dcCore::app()->adminurl->get('admin.plugins', ['module' => My::id(), 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.' . My::id())]) . '">' . __('Configuration') . '</a>' .
             '</div>';
         } else {
             $repo_path_modules = array_merge(

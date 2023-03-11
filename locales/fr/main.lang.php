@@ -9,7 +9,6 @@
 # DOT NOT MODIFY THIS FILE !
 #
 
-l10n::$locales['Packages repository']                             = 'Dépôt de paquetages';
 l10n::$locales['Configuration has been successfully updated.']    = 'La configuration a été mise à jour avec succès.';
 l10n::$locales['Root']                                            = 'Racine';
 l10n::$locales['Path to repository:']                             = 'Chemin vers le dépôt :';
@@ -38,6 +37,7 @@ l10n::$locales['pacKman is not well configured.']                 = 'pacKman n\'
 l10n::$locales['Configuration']                                   = 'Configuration';
 l10n::$locales['Plugins root']                                    = 'Racine des plugins';
 l10n::$locales['Themes root']                                     = 'Racine des thèmes';
+l10n::$locales['Packages repository']                             = 'Dépôt de paquetages';
 l10n::$locales['Cache directory is not writable.']                = 'Le répertoire de cache n\'est pas accessible en écriture.';
 l10n::$locales['Path to repository is not writable.']             = 'Le chemin vers le dépôt n\'est pas accessible en écriture.';
 l10n::$locales['You must specify the name of package to export.'] = 'Vous devez spécifier le nom du paquetage exporté.';

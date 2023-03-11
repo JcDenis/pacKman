@@ -12,20 +12,17 @@
  */
 declare(strict_types=1);
 
-// can not use namespace as it is included inside a class method,
-// and also can be included in third party plugins class methods.
-
 if (!defined('DC_RC_PATH')) {
     return null;
 }
 
 $this->registerModule(
-    'pacKman',
+    'Packages repository',
     'Manage your Dotclear packages',
     'Jean-Christian Denis',
-    '2023.03.05-dev',
+    '2023.03.11',
     [
-        'requires'    => [['core', '2.26-dev']],
+        'requires'    => [['core', '2.26']],
         'permissions' => null,
         'type'        => 'plugin',
         'support'     => 'https://github.com/JcDenis/' . basename(__DIR__),

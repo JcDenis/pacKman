@@ -16,12 +16,10 @@ namespace Dotclear\Plugin\pacKman;
 
 class Uninstall
 {
-    private static $pid    = '';
     protected static $init = false;
 
     public static function init(): bool
     {
-        self::$pid  = basename(dirname(__DIR__));
         self::$init = defined('DC_RC_PATH');
 
         return self::$init;
@@ -39,7 +37,7 @@ class Uninstall
             /* action */
             'delete_all',
             /* ns */
-            self::$pid,
+            My::id(),
             /* desc */
             __('delete all settings')
         );
@@ -50,7 +48,7 @@ class Uninstall
             /* action */
             'delete',
             /* ns */
-            self::$pid,
+            My::id(),
             /* desc */
             __('delete plugin files')
         );
@@ -61,7 +59,7 @@ class Uninstall
             /* action */
             'delete',
             /* ns */
-            self::$pid,
+            My::id(),
             /* desc */
             __('delete the version number')
         );
@@ -72,9 +70,9 @@ class Uninstall
             /* action */
             'delete_all',
             /* ns */
-            self::$pid,
+            My::id(),
             /* desc */
-            sprintf(__('delete all %s settings'), self::$pid)
+            sprintf(__('delete all %s settings'), My::id())
         );
 
         $uninstaller->addDirectAction(
@@ -83,9 +81,9 @@ class Uninstall
             /* action */
             'delete',
             /* ns */
-            self::$pid,
+            My::id(),
             /* desc */
-            sprintf(__('delete %s plugin files'), self::$pid)
+            sprintf(__('delete %s plugin files'), My::id())
         );
 
         $uninstaller->addDirectAction(
@@ -94,9 +92,9 @@ class Uninstall
             /* action */
             'delete',
             /* ns */
-            self::$pid,
+            My::id(),
             /* desc */
-            sprintf(__('delete %s version number'), self::$pid)
+            sprintf(__('delete %s version number'), My::id())
         );
 
         return true;

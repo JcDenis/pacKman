@@ -14,50 +14,18 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-/* dotclear ns */
 use dcCore;
 use dcModules;
-use dcThemes;
-
-/* clearbricks ns */
+use Exception;
 use files;
 use fileUnzip;
 use path;
 
-/* packman ns */
-
-/* php ns */
-use Exception;
-
 class Core
 {
-    /** @var array Excluded files */
-    public static $exclude = [
-        '.',
-        '..',
-        '__MACOSX',
-        '.svn',
-        '.hg*',
-        '.git*',
-        'CVS',
-        '.DS_Store',
-        'Thumbs.db',
-        '_disabled',
-    ];
-
-    public static function id()
-    {
-        return basename(dirname(__DIR__));
-    }
-
-    public static function name()
-    {
-        return __('pacKman');
-    }
-
     public static function quote_exclude(array $exclude): array
     {
-        foreach ($exclude as $k => $v) {
+        foreach (My::EXCLUDED_FILES as $k => $v) {
             $exclude[$k] = '#(^|/)(' . str_replace(
                 ['.', '*'],
                 ['\.', '.*?'],
@@ -94,7 +62,6 @@ class Core
             'theme'  => clone dcCore::app()->themes,
             'plugin' => clone dcCore::app()->plugins,
         ];
-
 
         $i = 0;
         foreach ($zip_files as $zip_file) {
@@ -137,8 +104,8 @@ class Core
                     // can't load twice _init.php file !
                     $unlink = false;
                     if ($zip->hasFile($init)
-                     && !dcCore::app()->plugins->getDefine(basename($destination))->isDefined()
-                     && !dcCore::app()->themes->getDefine(basename($destination))->isDefined()
+//                     && !dcCore::app()->plugins->getDefine(basename($destination))->isDefined()
+//                     && !dcCore::app()->themes->getDefine(basename($destination))->isDefined()
                     ) {
                         $unlink = true;
                         $zip->unzip($init, $destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_INIT);
@@ -164,7 +131,6 @@ class Core
 
                     $module = $sandbox->getDefine(basename($destination));
                     if (!$module->isDefined() || $module->get('type') != $type) {
-
                         throw new Exception('bad module type');
                     }
 
@@ -174,7 +140,6 @@ class Core
 
                     $zip->close();
                     files::deltree($destination);
-
                 } catch (Exception $e) {
                     $zip->close();
                     files::deltree($destination);
@@ -256,7 +221,7 @@ class Core
 
     private static function getExclude(array $exclude): array
     {
-        $exclude = array_merge(self::$exclude, $exclude);
+        $exclude = array_merge(My::EXCLUDED_FILES, $exclude);
 
         return self::quote_exclude($exclude);
     }

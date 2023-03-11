@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-/* dotclear ns */
 use dcAdmin;
 use dcCore;
 use dcFavorites;
@@ -23,14 +22,9 @@ use dcNsProcess;
 
 class Backend extends dcNsProcess
 {
-    private static $pid    = '';
-
     public static function init(): bool
     {
-        if (defined('DC_CONTEXT_ADMIN')) {
-            self::$pid  = basename(dirname(__DIR__));
-            self::$init = true;
-        }
+        self::$init = defined('DC_CONTEXT_ADMIN');
 
         return self::$init;
     }
@@ -42,20 +36,20 @@ class Backend extends dcNsProcess
         }
 
         dcCore::app()->addBehavior('adminDashboardFavoritesV2', function (dcFavorites $favs): void {
-            $favs->register(self::$pid, [
-                'title'      => __('Packages repository'),
-                'url'        => dcCore::app()->adminurl->get('admin.plugin.' . self::$pid, [], '#packman-repository-repository'),
-                'small-icon' => [dcPage::getPF(self::$pid . '/icon.svg'), dcPage::getPF(self::$pid . '/icon-dark.svg')],
-                'large-icon' => [dcPage::getPF(self::$pid . '/icon.svg'), dcPage::getPF(self::$pid . '/icon-dark.svg')],
+            $favs->register(My::id(), [
+                'title'      => My::name(),
+                'url'        => dcCore::app()->adminurl->get('admin.plugin.' . My::id(), [], '#packman-repository-repository'),
+                'small-icon' => [dcPage::getPF(My::id() . '/icon.svg'), dcPage::getPF(My::id() . '/icon-dark.svg')],
+                'large-icon' => [dcPage::getPF(My::id() . '/icon.svg'), dcPage::getPF(My::id() . '/icon-dark.svg')],
                 //'permissions' => dcCore::app()->auth->isSuperAdmin(),
             ]);
         });
 
         dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
-            __('Packages repository'),
-            dcCore::app()->adminurl->get('admin.plugin.' . self::$pid) . '#packman-repository-repository',
-            [dcPage::getPF(self::$pid . '/icon.svg'), dcPage::getPF(self::$pid . '/icon-dark.svg')],
-            preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . self::$pid)) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
+            My::name(),
+            dcCore::app()->adminurl->get('admin.plugin.' . My::id()) . '#packman-repository-repository',
+            [dcPage::getPF(My::id() . '/icon.svg'), dcPage::getPF(My::id() . '/icon-dark.svg')],
+            preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . My::id())) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
             dcCore::app()->auth->isSuperAdmin()
         );
 

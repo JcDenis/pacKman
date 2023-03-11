@@ -1,17 +1,14 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: pacKman 2022.12.19.3\n"
+"Project-Id-Version: pacKman 2023.03.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-12-20T00:29:17+00:00\n"
+"PO-Revision-Date: 2023-03-11T17:43:33+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
-msgid "Packages repository"
-msgstr "Dépôt de paquetages"
 
 msgid "Configuration has been successfully updated."
 msgstr "La configuration a été mise à jour avec succès."
@@ -96,6 +93,9 @@ msgstr "Racine des plugins"
 
 msgid "Themes root"
 msgstr "Racine des thèmes"
+
+msgid "Packages repository"
+msgstr "Dépôt de paquetages"
 
 msgid "Cache directory is not writable."
 msgstr "Le répertoire de cache n'est pas accessible en écriture."

@@ -154,7 +154,7 @@ class Utils
                 html::escapeHTML($_REQUEST['redir'])
             ) : ''
         ) .
-        form::hidden(['p'], basename(dirname('../' . __DIR__))) .
+        form::hidden(['p'], My::id()) .
         form::hidden(['type'], $type) .
         form::hidden(['action'], 'packup') .
         '<input type="submit" name="packup" value="' .
@@ -232,7 +232,7 @@ class Utils
             '</td>' .
             '<td class="nowrap">' .
                 '<a class="packman-download" href="' .
-                dcCore::app()->adminurl->get('admin.plugin.' . basename(dirname('../' . __DIR__)), [
+                dcCore::app()->adminurl->get('admin.plugin.' . My::id(), [
                     'package' => basename($module['root']),
                     'repo'    => $type,
                 ]) . '" title="' . __('Download') . '">' .
@@ -251,7 +251,7 @@ class Utils
         '<p class="col right">' . __('Selected modules action:') . ' ' .
         form::combo(['action'], $combo_action) .
         '<input type="submit" name="packup" value="' . __('ok') . '" />' .
-        form::hidden(['p'], basename(dirname('../' . __DIR__))) .
+        form::hidden(['p'], My::id()) .
         form::hidden(['tab'], 'repository') .
         form::hidden(['type'], $type) .
         dcCore::app()->formNonce() .

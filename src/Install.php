@@ -14,12 +14,9 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-/* dotclear ns */
 use dcCore;
 use dcNamespace;
 use dcNsProcess;
-
-/* php ns */
 use Exception;
 
 class Install extends dcNsProcess
@@ -72,7 +69,7 @@ class Install extends dcNsProcess
 
     public static function init(): bool
     {
-        self::$init = defined('DC_CONTEXT_ADMIN') && dcCore::app()->newVersion(Core::id(), dcCore::app()->plugins->moduleInfo(Core::id(), 'version'));
+        self::$init = defined('DC_CONTEXT_ADMIN') && dcCore::app()->newVersion(My::id(), dcCore::app()->plugins->moduleInfo(My::id(), 'version'));
 
         return self::$init;
     }
@@ -89,7 +86,7 @@ class Install extends dcNsProcess
 
             // Set module settings
             foreach (self::$mod_conf as $v) {
-                dcCore::app()->blog->settings->__get(Core::id())->put(
+                dcCore::app()->blog->settings->get(My::id())->put(
                     $v[0],
                     $v[2],
                     $v[3],
@@ -109,7 +106,7 @@ class Install extends dcNsProcess
 
     public static function growUp(): void
     {
-        $current = dcCore::app()->getVersion(Core::id());
+        $current = dcCore::app()->getVersion(My::id());
 
         // Update settings id, ns
         if ($current && version_compare($current, '2022.12.19.1', '<=')) {
@@ -122,7 +119,7 @@ class Install extends dcNsProcess
                 if (preg_match('/^packman_(.*?)$/', $record->setting_id, $match)) {
                     $cur             = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcNamespace::NS_TABLE_NAME);
                     $cur->setting_id = $match[1];
-                    $cur->setting_ns = Core::id();
+                    $cur->setting_ns = My::id();
                     $cur->update(
                         "WHERE setting_id = '" . $record->setting_id . "' and setting_ns = 'pacKman' " .
                         'AND blog_id ' . (null === $record->blog_id ? 'IS NULL ' : ("= '" . dcCore::app()->con->escape($record->blog_id) . "' "))

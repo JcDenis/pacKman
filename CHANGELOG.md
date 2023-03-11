@@ -1,7 +1,8 @@
-xxxx.xx.xx
+2023.03.11
 - require Dotclear 2.26
 - use PHP namespace
 - use dcPage open/close module
+- use Form helpers
 - manage modules structure > dc 2.24
 
 2023.01.07

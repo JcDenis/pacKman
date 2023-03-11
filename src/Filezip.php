@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-/* clearbricks ns */
 //use fileZip;
 
 class Filezip extends \fileZip

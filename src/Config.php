@@ -14,35 +14,33 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-/* dotclear ns */
 use dcCore;
 use dcPage;
 use dcNsProcess;
-
-/* clearbricks ns */
-use form;
-use http;
-
-/* php ns */
+use Dotclear\Helper\Html\Form\{
+    Checkbox,
+    Div,
+    Fieldset,
+    Input,
+    Label,
+    Legend,
+    Note,
+    Para
+};
 use Exception;
 
 class Config extends dcNsProcess
 {
-    private static $pid    = '';
-
     public static function init(): bool
     {
-        if (defined('DC_CONTEXT_ADMIN')) {
-            self::$pid  = basename(dirname(__DIR__));
-            self::$init = true;
-        }
+        self::$init = defined('DC_CONTEXT_ADMIN');
 
         return self::$init;
     }
 
     public static function process(): bool
     {
-        if (!self::$init || !defined('DC_CONTEXT_MODULE')) {
+        if (!self::$init) {
             return false;
         }
 
@@ -67,7 +65,7 @@ class Config extends dcNsProcess
             );
 
             if ($check) {
-                $s = dcCore::app()->blog->settings->__get(self::$pid);
+                $s = dcCore::app()->blog->settings->get(My::id());
                 $s->put('pack_nocomment', $pack_nocomment);
                 $s->put('pack_fixnewline', $pack_fixnewline);
                 $s->put('pack_overwrite', $pack_overwrite);
@@ -79,10 +77,11 @@ class Config extends dcNsProcess
                 dcPage::addSuccessNotice(
                     __('Configuration has been successfully updated.')
                 );
-                http::redirect(
-                    dcCore::app()->admin->__get('list')->getURL('module=' . self::$pid . '&conf=1&redir=' .
-                    dcCore::app()->admin->__get('list')->getRedir())
-                );
+                dcCore::app()->adminurl->redirect('admin.plugins', [
+                    'module' => My::id(),
+                    'conf'   => '1',
+                    'redir'  => dcCore::app()->admin->__get('list')->getRedir(),
+                ]);
             }
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
@@ -98,58 +97,63 @@ class Config extends dcNsProcess
         }
 
         # -- Get settings --
-        $s = dcCore::app()->blog->settings->__get(self::$pid);
+        $s = dcCore::app()->blog->settings->get(My::id());
 
         # -- Display form --
-        echo '
-        <div class="fieldset">
-        <h4>' . __('Root') . '</h4>
+        echo
+        (new Div())->items([
+            (new Fieldset())->class('fieldset')->legend((new Legend(__('Root'))))->fields([
+                // pack_repository
+                (new Para())->items([
+                    (new Label(__('Path to repository:')))->for('pack_repository'),
+                    (new Input('pack_repository'))->class('maximal')->size(65)->maxlenght(255)->value((string) $s->get('pack_repository')),
+                ]),
+                (new Note())->class('form-note')->text(
+                    sprintf(
+                        __('Preconization: %s'),
+                        dcCore::app()->blog->public_path ?
+                        dcCore::app()->blog->public_path : __("Blog's public directory")
+                    ) . ' ' . __('Leave it empty to use Dotclear VAR directory')
+                ),
+            ]),
+            (new Fieldset())->class('fieldset')->legend((new Legend(__('Files'))))->fields([
+                // pack_filename
+                (new Para())->items([
+                    (new Label(__('Name of exported package:')))->for('pack_filename'),
+                    (new Input('pack_filename'))->class('maximal')->size(65)->maxlenght(255)->value((string) $s->get('pack_filename')),
+                ]),
+                (new Note())->text(sprintf(__('Preconization: %s'), '%type%-%id%'))->class('form-note'),
+                // secondpack_filename
+                (new Para())->items([
+                    (new Label(__('Name of second exported package:')))->for('secondpack_filename'),
+                    (new Input('secondpack_filename'))->class('maximal')->size(65)->maxlenght(255)->value((string) $s->get('secondpack_filename')),
+                ]),
+                (new Note())->text(sprintf(__('Preconization: %s'), '%type%-%id%-%version%'))->class('form-note'),
+                // pack_overwrite
+                (new Para())->items([
+                    (new Checkbox('pack_overwrite', (bool) $s->get('pack_overwrite')))->value(1),
+                    (new Label(__('Overwrite existing package'), Label::OUTSIDE_LABEL_AFTER))->for('pack_overwrite')->class('classic'),
+                ]),
+            ]),
+            (new Fieldset())->class('fieldset')->legend((new Legend(__('Content'))))->fields([
+                // pack_excludefiles
+                (new Para())->items([
+                    (new Label(__('Extra files to exclude from package:')))->for('pack_excludefiles'),
+                    (new Input('pack_excludefiles'))->class('maximal')->size(65)->maxlenght(255)->value((string) $s->get('pack_excludefiles')),
+                ]),
+                (new Note())->text(sprintf(__('Preconization: %s'), '*.zip,*.tar,*.tar.gz'))->class('form-note'),
+                // pack_nocomment
+                (new Para())->items([
+                    (new Checkbox('pack_nocomment', (bool) $s->get('pack_nocomment')))->value(1),
+                    (new Label(__('Remove comments from files'), Label::OUTSIDE_LABEL_AFTER))->for('pack_nocomment')->class('classic'),
+                ]),
+                // pack_fixnewline
+                (new Para())->items([
+                    (new Checkbox('pack_fixnewline', (bool) $s->get('pack_fixnewline')))->value(1),
+                    (new Label(__('Fix newline style from files content'), Label::OUTSIDE_LABEL_AFTER))->for('pack_fixnewline')->class('classic'),
+                ]),
 
-        <p><label for="pack_repository">' . __('Path to repository:') . ' ' .
-        form::field('pack_repository', 65, 255, (string) $s->get('pack_repository'), 'maximal') .
-        '</label></p>' .
-        '<p class="form-note">' . sprintf(
-            __('Preconization: %s'),
-            dcCore::app()->blog->public_path ?
-            dcCore::app()->blog->public_path : __("Blog's public directory")
-        ) . '<br />' . __('Leave it empty to use Dotclear VAR directory') . '</p>
-        </div>
-
-        <div class="fieldset">
-        <h4>' . __('Files') . '</h4>
-
-        <p><label for="pack_filename">' . __('Name of exported package:') . ' ' .
-        form::field('pack_filename', 65, 255, (string) $s->get('pack_filename'), 'maximal') .
-        '</label></p>
-        <p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%') . '</p>
-
-        <p><label for="secondpack_filename">' . __('Name of second exported package:') . ' ' .
-        form::field('secondpack_filename', 65, 255, (string) $s->get('secondpack_filename'), 'maximal') .
-        '</label></p>
-        <p class="form-note">' . sprintf(__('Preconization: %s'), '%type%-%id%-%version%') . '</p>
-
-        <p><label class="classic" for="pack_overwrite">' .
-        form::checkbox('pack_overwrite', 1, (bool) $s->get('pack_overwrite')) . ' ' .
-        __('Overwrite existing package') . '</label></p>
-
-        </div>
-
-        <div class="fieldset">
-        <h4>' . __('Content') . '</h4>
-
-        <p><label for="pack_excludefiles">' . __('Extra files to exclude from package:') . ' ' .
-        form::field('pack_excludefiles', 65, 255, (string) $s->get('pack_excludefiles'), 'maximal') .
-        '</label></p>
-        <p class="form-note">' . sprintf(__('Preconization: %s'), '*.zip,*.tar,*.tar.gz') . '</p>
-
-        <p><label class="classic" for="pack_nocomment">' .
-        form::checkbox('pack_nocomment', 1, (bool) $s->get('pack_nocomment')) . ' ' .
-        __('Remove comments from files') . '</label></p>
-
-        <p><label class="classic" for="pack_fixnewline">' .
-        form::checkbox('pack_fixnewline', 1, (bool) $s->get('pack_fixnewline')) . ' ' .
-        __('Fix newline style from files content') . '</label></p>
-
-        </div>';
+            ]),
+        ])->render();
     }
 }

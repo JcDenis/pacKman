@@ -25,7 +25,7 @@ class Core
 {
     public static function quote_exclude(array $exclude): array
     {
-        foreach (My::EXCLUDED_FILES as $k => $v) {
+        foreach ($exclude as $k => $v) {
             $exclude[$k] = '#(^|/)(' . str_replace(
                 ['.', '*'],
                 ['\.', '.*?'],

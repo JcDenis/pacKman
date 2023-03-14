@@ -1,3 +1,6 @@
+2023.03.14
+- fix preg match on excluded files
+
 2023.03.11
 - require Dotclear 2.26
 - use PHP namespace

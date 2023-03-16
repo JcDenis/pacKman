@@ -23,26 +23,16 @@ use dcNsProcess;
 /* clearbricks ns */
 use files;
 use http;
-use path;
 
 /* php ns */
 use Exception;
 
 class Manage extends dcNsProcess
 {
-    private static $plugins_path = '';
-    private static $themes_path  = '';
-
     public static function init(): bool
     {
         if (defined('DC_CONTEXT_ADMIN')) {
-            dcPage::checkSuper();
-
-            # Paths
-            $e                  = explode(PATH_SEPARATOR, DC_PLUGINS_ROOT);
-            $p                  = array_pop($e);
-            self::$plugins_path = (string) path::real($p);
-            self::$themes_path  = dcCore::app()->blog->themes_path;
+            self::$init = dcCore::app()->auth->isSuperAdmin() && version_compare(phpversion(), My::PHP_MIN, '>=');
         }
 
         return self::$init;
@@ -59,8 +49,8 @@ class Manage extends dcNsProcess
         $type   = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository']) ? $_POST['type'] : '';
 
         # Settings
-        $s   = dcCore::app()->blog->settings->get(My::id());
-        $dir = Utils::getRepositoryDir($s->get('pack_repository'));
+        $s   = new Settings();
+        $dir = Utils::getRepositoryDir($s->pack_repository);
 
         # Modules
         if (!(dcCore::app()->themes instanceof dcThemes)) {
@@ -73,7 +63,7 @@ class Manage extends dcNsProcess
         # Rights
         $is_writable = Utils::is_writable(
             $dir,
-            $s->get('pack_filename')
+            $s->pack_filename
         );
         $is_editable = !empty($type)
             && !empty($_POST['modules'])
@@ -85,13 +75,13 @@ class Manage extends dcNsProcess
             if (isset($_REQUEST['package']) && empty($type)) {
                 $modules = [];
                 if ($type == 'plugins') {
-                    $modules = Core::getPackages(self::$plugins_path);
+                    $modules = Core::getPackages(Utils::getPluginsPath());
                 } elseif ($type == 'themes') {
-                    $modules = Core::getPackages(self::$themes_path);
+                    $modules = Core::getPackages(Utils::getThemesPath());
                 } else {
                     $modules = array_merge(
-                        Core::getPackages(dirname($dir . '/' . $s->get('pack_filename'))),
-                        Core::getPackages(dirname($dir . '/' . $s->get('secondpack_filename')))
+                        Core::getPackages(dirname($dir . '/' . $s->pack_filename)),
+                        Core::getPackages(dirname($dir . '/' . $s->secondpack_filename))
                     );
                 }
 
@@ -140,19 +130,18 @@ class Manage extends dcNsProcess
                     $module['id']   = $id;
                     $module['type'] = $type == 'themes' ? 'theme' : 'plugin';
 
-                    $files = [
-                        (string) $s->get('pack_filename'),
-                        (string) $s->get('secondpack_filename'),
-                    ];
-                    $nocomment  = (bool) $s->get('pack_nocomment');
-                    $fixnewline = (bool) $s->get('pack_fixnewline');
-                    $overwrite  = (bool) $s->get('pack_overwrite');
-                    $exclude    = explode(',', (string) $s->get('pack_excludefiles'));
-
                     # --BEHAVIOR-- packmanBeforeCreatePackage
                     dcCore::app()->callBehavior('packmanBeforeCreatePackage', $module);
 
-                    Core::pack($module, $dir, $files, $overwrite, $exclude, $nocomment, $fixnewline);
+                    Core::pack(
+                        $module,
+                        $dir,
+                        [$s->pack_filename, $s->secondpack_filename],
+                        $s->pack_overwrite,
+                        explode(',', $s->pack_excludefiles),
+                        $s->pack_nocomment,
+                        $s->pack_fixnewline
+                    );
 
                     # --BEHAVIOR-- packmanAfterCreatePackage
                     dcCore::app()->callBehavior('packmanAfterCreatePackage', $module);
@@ -224,9 +213,9 @@ class Manage extends dcNsProcess
             } elseif (strpos($action, 'copy_to_') !== false) {
                 $dest = (string) $dir;
                 if ($action == 'copy_to_plugins') {
-                    $dest = self::$plugins_path;
+                    $dest = Utils::getPluginsPath();
                 } elseif ($action == 'copy_to_themes') {
-                    $dest = self::$themes_path;
+                    $dest = Utils::getThemesPath();
                 }
 
                 foreach ($_POST['modules'] as $root => $id) {
@@ -250,9 +239,9 @@ class Manage extends dcNsProcess
             } elseif (strpos($action, 'move_to_') !== false) {
                 $dest = (string) $dir;
                 if ($action == 'move_to_plugins') {
-                    $dest = self::$plugins_path;
+                    $dest = Utils::getPluginsPath();
                 } elseif ($action == 'move_to_themes') {
-                    $dest = self::$themes_path;
+                    $dest = Utils::getThemesPath();
                 }
 
                 foreach ($_POST['modules'] as $root => $id) {
@@ -287,13 +276,13 @@ class Manage extends dcNsProcess
         }
 
         # Settings
-        $s   = dcCore::app()->blog->settings->get(My::id());
-        $dir = Utils::getRepositoryDir($s->get('pack_repository'));
+        $s   = new Settings();
+        $dir = Utils::getRepositoryDir($s->pack_repository);
 
         $is_configured = Utils::is_configured(
             $dir,
-            $s->get('pack_filename'),
-            $s->get('secondpack_filename')
+            $s->pack_filename,
+            $s->secondpack_filename
         );
 
         # Display
@@ -319,13 +308,6 @@ class Manage extends dcNsProcess
             '<a href="' . dcCore::app()->adminurl->get('admin.plugins', ['module' => My::id(), 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.' . My::id())]) . '">' . __('Configuration') . '</a>' .
             '</div>';
         } else {
-            $repo_path_modules = array_merge(
-                Core::getPackages(dirname($dir . '/' . $s->get('pack_filename'))),
-                Core::getPackages(dirname($dir . '/' . $s->get('secondpack_filename')))
-            );
-            $plugins_path_modules = Core::getPackages(self::$plugins_path);
-            $themes_path_modules  = Core::getPackages(self::$themes_path);
-
             Utils::modules(
                 Utils::getModules('plugins'),
                 'plugins',
@@ -339,19 +321,22 @@ class Manage extends dcNsProcess
             );
 
             Utils::repository(
-                $plugins_path_modules,
+                Core::getPackages(Utils::getPluginsPath()),
                 'plugins',
                 __('Plugins root')
             );
 
             Utils::repository(
-                $themes_path_modules,
+                Core::getPackages(Utils::getThemesPath()),
                 'themes',
                 __('Themes root')
             );
 
             Utils::repository(
-                $repo_path_modules,
+                array_merge(
+                    Core::getPackages(dirname($dir . '/' . $s->pack_filename)),
+                    Core::getPackages(dirname($dir . '/' . $s->secondpack_filename))
+                ),
                 'repository',
                 __('Packages repository')
             );

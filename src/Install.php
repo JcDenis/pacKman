@@ -21,55 +21,12 @@ use Exception;
 
 class Install extends dcNsProcess
 {
-    // Module specs
-    private static $mod_conf = [
-        [
-            'menu_plugins',
-            'Add link to pacKman in plugins page',
-            false,
-            'boolean',
-        ],
-        [
-            'pack_nocomment',
-            'Remove comments from files',
-            false,
-            'boolean',
-        ],
-        [
-            'pack_overwrite',
-            'Overwrite existing package',
-            false,
-            'boolean',
-        ],
-        [
-            'pack_filename',
-            'Name of package',
-            '%type%-%id%',
-            'string',
-        ],
-        [
-            'secondpack_filename',
-            'Name of second package',
-            '%type%-%id%-%version%',
-            'string',
-        ],
-        [
-            'pack_repository',
-            'Path to package repository',
-            '',
-            'string',
-        ],
-        [
-            'pack_excludefiles',
-            'Extra files to exclude from package',
-            '*.zip,*.tar,*.tar.gz,.directory,.hg',
-            'string',
-        ],
-    ];
-
     public static function init(): bool
     {
-        self::$init = defined('DC_CONTEXT_ADMIN') && dcCore::app()->newVersion(My::id(), dcCore::app()->plugins->moduleInfo(My::id(), 'version'));
+        if (defined('DC_CONTEXT_ADMIN')) {
+            self::$init = version_compare(phpversion(), My::PHP_MIN, '>=')
+                && dcCore::app()->newVersion(My::id(), dcCore::app()->plugins->moduleInfo(My::id(), 'version'));
+        }
 
         return self::$init;
     }
@@ -83,18 +40,6 @@ class Install extends dcNsProcess
         try {
             // Upgrade
             self::growUp();
-
-            // Set module settings
-            foreach (self::$mod_conf as $v) {
-                dcCore::app()->blog->settings->get(My::id())->put(
-                    $v[0],
-                    $v[2],
-                    $v[3],
-                    $v[1],
-                    false,
-                    true
-                );
-            }
 
             return true;
         } catch (Exception $e) {

@@ -54,41 +54,22 @@ class Config extends dcNsProcess
             return true;
         }
 
+        $s = new Settings();
+
         # -- Set settings --
         try {
-            $pack_nocomment      = !empty($_POST['pack_nocomment']);
-            $pack_fixnewline     = !empty($_POST['pack_fixnewline']);
-            $pack_overwrite      = !empty($_POST['pack_overwrite']);
-            $pack_filename       = (string) $_POST['pack_filename'];
-            $secondpack_filename = (string) $_POST['secondpack_filename'];
-            $pack_repository     = (string) $_POST['pack_repository'];
-            $pack_excludefiles   = (string) $_POST['pack_excludefiles'];
-
-            $check = Utils::is_configured(
-                Utils::getRepositoryDir($pack_repository),
-                $pack_filename,
-                $secondpack_filename
-            );
-
-            if ($check) {
-                $s = dcCore::app()->blog->settings->get(My::id());
-                $s->put('pack_nocomment', $pack_nocomment);
-                $s->put('pack_fixnewline', $pack_fixnewline);
-                $s->put('pack_overwrite', $pack_overwrite);
-                $s->put('pack_filename', $pack_filename);
-                $s->put('secondpack_filename', $secondpack_filename);
-                $s->put('pack_repository', $pack_repository);
-                $s->put('pack_excludefiles', $pack_excludefiles);
-
-                dcPage::addSuccessNotice(
-                    __('Configuration has been successfully updated.')
-                );
-                dcCore::app()->adminurl->redirect('admin.plugins', [
-                    'module' => My::id(),
-                    'conf'   => '1',
-                    'redir'  => dcCore::app()->admin->__get('list')->getRedir(),
-                ]);
+            foreach ($s->listSettings() as $key) {
+                $s->writeSetting($key, $_POST[$key] ?? '');
             }
+
+            dcPage::addSuccessNotice(
+                __('Configuration has been successfully updated.')
+            );
+            dcCore::app()->adminurl->redirect('admin.plugins', [
+                'module' => My::id(),
+                'conf'   => '1',
+                'redir'  => dcCore::app()->admin->__get('list')->getRedir(),
+            ]);
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }
@@ -103,7 +84,7 @@ class Config extends dcNsProcess
         }
 
         # -- Get settings --
-        $s = dcCore::app()->blog->settings->get(My::id());
+        $s = new Settings();
 
         # -- Display form --
         echo
@@ -112,7 +93,7 @@ class Config extends dcNsProcess
                 // pack_repository
                 (new Para())->items([
                     (new Label(__('Path to repository:')))->for('pack_repository'),
-                    (new Input('pack_repository'))->class('maximal')->size(65)->maxlenght(255)->value((string) $s->get('pack_repository')),
+                    (new Input('pack_repository'))->class('maximal')->size(65)->maxlenght(255)->value($s->pack_repository),
                 ]),
                 (new Note())->class('form-note')->text(
                     sprintf(
@@ -126,18 +107,18 @@ class Config extends dcNsProcess
                 // pack_filename
                 (new Para())->items([
                     (new Label(__('Name of exported package:')))->for('pack_filename'),
-                    (new Input('pack_filename'))->class('maximal')->size(65)->maxlenght(255)->value((string) $s->get('pack_filename')),
+                    (new Input('pack_filename'))->class('maximal')->size(65)->maxlenght(255)->value($s->pack_filename),
                 ]),
                 (new Note())->text(sprintf(__('Preconization: %s'), '%type%-%id%'))->class('form-note'),
                 // secondpack_filename
                 (new Para())->items([
                     (new Label(__('Name of second exported package:')))->for('secondpack_filename'),
-                    (new Input('secondpack_filename'))->class('maximal')->size(65)->maxlenght(255)->value((string) $s->get('secondpack_filename')),
+                    (new Input('secondpack_filename'))->class('maximal')->size(65)->maxlenght(255)->value($s->secondpack_filename),
                 ]),
                 (new Note())->text(sprintf(__('Preconization: %s'), '%type%-%id%-%version%'))->class('form-note'),
                 // pack_overwrite
                 (new Para())->items([
-                    (new Checkbox('pack_overwrite', (bool) $s->get('pack_overwrite')))->value(1),
+                    (new Checkbox('pack_overwrite', $s->pack_overwrite))->value(1),
                     (new Label(__('Overwrite existing package'), Label::OUTSIDE_LABEL_AFTER))->for('pack_overwrite')->class('classic'),
                 ]),
             ]),
@@ -145,17 +126,17 @@ class Config extends dcNsProcess
                 // pack_excludefiles
                 (new Para())->items([
                     (new Label(__('Extra files to exclude from package:')))->for('pack_excludefiles'),
-                    (new Input('pack_excludefiles'))->class('maximal')->size(65)->maxlenght(255)->value((string) $s->get('pack_excludefiles')),
+                    (new Input('pack_excludefiles'))->class('maximal')->size(65)->maxlenght(255)->value($s->pack_excludefiles),
                 ]),
                 (new Note())->text(sprintf(__('Preconization: %s'), '*.zip,*.tar,*.tar.gz'))->class('form-note'),
                 // pack_nocomment
                 (new Para())->items([
-                    (new Checkbox('pack_nocomment', (bool) $s->get('pack_nocomment')))->value(1),
+                    (new Checkbox('pack_nocomment', $s->pack_nocomment))->value(1),
                     (new Label(__('Remove comments from files'), Label::OUTSIDE_LABEL_AFTER))->for('pack_nocomment')->class('classic'),
                 ]),
                 // pack_fixnewline
                 (new Para())->items([
-                    (new Checkbox('pack_fixnewline', (bool) $s->get('pack_fixnewline')))->value(1),
+                    (new Checkbox('pack_fixnewline', $s->pack_fixnewline))->value(1),
                     (new Label(__('Fix newline style from files content'), Label::OUTSIDE_LABEL_AFTER))->for('pack_fixnewline')->class('classic'),
                 ]),
 

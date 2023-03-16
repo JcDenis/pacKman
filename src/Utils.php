@@ -29,6 +29,19 @@ use Exception;
 
 class Utils
 {
+    public static function getPluginsPath(): string
+    {
+        $e = explode(PATH_SEPARATOR, DC_PLUGINS_ROOT);
+        $p = array_pop($e);
+
+        return (string) path::real($p);
+    }
+
+    public static function getThemesPath(): string
+    {
+        return dcCore::app()->blog->themes_path;
+    }
+
     public static function is_configured(string $repo, string $file_a, string $file_b): bool
     {
         if (!is_dir(DC_TPL_CACHE) || !is_writable(DC_TPL_CACHE)) {

@@ -33,7 +33,13 @@ class Config extends dcNsProcess
 {
     public static function init(): bool
     {
-        self::$init = defined('DC_CONTEXT_ADMIN');
+        if (defined('DC_CONTEXT_ADMIN')) {
+            if (version_compare(phpversion(), My::PHP_MIN, '>=')) {
+                self::$init = true;
+            } else {
+                dcCore::app()->error->add(sprintf(__('%s required php >= %s'), My::id(), My::PHP_MIN));
+            }
+        }
 
         return self::$init;
     }

@@ -18,6 +18,9 @@ use dcCore;
 
 class My
 {
+    /** @var string Required php version */
+    public const PHP_MIN = '8.1';
+
     /** @var array Excluded files */
     public const EXCLUDED_FILES = [
         '.',

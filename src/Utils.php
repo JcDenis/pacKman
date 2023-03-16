@@ -81,7 +81,7 @@ class Utils
         return !(empty($path) || empty($file) || !is_writable(dirname($path . '/' . $file)));
     }
 
-    public static function getRepositoryDir($dir)
+    public static function getRepositoryDir(?string $dir): string
     {
         if (empty($dir)) {
             try {

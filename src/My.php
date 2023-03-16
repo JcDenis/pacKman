@@ -35,12 +35,12 @@ class My
         '_disabled',
     ];
 
-    public static function id()
+    public static function id(): string
     {
         return basename(dirname(__DIR__));
     }
 
-    public static function name()
+    public static function name(): string
     {
         return __((string) dcCore::app()->plugins->moduleInfo(self::id(), 'name'));
     }

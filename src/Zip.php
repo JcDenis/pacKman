@@ -28,7 +28,7 @@ class Zip extends \Dotclear\Helper\File\Zip\Zip
      * @param      string    $name   The name
      * @param      string    $file   The file
      * @param      int|null  $mtime  The mtime
-     * 
+     *
      * @return     void
      */
     protected function writeFile(string $name, string $file, ?int $mtime)

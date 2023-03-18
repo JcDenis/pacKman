@@ -70,15 +70,15 @@ class Core
 
             $zip_root_dir = $zip->getRootDir();
             if ($zip_root_dir != false) {
-                $target      = dirname($zip_file);
-                $path        = $target . DIRECTORY_SEPARATOR . $zip_root_dir;
-                $define      = $zip_root_dir . '/' . dcModules::MODULE_FILE_DEFINE;
-                $init        = $zip_root_dir . '/' . dcModules::MODULE_FILE_INIT;
+                $target = dirname($zip_file);
+                $path   = $target . DIRECTORY_SEPARATOR . $zip_root_dir;
+                $define = $zip_root_dir . '/' . dcModules::MODULE_FILE_DEFINE;
+                $init   = $zip_root_dir . '/' . dcModules::MODULE_FILE_INIT;
             } else {
-                $target      = dirname($zip_file) . DIRECTORY_SEPARATOR . preg_replace('/\.([^.]+)$/', '', basename($zip_file));
-                $path        = $target;
-                $define      = dcModules::MODULE_FILE_DEFINE;
-                $init        = dcModules::MODULE_FILE_INIT;
+                $target = dirname($zip_file) . DIRECTORY_SEPARATOR . preg_replace('/\.([^.]+)$/', '', basename($zip_file));
+                $path   = $target;
+                $define = dcModules::MODULE_FILE_DEFINE;
+                $init   = dcModules::MODULE_FILE_INIT;
             }
 
             if ($zip->isEmpty()) {

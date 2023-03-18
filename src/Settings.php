@@ -39,6 +39,9 @@ class Settings
     // Extra files to exclude from package
     public readonly string $pack_excludefiles;
 
+    // Hide distributed modules from lists
+    public readonly bool $hide_distrib;
+
     /**
      * Constructor set up plugin settings
      */
@@ -53,6 +56,7 @@ class Settings
         $this->secondpack_filename = (string) ($s->get('secondpack_filename') ?? '%type%-%id%-%version%');
         $this->pack_repository     = (string) ($s->get('pack_repository') ?? '');
         $this->pack_excludefiles   = (string) ($s->get('pack_excludefiles') ?? '*.zip,*.tar,*.tar.gz,.directory,.hg');
+        $this->hide_distrib        = (bool) ($s->get('hide_distrib') ?? false);
     }
 
     public function getSetting(string $key): mixed

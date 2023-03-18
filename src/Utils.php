@@ -98,6 +98,10 @@ class Utils
 
         $modules = array_merge(dcCore::app()->{$type}->getDisabledModules(), dcCore::app()->{$type}->getModules());
 
+        if ((new Settings())->hide_distrib) {
+            $modules = array_diff_key($modules, array_flip(array_values(array_merge(explode(',', DC_DISTRIB_PLUGINS), explode(',', DC_DISTRIB_THEMES)))));
+        }
+
         if (empty($id)) {
             return $modules;
         } elseif (array_key_exists($id, $modules)) {

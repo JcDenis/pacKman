@@ -88,6 +88,13 @@ class Config extends dcNsProcess
         # -- Display form --
         echo
         (new Div())->items([
+            (new Fieldset())->class('fieldset')->legend((new Legend(__('Interface'))))->fields([
+                // hide_distrib
+                (new Para())->items([
+                    (new Checkbox('hide_distrib', $s->hide_distrib))->value(1),
+                    (new Label(__('Hide distributed modules from lists'), Label::OUTSIDE_LABEL_AFTER))->for('hide_distrib')->class('classic'),
+                ]),
+            ]),
             (new Fieldset())->class('fieldset')->legend((new Legend(__('Root'))))->fields([
                 // pack_repository
                 (new Para())->items([

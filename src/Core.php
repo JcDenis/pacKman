@@ -17,7 +17,7 @@ namespace Dotclear\Plugin\pacKman;
 use dcCore;
 use dcModules;
 use files;
-use fileUnzip;
+use Dotclear\Helper\File\Zip\Unzip;
 use path;
 
 class Core
@@ -65,23 +65,20 @@ class Core
         $i = 0;
         foreach ($zip_files as $zip_file) {
             $zip_file = $root . DIRECTORY_SEPARATOR . $zip_file;
-            $zip      = new fileUnzip($zip_file);
+            $zip      = new Unzip($zip_file);
             $zip->getList(false, '#(^|/)(__MACOSX|\.svn|\.hg.*|\.git.*|\.DS_Store|\.directory|Thumbs\.db)(/|$)#');
 
             $zip_root_dir = $zip->getRootDir();
-            $define       = '';
             if ($zip_root_dir != false) {
                 $target      = dirname($zip_file);
-                $destination = $target . DIRECTORY_SEPARATOR . $zip_root_dir;
+                $path        = $target . DIRECTORY_SEPARATOR . $zip_root_dir;
                 $define      = $zip_root_dir . '/' . dcModules::MODULE_FILE_DEFINE;
                 $init        = $zip_root_dir . '/' . dcModules::MODULE_FILE_INIT;
-                $has_define  = $zip->hasFile($define);
             } else {
                 $target      = dirname($zip_file) . DIRECTORY_SEPARATOR . preg_replace('/\.([^.]+)$/', '', basename($zip_file));
-                $destination = $target;
+                $path        = $target;
                 $define      = dcModules::MODULE_FILE_DEFINE;
                 $init        = dcModules::MODULE_FILE_INIT;
-                $has_define  = $zip->hasFile($define);
             }
 
             if ($zip->isEmpty()) {
@@ -90,7 +87,7 @@ class Core
                 continue;
             }
 
-            if (!$has_define) {
+            if (!$zip->hasFile($define)) {
                 $zip->close();
 
                 continue;
@@ -98,54 +95,39 @@ class Core
 
             foreach ($sandboxes as $type => $sandbox) {
                 try {
-                    files::makeDir($destination, true);
+                    files::makeDir($path, true);
 
                     // can't load twice _init.php file !
                     $unlink = false;
-                    if ($zip->hasFile($init)
-//                     && !dcCore::app()->plugins->getDefine(basename($destination))->isDefined()
-//                     && !dcCore::app()->themes->getDefine(basename($destination))->isDefined()
-                    ) {
+                    if ($zip->hasFile($init)) {
                         $unlink = true;
-                        $zip->unzip($init, $destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_INIT);
+                        $zip->unzip($init, $path);
                     }
 
-                    $zip->unzip($define, $destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_DEFINE);
+                    $zip->unzip($define, $path);
 
                     $sandbox->resetModulesList();
-                    $sandbox->requireDefine($destination, basename($destination));
+                    $sandbox->requireDefine($path, basename($path));
 
                     if ($unlink) {
-                        unlink($destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_INIT);
+                        unlink($target . DIRECTORY_SEPARATOR . $init);
                     }
 
-                    unlink($destination . DIRECTORY_SEPARATOR . dcModules::MODULE_FILE_DEFINE);
+                    unlink($target . DIRECTORY_SEPARATOR . $define);
 
-                    $new_errors = $sandbox->getErrors();
-                    if (!empty($new_errors)) {
-                        $new_errors = implode(" \n", $new_errors);
-
-                        throw new Exception($new_errors);
+                    if (!$sandbox->getErrors()) {
+                        $module = $sandbox->getDefine(basename($path));
+                        if ($module->isDefined() && $module->get('type') == $type) {
+                            $res[$i]         = $module->dump();
+                            $res[$i]['root'] = $zip_file;
+                            $i++;
+                        }
                     }
-
-                    $module = $sandbox->getDefine(basename($destination));
-                    if (!$module->isDefined() || $module->get('type') != $type) {
-                        throw new Exception('bad module type');
-                    }
-
-                    $res[$i]         = $module->dump();
-                    $res[$i]['root'] = $zip_file;
-                    $i++;
-
-                    $zip->close();
-                    files::deltree($destination);
                 } catch (Exception $e) {
-                    $zip->close();
-                    files::deltree($destination);
-
-                    continue;
                 }
+                files::deltree($path);
             }
+            $zip->close();
         }
 
         return $res;
@@ -169,15 +151,14 @@ class Core
             }
 
             @set_time_limit(300);
-            $fp = fopen($dest, 'wb');
 
             if ($nocomment) {
-                Filezip::$remove_comment = true;
+                Zip::$remove_comment = true;
             }
             if ($fixnewline) {
-                Filezip::$fix_newline = true;
+                Zip::$fix_newline = true;
             }
-            $zip = new Filezip($fp);
+            $zip = new Zip($dest);
 
             foreach ($exclude as $e) {
                 $zip->addExclusion($e);
@@ -188,7 +169,6 @@ class Core
                 true
             );
 
-            $zip->write();
             $zip->close();
             unset($zip);
         }

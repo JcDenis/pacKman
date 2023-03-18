@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-//use fileZip;
-
-class Filezip extends \fileZip
+class Zip extends \Dotclear\Helper\File\Zip\Zip
 {
     /** @var boolean Remove comments from files content */
     public static $remove_comment = false;
@@ -27,14 +25,13 @@ class Filezip extends \fileZip
     /**
      * Replace clearbricks fileZip::writeFile
      *
-     * @param  string $name  Name
-     * @param  string $file  File
-     * @param  int    $size  Size
-     * @param  int    $mtime Mtime
-     *
-     * @return void
+     * @param      string    $name   The name
+     * @param      string    $file   The file
+     * @param      int|null  $mtime  The mtime
+     * 
+     * @return     void
      */
-    protected function writeFile($name, $file, $size, $mtime)
+    protected function writeFile(string $name, string $file, ?int $mtime)
     {
         if (!isset($this->entries[$name])) {
             return;

@@ -1,3 +1,9 @@
+2023.03.18
+- require PHP 8.1
+- use new (un)zip helpers
+- use class for settings
+- add setting to hide distributed modules
+
 2023.03.14
 - fix preg match on excluded files
 

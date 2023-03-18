@@ -24,9 +24,6 @@ use form;
 use html;
 use path;
 
-/* php */
-use Exception;
-
 class Utils
 {
     public static function getPluginsPath(): string

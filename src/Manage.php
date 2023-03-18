@@ -24,9 +24,6 @@ use dcNsProcess;
 use files;
 use http;
 
-/* php ns */
-use Exception;
-
 class Manage extends dcNsProcess
 {
     public static function init(): bool

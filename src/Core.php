@@ -16,7 +16,6 @@ namespace Dotclear\Plugin\pacKman;
 
 use dcCore;
 use dcModules;
-use Exception;
 use files;
 use fileUnzip;
 use path;

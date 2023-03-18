@@ -1,141 +1,191 @@
+# Language: Français
+# Module: pacKman - 2023.03.14
+# Date: 2023-03-18 16:15:39
+# Author: , contact@jcdenis.fr
+# Translated with translater 2023.03.17
+
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: pacKman 2023.03.11\n"
+"Project-Id-Version: pacKman 2023.03.14\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-03-11T17:43:33+00:00\n"
+"PO-Revision-Date: 2023-03-18T16:15:39+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: src/Config.php:65
 msgid "Configuration has been successfully updated."
 msgstr "La configuration a été mise à jour avec succès."
 
+#: src/Config.php:95
+msgid "Hide distributed modules from lists"
+msgstr "Ne pas afficher dans les listes les modules de la distribution"
+
+#: src/Config.php:98
+#: src/Utils.php:138
 msgid "Root"
 msgstr "Racine"
 
+#: src/Config.php:101
 msgid "Path to repository:"
 msgstr "Chemin vers le dépôt :"
 
+#: src/Config.php:106
 msgid "Preconization: %s"
 msgstr "Préconisation : %s"
 
+#: src/Config.php:108
 msgid "Blog's public directory"
 msgstr "Répertoire public du blog"
 
+#: src/Config.php:109
 msgid "Leave it empty to use Dotclear VAR directory"
 msgstr "Laisser vide pour utiliser le répertoire VAR de Dotclear"
 
+#: src/Config.php:112
 msgid "Files"
 msgstr "Fichiers"
 
+#: src/Config.php:115
 msgid "Name of exported package:"
 msgstr "Nom du paquetage exporté :"
 
+#: src/Config.php:121
 msgid "Name of second exported package:"
 msgstr "Nom du second paquetage exporté :"
 
+#: src/Config.php:128
 msgid "Overwrite existing package"
 msgstr "Écraser les paquetages existants"
 
-msgid "Content"
-msgstr "Contenu"
-
+#: src/Config.php:134
 msgid "Extra files to exclude from package:"
 msgstr "Fichiers supplémentaires à exclure du paquetage :"
 
+#: src/Config.php:141
 msgid "Remove comments from files"
 msgstr "Retirer les commentaires des fichiers"
 
+#: src/Config.php:146
 msgid "Fix newline style from files content"
 msgstr "Corriger les retour chariot du contenu des fichiers"
 
+#: src/Core.php:183
 msgid "Directory is not writable"
 msgstr "Le répertoire n'est pas accessible en écriture"
 
+#: src/Core.php:195
 msgid "Failed to get module info"
 msgstr "Impossible de retrouver les informations du module"
 
+#: src/Core.php:258
 msgid "Failed to get temporary directory"
 msgstr "Impossible de retrouver le répertoire temporaire"
 
+#: src/Manage.php:110
 msgid "No modules selected."
 msgstr "Aucun module sélectionné."
 
+#: src/Manage.php:148
 msgid "Package successfully created."
 msgstr "Paquetage créé avec succès."
 
+#: src/Manage.php:162
 msgid "Undeletable file \"%s\""
 msgstr "Impossible de supprimer le fichier \"%s\""
 
+#: src/Manage.php:172
 msgid "Package successfully deleted."
 msgstr "Paquetage effacé avec succès."
 
+#: src/Manage.php:200
 msgid "Package successfully installed."
 msgstr "Paquetage installé avec succès."
 
+#: src/Manage.php:226
 msgid "Package successfully copied."
 msgstr "Paquetage copié avec succès."
 
+#: src/Manage.php:253
 msgid "Package successfully moved."
 msgstr "Paquetage déplacé avec succès."
 
+#: src/Manage.php:304
 msgid "pacKman is not well configured."
 msgstr "pacKman n'est pas correctement configuré."
 
+#: src/Manage.php:305
 msgid "Configuration"
 msgstr "Configuration"
 
+#: src/Manage.php:323
 msgid "Plugins root"
 msgstr "Racine des plugins"
 
+#: src/Manage.php:329
 msgid "Themes root"
 msgstr "Racine des thèmes"
 
+#: src/Manage.php:338
 msgid "Packages repository"
 msgstr "Dépôt de paquetages"
 
+#: src/Utils.php:46
 msgid "Cache directory is not writable."
 msgstr "Le répertoire de cache n'est pas accessible en écriture."
 
+#: src/Utils.php:51
 msgid "Path to repository is not writable."
 msgstr "Le chemin vers le dépôt n'est pas accessible en écriture."
 
+#: src/Utils.php:57
 msgid "You must specify the name of package to export."
 msgstr "Vous devez spécifier le nom du paquetage exporté."
 
+#: src/Utils.php:63
 msgid "Path to first export package is not writable."
 msgstr "Le chemin vers le premier paquetage exporté n'est pas accessible en écriture."
 
+#: src/Utils.php:69
 msgid "Path to second export package is not writable."
 msgstr "Le chemin vers le second paquetage exporté n'est pas accessible en écriture."
 
+#: src/Utils.php:175
 msgid "Pack up selected modules"
 msgstr "Emballer les modules sélectionnés"
 
+#: src/Utils.php:201
 msgid "install"
 msgstr "installer"
 
+#: src/Utils.php:204
 msgid "copy to %s directory"
 msgstr "copier dans le répertoire des %s"
 
+#: src/Utils.php:204
 msgid "plugins"
 msgstr "extensions"
 
+#: src/Utils.php:205
 msgid "move to %s directory"
 msgstr "déplacer dans le repertoire des %s"
 
+#: src/Utils.php:208
 msgid "themes"
 msgstr "thèmes"
 
+#: src/Utils.php:212
 msgid "repository"
 msgstr "dépôt"
 
+#: src/Utils.php:222
 msgid "File"
 msgstr "Fichier"
 
+#: src/Utils.php:265
 msgid "Selected modules action:"
 msgstr "Action sur les modules sélectionnés :"
 

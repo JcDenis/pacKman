@@ -10,6 +10,7 @@
 #
 
 l10n::$locales['Configuration has been successfully updated.']    = 'La configuration a été mise à jour avec succès.';
+l10n::$locales['Hide distributed modules from lists']             = 'Ne pas afficher dans les listes les modules de la distribution';
 l10n::$locales['Root']                                            = 'Racine';
 l10n::$locales['Path to repository:']                             = 'Chemin vers le dépôt :';
 l10n::$locales['Preconization: %s']                               = 'Préconisation : %s';
@@ -19,7 +20,6 @@ l10n::$locales['Files']                                           = 'Fichiers';
 l10n::$locales['Name of exported package:']                       = 'Nom du paquetage exporté :';
 l10n::$locales['Name of second exported package:']                = 'Nom du second paquetage exporté :';
 l10n::$locales['Overwrite existing package']                      = 'Écraser les paquetages existants';
-l10n::$locales['Content']                                         = 'Contenu';
 l10n::$locales['Extra files to exclude from package:']            = 'Fichiers supplémentaires à exclure du paquetage :';
 l10n::$locales['Remove comments from files']                      = 'Retirer les commentaires des fichiers';
 l10n::$locales['Fix newline style from files content']            = 'Corriger les retour chariot du contenu des fichiers';

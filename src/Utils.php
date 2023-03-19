@@ -16,6 +16,8 @@ namespace Dotclear\Plugin\pacKman;
 
 /* dotclear ns */
 use dcCore;
+use Dotclear\Helper\File\Zip\Unzip;
+use Dotclear\Helper\File\Zip\Zip;
 
 /* clearbricks ns */
 use dt;
@@ -58,13 +60,13 @@ class Utils
             );
         }
 
-        if (!is_writable(dirname($repo . '/' . $file_a))) {
+        if (!is_writable(dirname($repo . DIRECTORY_SEPARATOR . $file_a))) {
             dcCore::app()->error->add(
                 __('Path to first export package is not writable.')
             );
         }
 
-        if (!empty($file_b) && !is_writable(dirname($repo . '/' . $file_b))) {
+        if (!empty($file_b) && !is_writable(dirname($repo . DIRECTORY_SEPARATOR . $file_b))) {
             dcCore::app()->error->add(
                 __('Path to second export package is not writable.')
             );
@@ -75,7 +77,65 @@ class Utils
 
     public static function is_writable(string $path, string $file): bool
     {
-        return !(empty($path) || empty($file) || !is_writable(dirname($path . '/' . $file)));
+        return !(empty($path) || empty($file) || !is_writable(dirname($path . DIRECTORY_SEPARATOR . $file)));
+    }
+
+    public static function getUnzipCapability()
+    {
+        switch (Unzip::USE_DEFAULT) {
+            case Unzip::USE_PHARDATA:
+                if (class_exists('PharData')) {
+                    return 'PharData';
+                }
+                if (class_exists('ZipArchive')) {
+                    return 'ZipArchive';
+                }
+
+                break;
+            case Unzip::USE_ZIPARCHIVE:
+                if (class_exists('ZipArchive')) {
+                    return 'ZipArchive';
+                }
+                if (class_exists('PharData')) {
+                    return 'PharData';
+                }
+
+                break;
+            case self::USE_LEGACY:
+
+                break;
+        }
+
+        return 'Legacy';
+    }
+
+    public static function getZipCapability()
+    {
+        switch (Zip::USE_DEFAULT) {
+            case Zip::USE_PHARDATA:
+                if (class_exists('PharData')) {
+                    return 'PharData';
+                }
+                if (class_exists('ZipArchive')) {
+                    return 'ZipArchive';
+                }
+
+                break;
+            case Zip::USE_ZIPARCHIVE:
+                if (class_exists('ZipArchive')) {
+                    return 'ZipArchive';
+                }
+                if (class_exists('PharData')) {
+                    return 'PharData';
+                }
+
+                break;
+            case self::USE_LEGACY:
+
+                break;
+        }
+
+        return 'Legacy';
     }
 
     public static function getRepositoryDir(?string $dir): string

@@ -25,7 +25,8 @@ use Dotclear\Helper\Html\Form\{
     Label,
     Legend,
     Note,
-    Para
+    Para,
+    Text
 };
 
 class Config extends dcNsProcess
@@ -85,6 +86,22 @@ class Config extends dcNsProcess
         # -- Get settings --
         $s = new Settings();
 
+        # -- Check config --
+        $img     = '<img alt="%1$s" title="%1$s" src="images/%2$s" /> ';
+        $img_on  = sprintf($img, __('writable'), 'check-on.png');
+        $img_off = sprintf($img, __('not writable'), 'check-off.png');
+
+        $check_repo   = Utils::is_writable(Utils::getRepositoryDir($s->pack_repository), '_.zip') ? $img_on : $img_off;
+        $check_first  = !empty($s->pack_filename) && Utils::is_writable(Utils::getRepositoryDir($repo), $s->pack_filename) ? $img_on : $img_off;
+        $check_second = !empty($s->secondpack_filename) && Utils::is_writable(Utils::getRepositoryDir($repo), $s->secondpack_filename) ? $img_on : $img_off;
+
+        $is_configured = Utils::is_configured(
+            Utils::getRepositoryDir($s->pack_repository),
+            $s->pack_filename,
+            $s->secondpack_filename
+        );
+        $check_conf = $is_configured ? $img_on . sprintf(__('%s is well configured.'), My::name()) : $img_off . sprintf(__('%s is not well configured.'), My::name());
+
         # -- Display form --
         echo
         (new Div())->items([
@@ -98,7 +115,7 @@ class Config extends dcNsProcess
             (new Fieldset())->class('fieldset')->legend((new Legend(__('Root'))))->fields([
                 // pack_repository
                 (new Para())->items([
-                    (new Label(__('Path to repository:')))->for('pack_repository'),
+                    (new Label($check_repo . __('Path to repository:')))->for('pack_repository'),
                     (new Input('pack_repository'))->class('maximal')->size(65)->maxlenght(255)->value($s->pack_repository),
                 ]),
                 (new Note())->class('form-note')->text(
@@ -112,13 +129,13 @@ class Config extends dcNsProcess
             (new Fieldset())->class('fieldset')->legend((new Legend(__('Files'))))->fields([
                 // pack_filename
                 (new Para())->items([
-                    (new Label(__('Name of exported package:')))->for('pack_filename'),
+                    (new Label($check_first . __('Name of exported package:')))->for('pack_filename'),
                     (new Input('pack_filename'))->class('maximal')->size(65)->maxlenght(255)->value($s->pack_filename),
                 ]),
                 (new Note())->text(sprintf(__('Preconization: %s'), '%type%-%id%'))->class('form-note'),
                 // secondpack_filename
                 (new Para())->items([
-                    (new Label(__('Name of second exported package:')))->for('secondpack_filename'),
+                    (new Label($check_second . __('Name of second exported package:')))->for('secondpack_filename'),
                     (new Input('secondpack_filename'))->class('maximal')->size(65)->maxlenght(255)->value($s->secondpack_filename),
                 ]),
                 (new Note())->text(sprintf(__('Preconization: %s'), '%type%-%id%-%version%'))->class('form-note'),
@@ -145,7 +162,11 @@ class Config extends dcNsProcess
                     (new Checkbox('pack_fixnewline', $s->pack_fixnewline))->value(1),
                     (new Label(__('Fix newline style from files content'), Label::OUTSIDE_LABEL_AFTER))->for('pack_fixnewline')->class('classic'),
                 ]),
-
+            ]),
+            (new Fieldset())->class('fieldset')->legend((new Legend(__('Capability'))))->fields([
+                (new Text('p', $img_on . sprintf(__('Use "%s" class to zip modules.'), Utils::getZipCapability()))),
+                (new Text('p', $img_on . sprintf(__('Use "%s" class to unzip modules.'), Utils::getUnzipCapability()))),
+                (new Text('p', $check_conf)),
             ]),
         ])->render();
     }

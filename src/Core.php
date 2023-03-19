@@ -213,6 +213,7 @@ class Core
 
         $file = str_replace(
             [
+                '\\',
                 '%type%',
                 '%id%',
                 '%version%',
@@ -220,6 +221,7 @@ class Core
                 '%time%',
             ],
             [
+                '/',
                 $info['type'],
                 $info['id'],
                 $info['version'],
@@ -233,12 +235,12 @@ class Core
             $parts[$i] = files::tidyFileName($part);
         }
 
-        return implode('/', $parts) . '.zip';
+        return implode(DIRECTORY_SEPARATOR, $parts) . '.zip';
     }
 
     private static function getOverwrite(bool $overwrite, string $root, string$file): ?string
     {
-        $path = $root . '/' . $file;
+        $path = $root . DIRECTORY_SEPARATOR . $file;
         if (file_exists($path) && !$overwrite) {
             // don't break loop
             //throw new Exception('File already exists');
@@ -250,7 +252,7 @@ class Core
 
     private static function getCache(): string
     {
-        $c = DC_TPL_CACHE . '/packman';
+        $c = DC_TPL_CACHE . DIRECTORY_SEPARATOR . 'packman';
         if (!file_exists($c)) {
             @files::makeDir($c);
         }

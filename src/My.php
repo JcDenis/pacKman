@@ -35,13 +35,27 @@ class My
         '_disabled',
     ];
 
+    /**
+     * This module id
+     */
     public static function id(): string
     {
         return basename(dirname(__DIR__));
     }
 
+    /**
+     * This module name
+     */
     public static function name(): string
     {
         return __((string) dcCore::app()->plugins->moduleInfo(self::id(), 'name'));
+    }
+
+    /**
+     * Check php version
+     */
+    public static function phpCompliant(): bool
+    {
+        return version_compare(phpversion(), self::PHP_MIN, '>=');
     }
 }

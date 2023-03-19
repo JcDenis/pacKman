@@ -61,7 +61,7 @@ class Config extends dcNsProcess
             dcPage::addSuccessNotice(
                 __('Configuration has been successfully updated.')
             );
-            dcCore::app()->adminurl->redirect('admin.plugins', [
+            dcCore::app()->adminurl?->redirect('admin.plugins', [
                 'module' => My::id(),
                 'conf'   => '1',
                 'redir'  => dcCore::app()->admin->__get('list')->getRedir(),
@@ -87,12 +87,13 @@ class Config extends dcNsProcess
         $img_on  = sprintf($img, __('writable'), 'check-on.png');
         $img_off = sprintf($img, __('not writable'), 'check-off.png');
 
-        $check_repo   = Utils::is_writable(Utils::getRepositoryDir($s->pack_repository), '_.zip') ? $img_on : $img_off;
-        $check_first  = !empty($s->pack_filename)       && Utils::is_writable(Utils::getRepositoryDir($repo), $s->pack_filename) ? $img_on : $img_off;
-        $check_second = !empty($s->secondpack_filename) && Utils::is_writable(Utils::getRepositoryDir($repo), $s->secondpack_filename) ? $img_on : $img_off;
+        $repo         = Utils::getRepositoryDir($s->pack_repository);
+        $check_repo   = Utils::is_writable($repo, '_.zip') ? $img_on : $img_off;
+        $check_first  = !empty($s->pack_filename)       && Utils::is_writable($repo, $s->pack_filename) ? $img_on : $img_off;
+        $check_second = !empty($s->secondpack_filename) && Utils::is_writable($repo, $s->secondpack_filename) ? $img_on : $img_off;
 
         $is_configured = Utils::is_configured(
-            Utils::getRepositoryDir($s->pack_repository),
+            $repo,
             $s->pack_filename,
             $s->secondpack_filename
         );
@@ -117,7 +118,7 @@ class Config extends dcNsProcess
                 (new Note())->class('form-note')->text(
                     sprintf(
                         __('Preconization: %s'),
-                        dcCore::app()->blog->public_path ?
+                        dcCore::app()->blog?->public_path ?
                         dcCore::app()->blog->public_path : __("Blog's public directory")
                     ) . ' ' . __('Leave it empty to use Dotclear VAR directory')
                 ),

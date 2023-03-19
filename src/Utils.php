@@ -38,7 +38,7 @@ class Utils
 
     public static function getThemesPath(): string
     {
-        return dcCore::app()->blog->themes_path;
+        return (string) dcCore::app()->blog?->themes_path;
     }
 
     public static function is_configured(string $repo, string $file_a, string $file_b): bool
@@ -101,7 +101,7 @@ class Utils
                 }
 
                 break;
-            case self::USE_LEGACY:
+            case Unzip::USE_LEGACY:
 
                 break;
         }
@@ -130,7 +130,7 @@ class Utils
                 }
 
                 break;
-            case self::USE_LEGACY:
+            case Unzip::USE_LEGACY:
 
                 break;
         }
@@ -152,7 +152,7 @@ class Utils
         return $dir;
     }
 
-    public static function getModules(string $type, ?string $id = null): ?array
+    public static function getModules(string $type, ?string $id = null): array
     {
         $type = $type == 'themes' ? 'themes' : 'plugins';
 
@@ -168,14 +168,14 @@ class Utils
             return $modules[$id];
         }
 
-        return null;
+        return [];
     }
 
     public static function moduleExists(string $type, ?string $id): bool
     {
         $type = $type == 'themes' ? 'themes' : 'plugins';
 
-        return array_key_exists($id, array_merge(dcCore::app()->{$type}->getDisabledModules(), dcCore::app()->{$type}->getModules()));
+        return array_key_exists((string) $id, array_merge(dcCore::app()->{$type}->getDisabledModules(), dcCore::app()->{$type}->getModules()));
     }
 
     public static function modules(array $modules, string $type, string $title): ?bool
@@ -306,7 +306,7 @@ class Utils
             '</td>' .
             '<td class="nowrap">' .
                 '<a class="packman-download" href="' .
-                dcCore::app()->adminurl->get('admin.plugin.' . My::id(), [
+                dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), [
                     'package' => basename($module['root']),
                     'repo'    => $type,
                 ]) . '" title="' . __('Download') . '">' .

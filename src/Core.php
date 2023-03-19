@@ -164,7 +164,7 @@ class Core
                 $zip->addExclusion($e);
             }
             $zip->addDirectory(
-                path::real($info['root']),
+                (string) path::real($info['root'], false),
                 $info['id'],
                 true
             );

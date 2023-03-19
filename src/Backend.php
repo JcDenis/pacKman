@@ -40,7 +40,7 @@ class Backend extends dcNsProcess
         dcCore::app()->addBehavior('adminDashboardFavoritesV2', function (dcFavorites $favs): void {
             $favs->register(My::id(), [
                 'title'      => My::name(),
-                'url'        => dcCore::app()->adminurl->get('admin.plugin.' . My::id(), [], '#packman-repository-repository'),
+                'url'        => dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), [], '#packman-repository-repository'),
                 'small-icon' => [dcPage::getPF(My::id() . '/icon.svg'), dcPage::getPF(My::id() . '/icon-dark.svg')],
                 'large-icon' => [dcPage::getPF(My::id() . '/icon.svg'), dcPage::getPF(My::id() . '/icon-dark.svg')],
                 //'permissions' => dcCore::app()->auth->isSuperAdmin(),
@@ -49,10 +49,10 @@ class Backend extends dcNsProcess
 
         dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
             My::name(),
-            dcCore::app()->adminurl->get('admin.plugin.' . My::id()) . '#packman-repository-repository',
+            dcCore::app()->adminurl?->get('admin.plugin.' . My::id()) . '#packman-repository-repository',
             [dcPage::getPF(My::id() . '/icon.svg'), dcPage::getPF(My::id() . '/icon-dark.svg')],
-            preg_match('/' . preg_quote(dcCore::app()->adminurl->get('admin.plugin.' . My::id())) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
-            dcCore::app()->auth->isSuperAdmin()
+            preg_match('/' . preg_quote((string) dcCore::app()->adminurl?->get('admin.plugin.' . My::id())) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
+            dcCore::app()->auth?->isSuperAdmin()
         );
 
         return true;

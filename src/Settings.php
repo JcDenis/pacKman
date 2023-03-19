@@ -47,16 +47,16 @@ class Settings
      */
     public function __construct()
     {
-        $s = dcCore::app()->blog->settings->get(My::id());
+        $s = dcCore::app()->blog?->settings->get(My::id());
 
-        $this->pack_nocomment      = (bool) ($s->get('pack_nocomment') ?? false);
-        $this->pack_fixnewline     = (bool) ($s->get('pack_fixnewline') ?? false);
-        $this->pack_overwrite      = (bool) ($s->get('pack_overwrite') ?? false);
-        $this->pack_filename       = (string) ($s->get('pack_filename') ?? '%type%-%id%');
-        $this->secondpack_filename = (string) ($s->get('secondpack_filename') ?? '%type%-%id%-%version%');
-        $this->pack_repository     = (string) ($s->get('pack_repository') ?? '');
-        $this->pack_excludefiles   = (string) ($s->get('pack_excludefiles') ?? '*.zip,*.tar,*.tar.gz,.directory,.hg');
-        $this->hide_distrib        = (bool) ($s->get('hide_distrib') ?? false);
+        $this->pack_nocomment      = (bool) ($s?->get('pack_nocomment') ?? false);
+        $this->pack_fixnewline     = (bool) ($s?->get('pack_fixnewline') ?? false);
+        $this->pack_overwrite      = (bool) ($s?->get('pack_overwrite') ?? false);
+        $this->pack_filename       = (string) ($s?->get('pack_filename') ?? '%type%-%id%');
+        $this->secondpack_filename = (string) ($s?->get('secondpack_filename') ?? '%type%-%id%-%version%');
+        $this->pack_repository     = (string) ($s?->get('pack_repository') ?? '');
+        $this->pack_excludefiles   = (string) ($s?->get('pack_excludefiles') ?? '*.zip,*.tar,*.tar.gz,.directory,.hg');
+        $this->hide_distrib        = (bool) ($s?->get('hide_distrib') ?? false);
     }
 
     public function getSetting(string $key): mixed
@@ -75,8 +75,8 @@ class Settings
     public function writeSetting(string $key, mixed $value): bool
     {
         if (property_exists($this, $key) && settype($value, gettype($this->{$key})) === true) {
-            dcCore::app()->blog->settings->get(My::id())->drop($key);
-            dcCore::app()->blog->settings->get(My::id())->put($key, $value, gettype($this->{$key}), '', true, true);
+            dcCore::app()->blog?->settings->get(My::id())->drop($key);
+            dcCore::app()->blog?->settings->get(My::id())->put($key, $value, gettype($this->{$key}), '', true, true);
 
             return true;
         }

@@ -39,7 +39,7 @@ class Core
     {
         $res = [];
 
-        $cache = self::getCache() . '/';
+        $cache = self::getCache() . DIRECTORY_SEPARATOR;
         if (!is_dir($root) || !is_readable($root)) {
             return $res;
         }

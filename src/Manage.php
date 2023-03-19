@@ -243,7 +243,7 @@ class Manage extends dcNsProcess
 
                 foreach ($_POST['modules'] as $root => $id) {
                     file_put_contents(
-                        $dest . '/' . basename($root),
+                        $dest . DIRECTORY_SEPARATOR . basename($root),
                         file_get_contents($root)
                     );
                     unlink($root);

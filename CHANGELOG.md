@@ -1,3 +1,7 @@
+2023.03.19
+- fix init check
+- fix some phpstan warnings
+
 2023.03.18
 - require PHP 8.1
 - use new (un)zip helpers

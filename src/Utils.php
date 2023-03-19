@@ -80,7 +80,7 @@ class Utils
         return !(empty($path) || empty($file) || !is_writable(dirname($path . DIRECTORY_SEPARATOR . $file)));
     }
 
-    public static function getUnzipCapability()
+    public static function getUnzipCapability(): string
     {
         switch (Unzip::USE_DEFAULT) {
             case Unzip::USE_PHARDATA:
@@ -109,7 +109,7 @@ class Utils
         return 'Legacy';
     }
 
-    public static function getZipCapability()
+    public static function getZipCapability(): string
     {
         switch (Zip::USE_DEFAULT) {
             case Zip::USE_PHARDATA:

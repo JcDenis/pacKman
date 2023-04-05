@@ -1,3 +1,8 @@
+2023.04.06
+- update to latest dotclear 2.26-dev changes
+- use Helper Form
+- cleanup main class
+
 2023.03.19
 - fix init check
 - fix some phpstan warnings

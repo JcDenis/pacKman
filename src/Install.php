@@ -59,13 +59,13 @@ class Install extends dcNsProcess
             );
 
             while ($record->fetch()) {
-                if (preg_match('/^packman_(.*?)$/', $record->setting_id, $match)) {
-                    $cur             = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcNamespace::NS_TABLE_NAME);
-                    $cur->setting_id = $match[1];
-                    $cur->setting_ns = My::id();
+                if (preg_match('/^packman_(.*?)$/', $record->f('setting_id'), $match)) {
+                    $cur = dcCore::app()->con->openCursor(dcCore::app()->prefix . dcNamespace::NS_TABLE_NAME);
+                    $cur->setField('setting_id', $match[1]);
+                    $cur->setField('setting_ns', My::id());
                     $cur->update(
-                        "WHERE setting_id = '" . $record->setting_id . "' and setting_ns = 'pacKman' " .
-                        'AND blog_id ' . (null === $record->blog_id ? 'IS NULL ' : ("= '" . dcCore::app()->con->escape($record->blog_id) . "' "))
+                        "WHERE setting_id = '" . $record->f('setting_id') . "' and setting_ns = 'pacKman' " .
+                        'AND blog_id ' . (null === $record->f('blog_id') ? 'IS NULL ' : ("= '" . dcCore::app()->con->escapeStr($record->f('blog_id')) . "' "))
                     );
                 }
             }

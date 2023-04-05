@@ -15,10 +15,11 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\pacKman;
 
 use dcCore;
+use dcModuleDefine;
 use dcModules;
-use files;
+use Dotclear\Helper\File\Files;
+use Dotclear\Helper\File\Path;
 use Dotclear\Helper\File\Zip\Unzip;
-use path;
 
 class Core
 {
@@ -39,12 +40,11 @@ class Core
     {
         $res = [];
 
-        $cache = self::getCache() . DIRECTORY_SEPARATOR;
         if (!is_dir($root) || !is_readable($root)) {
             return $res;
         }
 
-        $files     = files::scanDir($root);
+        $files     = Files::scanDir($root);
         $zip_files = [];
         foreach ($files as $file) {
             if (!preg_match('#(^|/)(.*?)\.zip(/|$)#', $file)) {
@@ -95,7 +95,7 @@ class Core
 
             foreach ($sandboxes as $type => $sandbox) {
                 try {
-                    files::makeDir($path, true);
+                    Files::makeDir($path, true);
 
                     // can't load twice _init.php file !
                     $unlink = false;
@@ -118,14 +118,14 @@ class Core
                     if (!$sandbox->getErrors()) {
                         $module = $sandbox->getDefine(basename($path));
                         if ($module->isDefined() && $module->get('type') == $type) {
-                            $res[$i]         = $module->dump();
-                            $res[$i]['root'] = $zip_file;
+                            $res[$i] = $module;
+                            $res[$i]->set('root', $zip_file);
                             $i++;
                         }
                     }
                 } catch (Exception $e) {
                 }
-                files::deltree($path);
+                Files::deltree($path);
             }
             $zip->close();
         }
@@ -133,20 +133,34 @@ class Core
         return $res;
     }
 
-    public static function pack(array $info, string $root, array $files, bool $overwrite = false, array $exclude = [], bool $nocomment = false, bool $fixnewline = false): bool
+    public static function pack(dcModuleDefine $define, string $root, array $files, bool $overwrite = false, array $exclude = [], bool $nocomment = false, bool $fixnewline = false): bool
     {
-        if (!($info = self::getInfo($info))
-            || !($root = self::getRoot($root))
+        // check define
+        if (!$define->isDefined()
+            || empty($define->get('root'))
+            || !is_dir($define->get('root'))
         ) {
-            return false;
+            throw new Exception(__('Failed to get module info'));
         }
 
-        $exclude = self::getExclude($exclude);
+        // check root
+        $root = (string) Path::real($root);
+        if (!is_dir($root) || !is_writable($root)) {
+            throw new Exception(__('Directory is not writable'));
+        }
+
+        //set excluded
+        $exclude = self::quote_exclude(array_merge(My::EXCLUDED_FILES, $exclude));
 
         foreach ($files as $file) {
-            if (!($file = self::getFile($file, $info))
-                || !($dest = self::getOverwrite($overwrite, $root, $file))
-            ) {
+            if (empty($file)) {
+                continue;
+            }
+
+            // check path
+            $path = $root . DIRECTORY_SEPARATOR . self::getFile($file, $define);
+            if (file_exists($path) && !$overwrite) {
+                // don't break loop
                 continue;
             }
 
@@ -158,14 +172,14 @@ class Core
             if ($fixnewline) {
                 Zip::$fix_newline = true;
             }
-            $zip = new Zip($dest);
+            $zip = new Zip($path);
 
             foreach ($exclude as $e) {
                 $zip->addExclusion($e);
             }
             $zip->addDirectory(
-                (string) path::real($info['root'], false),
-                $info['id'],
+                (string) Path::real($define->get('root'), false),
+                $define->getId(),
                 true
             );
 
@@ -176,41 +190,8 @@ class Core
         return true;
     }
 
-    private static function getRoot(string $root): string
+    private static function getFile(string $file, dcModuleDefine $define): string
     {
-        $root = (string) path::real($root);
-        if (!is_dir($root) || !is_writable($root)) {
-            throw new Exception(__('Directory is not writable'));
-        }
-
-        return $root;
-    }
-
-    private static function getInfo(array $info): array
-    {
-        if (!isset($info['root'])
-            || !isset($info['id'])
-            || !is_dir($info['root'])
-        ) {
-            throw new Exception(__('Failed to get module info'));
-        }
-
-        return $info;
-    }
-
-    private static function getExclude(array $exclude): array
-    {
-        $exclude = array_merge(My::EXCLUDED_FILES, $exclude);
-
-        return self::quote_exclude($exclude);
-    }
-
-    private static function getFile(string $file, array $info): ?string
-    {
-        if (empty($file) || empty($info)) {
-            return null;
-        }
-
         $file = str_replace(
             [
                 '\\',
@@ -222,44 +203,19 @@ class Core
             ],
             [
                 '/',
-                $info['type'],
-                $info['id'],
-                $info['version'],
-                $info['author'],
+                $define->get('type'),
+                $define->getId(),
+                $define->get('version'),
+                $define->get('author'),
                 time(),
             ],
             $file
         );
         $parts = explode('/', $file);
         foreach ($parts as $i => $part) {
-            $parts[$i] = files::tidyFileName($part);
+            $parts[$i] = Files::tidyFileName($part);
         }
 
         return implode(DIRECTORY_SEPARATOR, $parts) . '.zip';
-    }
-
-    private static function getOverwrite(bool $overwrite, string $root, string$file): ?string
-    {
-        $path = $root . DIRECTORY_SEPARATOR . $file;
-        if (file_exists($path) && !$overwrite) {
-            // don't break loop
-            //throw new Exception('File already exists');
-            return null;
-        }
-
-        return $path;
-    }
-
-    private static function getCache(): string
-    {
-        $c = DC_TPL_CACHE . DIRECTORY_SEPARATOR . 'packman';
-        if (!file_exists($c)) {
-            @files::makeDir($c);
-        }
-        if (!is_writable($c)) {
-            throw new Exception(__('Failed to get temporary directory'));
-        }
-
-        return $c;
     }
 }

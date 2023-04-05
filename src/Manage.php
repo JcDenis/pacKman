@@ -19,10 +19,8 @@ use dcCore;
 use dcPage;
 use dcThemes;
 use dcNsProcess;
-
-/* clearbricks ns */
-use files;
-use http;
+use Dotclear\Helper\File\Files;
+use Dotclear\Helper\Network\Http;
 
 class Manage extends dcNsProcess
 {
@@ -58,13 +56,8 @@ class Manage extends dcNsProcess
         $plugins = dcCore::app()->plugins;
 
         # Rights
-        $is_writable = Utils::is_writable(
-            $dir,
-            $s->pack_filename
-        );
-        $is_editable = !empty($type)
-            && !empty($_POST['modules'])
-            && is_array($_POST['modules']);
+        $is_writable = Utils::isWritable($dir, $s->pack_filename);
+        $is_editable = !empty($type) && !empty($_POST['modules']) && is_array($_POST['modules']);
 
         # Actions
         try {
@@ -77,25 +70,25 @@ class Manage extends dcNsProcess
                     $modules = Core::getPackages(Utils::getThemesPath());
                 } else {
                     $modules = array_merge(
-                        Core::getPackages(dirname($dir . '/' . $s->pack_filename)),
-                        Core::getPackages(dirname($dir . '/' . $s->secondpack_filename))
+                        Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->pack_filename)),
+                        Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->secondpack_filename))
                     );
                 }
 
-                foreach ($modules as $f) {
-                    if (preg_match('/' . preg_quote($_REQUEST['package']) . '$/', $f['root'])
-                        && is_file($f['root']) && is_readable($f['root'])
+                foreach ($modules as $module) {
+                    if (preg_match('/' . preg_quote($_REQUEST['package']) . '$/', $module->get('root'))
+                        && is_file($module->get('root')) && is_readable($module->get('root'))
                     ) {
                         # --BEHAVIOR-- packmanBeforeDownloadPackage
-                        dcCore::app()->callBehavior('packmanBeforeDownloadPackage', $f, $type);
+                        dcCore::app()->callBehavior('packmanBeforeDownloadPackage', $module->dump(), $type);
 
                         header('Content-Type: application/zip');
-                        header('Content-Length: ' . filesize($f['root']));
-                        header('Content-Disposition: attachment; filename="' . basename($f['root']) . '"');
-                        readfile($f['root']);
+                        header('Content-Length: ' . filesize($module->get('root')));
+                        header('Content-Disposition: attachment; filename="' . basename($module->get('root')) . '"');
+                        readfile($module->get('root'));
 
                         # --BEHAVIOR-- packmanAfterDownloadPackage
-                        dcCore::app()->callBehavior('packmanAfterDownloadPackage', $f, $type);
+                        dcCore::app()->callBehavior('packmanAfterDownloadPackage', $module->dump(), $type);
 
                         exit;
                     }
@@ -103,7 +96,7 @@ class Manage extends dcNsProcess
 
                 # Not found
                 header('Content-Type: text/plain');
-                http::head(404, 'Not Found');
+                Http::head(404, 'Not Found');
                 exit;
             } elseif (!empty($action) && !$is_editable) {
                 dcPage::addErrorNotice(
@@ -111,7 +104,7 @@ class Manage extends dcNsProcess
                 );
 
                 if (!empty($_POST['redir'])) {
-                    http::redirect($_POST['redir']);
+                    Http::redirect($_POST['redir']);
                 } else {
                     dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-' . $type);
                 }
@@ -119,16 +112,14 @@ class Manage extends dcNsProcess
             # Pack
             } elseif ($action == 'packup') {
                 foreach ($_POST['modules'] as $root => $id) {
-                    if (!Utils::moduleExists($type, $id)) {
+                    if (!dcCore::app()->{$type}->getDefine($id)->isDefined()) {
                         throw new Exception('No such module');
                     }
 
-                    $module         = Utils::getModules($type, $id);
-                    $module['id']   = $id;
-                    $module['type'] = $type == 'themes' ? 'theme' : 'plugin';
+                    $module = dcCore::app()->{$type}->getDefine($id);
 
                     # --BEHAVIOR-- packmanBeforeCreatePackage
-                    dcCore::app()->callBehavior('packmanBeforeCreatePackage', $module);
+                    dcCore::app()->callBehavior('packmanBeforeCreatePackage', $module->dump());
 
                     Core::pack(
                         $module,
@@ -141,7 +132,7 @@ class Manage extends dcNsProcess
                     );
 
                     # --BEHAVIOR-- packmanAfterCreatePackage
-                    dcCore::app()->callBehavior('packmanAfterCreatePackage', $module);
+                    dcCore::app()->callBehavior('packmanAfterCreatePackage', $module->dump());
                 }
 
                 dcPage::addSuccessNotice(
@@ -149,7 +140,7 @@ class Manage extends dcNsProcess
                 );
 
                 if (!empty($_POST['redir'])) {
-                    http::redirect($_POST['redir']);
+                    Http::redirect($_POST['redir']);
                 } else {
                     dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-' . $type);
                 }
@@ -158,7 +149,7 @@ class Manage extends dcNsProcess
             } elseif ($action == 'delete') {
                 $del_success = false;
                 foreach ($_POST['modules'] as $root => $id) {
-                    if (!file_exists($root) || !files::isDeletable($root)) {
+                    if (!file_exists($root) || !Files::isDeletable($root)) {
                         dcPage::addWarningNotice(sprintf(__('Undeletable file "%s"', $root)));
                     } else {
                         $del_success = true;
@@ -174,7 +165,7 @@ class Manage extends dcNsProcess
                 }
 
                 if (!empty($_POST['redir'])) {
-                    http::redirect($_POST['redir']);
+                    Http::redirect($_POST['redir']);
                 } else {
                     dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
                 }
@@ -201,7 +192,7 @@ class Manage extends dcNsProcess
                 );
 
                 if (!empty($_POST['redir'])) {
-                    http::redirect($_POST['redir']);
+                    Http::redirect($_POST['redir']);
                 } else {
                     dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
                 }
@@ -217,7 +208,7 @@ class Manage extends dcNsProcess
 
                 foreach ($_POST['modules'] as $root => $id) {
                     file_put_contents(
-                        $dest . '/' . basename($root),
+                        $dest . DIRECTORY_SEPARATOR . basename($root),
                         file_get_contents($root)
                     );
                 }
@@ -227,7 +218,7 @@ class Manage extends dcNsProcess
                 );
 
                 if (!empty($_POST['redir'])) {
-                    http::redirect($_POST['redir']);
+                    Http::redirect($_POST['redir']);
                 } else {
                     dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
                 }
@@ -254,7 +245,7 @@ class Manage extends dcNsProcess
                 );
 
                 if (!empty($_POST['redir'])) {
-                    http::redirect($_POST['redir']);
+                    Http::redirect($_POST['redir']);
                 } else {
                     dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
                 }
@@ -276,7 +267,7 @@ class Manage extends dcNsProcess
         $s   = new Settings();
         $dir = Utils::getRepositoryDir($s->pack_repository);
 
-        $is_configured = Utils::is_configured(
+        $is_configured = Utils::isConfigured(
             $dir,
             $s->pack_filename,
             $s->secondpack_filename
@@ -306,13 +297,13 @@ class Manage extends dcNsProcess
             '</div>';
         } else {
             Utils::modules(
-                Utils::getModules('plugins'),
+                dcCore::app()->plugins->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),
                 'plugins',
                 __('Installed plugins')
             );
 
             Utils::modules(
-                Utils::getModules('themes'),
+                dcCore::app()->themes->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),
                 'themes',
                 __('Installed themes')
             );
@@ -331,8 +322,8 @@ class Manage extends dcNsProcess
 
             Utils::repository(
                 array_merge(
-                    Core::getPackages(dirname($dir . '/' . $s->pack_filename)),
-                    Core::getPackages(dirname($dir . '/' . $s->secondpack_filename))
+                    Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->pack_filename)),
+                    Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->secondpack_filename))
                 ),
                 'repository',
                 __('Packages repository')

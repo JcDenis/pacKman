@@ -88,11 +88,11 @@ class Config extends dcNsProcess
         $img_off = sprintf($img, __('not writable'), 'check-off.png');
 
         $repo         = Utils::getRepositoryDir($s->pack_repository);
-        $check_repo   = Utils::is_writable($repo, '_.zip') ? $img_on : $img_off;
-        $check_first  = !empty($s->pack_filename)       && Utils::is_writable($repo, $s->pack_filename) ? $img_on : $img_off;
-        $check_second = !empty($s->secondpack_filename) && Utils::is_writable($repo, $s->secondpack_filename) ? $img_on : $img_off;
+        $check_repo   = Utils::isWritable($repo, '_.zip') ? $img_on : $img_off;
+        $check_first  = !empty($s->pack_filename)       && Utils::isWritable($repo, $s->pack_filename) ? $img_on : $img_off;
+        $check_second = !empty($s->secondpack_filename) && Utils::isWritable($repo, $s->secondpack_filename) ? $img_on : $img_off;
 
-        $is_configured = Utils::is_configured(
+        $is_configured = Utils::isConfigured(
             $repo,
             $s->pack_filename,
             $s->secondpack_filename

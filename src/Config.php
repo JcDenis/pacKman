@@ -28,6 +28,7 @@ use Dotclear\Helper\Html\Form\{
     Para,
     Text
 };
+use Exception;
 
 class Config extends dcNsProcess
 {

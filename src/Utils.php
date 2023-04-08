@@ -29,6 +29,7 @@ use Dotclear\Helper\Html\Form\{
     Text
 };
 use Dotclear\Helper\Html\Html;
+use Exception;
 
 use dt;
 

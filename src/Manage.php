@@ -21,6 +21,7 @@ use dcThemes;
 use dcNsProcess;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\Network\Http;
+use Exception;
 
 class Manage extends dcNsProcess
 {

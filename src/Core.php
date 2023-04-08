@@ -20,6 +20,7 @@ use dcModules;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
 use Dotclear\Helper\File\Zip\Unzip;
+use Exception;
 
 class Core
 {

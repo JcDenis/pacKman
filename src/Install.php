@@ -17,6 +17,7 @@ namespace Dotclear\Plugin\pacKman;
 use dcCore;
 use dcNamespace;
 use dcNsProcess;
+use Exception;
 
 class Install extends dcNsProcess
 {

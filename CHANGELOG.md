@@ -1,3 +1,9 @@
+2023.04.22
+- require dotclear 2.26
+- require php 8.1+
+- remove custom Exception handler
+- add plugin Uninstaller features
+
 2023.04.06
 - update to latest dotclear 2.26-dev changes
 - use Helper Form

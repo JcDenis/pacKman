@@ -21,7 +21,7 @@ themes and plugins from Dotclear administration pages.
 
   * Super administrator permissions
   * Dotclear 2.26
-  * PHP 8.1
+  * PHP 8.1+
   * A writable cache directory 
   * A writable directory to put packages. (can be VAR dir)
 

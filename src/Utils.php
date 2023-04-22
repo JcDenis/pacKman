@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\pacKman;
 
 use dcCore;
+use Dotclear\Helper\Date;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
 use Dotclear\Helper\File\Zip\Unzip;
@@ -30,8 +31,6 @@ use Dotclear\Helper\Html\Form\{
 };
 use Dotclear\Helper\Html\Html;
 use Exception;
-
-use dt;
 
 class Utils
 {
@@ -290,7 +289,7 @@ class Utils
                 Html::escapeHTML(basename($module->get('root'))) . '</a>' .
             '</td>' .
             '<td class="nowrap">' .
-                Html::escapeHTML(dt::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($module->get('root')))) .
+                Html::escapeHTML(Date::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($module->get('root')))) .
             '</td>' .
             '</tr>';
 

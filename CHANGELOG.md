@@ -1,3 +1,9 @@
+2023.04.27
+- require dotclear 2.26
+- require php 8.1+
+- rollback Zip Unzip dotclear class
+- fix settings read/write
+
 2023.04.22
 - require dotclear 2.26
 - require php 8.1+

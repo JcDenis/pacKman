@@ -27,11 +27,12 @@ class Zip extends \Dotclear\Helper\File\Zip\Zip
      *
      * @param      string    $name   The name
      * @param      string    $file   The file
+     * @param      string    $size   The size
      * @param      int|null  $mtime  The mtime
      *
      * @return     void
      */
-    protected function writeFile(string $name, string $file, ?int $mtime)
+    protected function writeFile($name, $file, $size, $mtime)
     {
         if (!isset($this->entries[$name])) {
             return;

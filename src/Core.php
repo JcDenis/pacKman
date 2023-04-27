@@ -102,10 +102,10 @@ class Core
                     $unlink = false;
                     if ($zip->hasFile($init)) {
                         $unlink = true;
-                        $zip->unzip($init, $path);
+                        $zip->unzip($init, $target . DIRECTORY_SEPARATOR . $init);
                     }
 
-                    $zip->unzip($define, $path);
+                    $zip->unzip($define, $target . DIRECTORY_SEPARATOR . $define);
 
                     $sandbox->resetModulesList();
                     $sandbox->requireDefine($path, basename($path));
@@ -125,6 +125,7 @@ class Core
                         }
                     }
                 } catch (Exception $e) {
+                    throw $e;
                 }
                 Files::deltree($path);
             }
@@ -173,7 +174,9 @@ class Core
             if ($fixnewline) {
                 Zip::$fix_newline = true;
             }
-            $zip = new Zip($path);
+
+            $fp  = fopen($path, 'wb');
+            $zip = new Zip($fp);
 
             foreach ($exclude as $e) {
                 $zip->addExclusion($e);
@@ -184,6 +187,7 @@ class Core
                 true
             );
 
+            $zip->write();
             $zip->close();
             unset($zip);
         }

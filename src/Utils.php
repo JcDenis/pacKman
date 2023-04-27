@@ -81,64 +81,6 @@ class Utils
         return !(empty($path) || empty($file) || !is_writable(dirname($path . DIRECTORY_SEPARATOR . $file)));
     }
 
-    public static function getUnzipCapability(): string
-    {
-        switch (Unzip::USE_DEFAULT) {
-            case Unzip::USE_PHARDATA:
-                if (class_exists('PharData')) {
-                    return 'PharData';
-                }
-                if (class_exists('ZipArchive')) {
-                    return 'ZipArchive';
-                }
-
-                break;
-            case Unzip::USE_ZIPARCHIVE:
-                if (class_exists('ZipArchive')) {
-                    return 'ZipArchive';
-                }
-                if (class_exists('PharData')) {
-                    return 'PharData';
-                }
-
-                break;
-            case Unzip::USE_LEGACY:
-
-                break;
-        }
-
-        return 'Legacy';
-    }
-
-    public static function getZipCapability(): string
-    {
-        switch (Zip::USE_DEFAULT) {
-            case Zip::USE_PHARDATA:
-                if (class_exists('PharData')) {
-                    return 'PharData';
-                }
-                if (class_exists('ZipArchive')) {
-                    return 'ZipArchive';
-                }
-
-                break;
-            case Zip::USE_ZIPARCHIVE:
-                if (class_exists('ZipArchive')) {
-                    return 'ZipArchive';
-                }
-                if (class_exists('PharData')) {
-                    return 'PharData';
-                }
-
-                break;
-            case Unzip::USE_LEGACY:
-
-                break;
-        }
-
-        return 'Legacy';
-    }
-
     public static function getRepositoryDir(?string $dir): string
     {
         if (empty($dir)) {

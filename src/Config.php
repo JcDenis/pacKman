@@ -161,11 +161,6 @@ class Config extends dcNsProcess
                     (new Label(__('Fix newline style from files content'), Label::OUTSIDE_LABEL_AFTER))->for('pack_fixnewline')->class('classic'),
                 ]),
             ]),
-            (new Fieldset())->class('fieldset')->legend((new Legend(__('Capability'))))->fields([
-                (new Text('p', $img_on . sprintf(__('Use "%s" class to zip modules.'), Utils::getZipCapability()))),
-                (new Text('p', $img_on . sprintf(__('Use "%s" class to unzip modules.'), Utils::getUnzipCapability()))),
-                (new Text('p', $check_conf)),
-            ]),
         ])->render();
     }
 }

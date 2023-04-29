@@ -20,6 +20,8 @@ use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
 use Dotclear\Helper\Html\Form\{
     Checkbox,
+    Div,
+    Form,
     Hidden,
     Label,
     Para,
@@ -101,56 +103,75 @@ class Utils
 
         $type = $type == 'themes' ? 'themes' : 'plugins';
 
-        echo
-        '<div class="multi-part" ' .
-        'id="packman-' . $type . '" title="' . $title . '">' .
-        '<h3>' . $title . '</h3>' .
-        '<form action="plugin.php" method="post">' .
-        '<table class="clear"><tr>' .
-        '<th class="nowrap">' . __('Id') . '</th>' .
-        '<th class="nowrap">' . __('Version') . '</th>' .
-        '<th class="nowrap maximal">' . __('Name') . '</th>' .
-        '<th class="nowrap">' . __('Root') . '</th>' .
-        '</tr>';
-
-        $i = 1;
+        $i     = 1;
+        $tbody = [];
         self::sort($modules);
         foreach ($modules as $module) {
-            echo
-            '<tr class="line">' .
-            (new Para(null, 'td'))->class('nowrap')->items([
-                (new Checkbox(['modules[' . Html::escapeHTML($module->get('root')) . ']', 'modules_' . $type . $i], false))->value(Html::escapeHTML($module->getId())),
-                (new Label(Html::escapeHTML($module->getId()), Label::OUTSIDE_LABEL_AFTER))->for('modules_' . $type . $i)->class('classic'),
-
-            ])->render() .
-            '<td class="nowrap count">' .
-                Html::escapeHTML($module->get('version')) .
-            '</td>' .
-            '<td class="nowrap maximal">' .
-                __(Html::escapeHTML($module->get('name'))) .
-            '</td>' .
-            '<td class="nowrap">' .
-                dirname((string) Path::real($module->get('root'), false)) .
-            '</td>' .
-            '</tr>';
+            $tbody[] = (new Para(null, 'tr'))
+                ->class('line')
+                ->items([
+                    (new Para(null, 'td'))
+                        ->class('nowrap')
+                        ->items([
+                            (new Checkbox(['modules[' . Html::escapeHTML($module->get('root')) . ']', 'modules_' . $type . $i], false))
+                                ->value(Html::escapeHTML($module->getId())),
+                            (new Label(Html::escapeHTML($module->getId()), Label::OUTSIDE_LABEL_AFTER))
+                                ->class('classic')
+                                ->for('modules_' . $type . $i),
+                        ]),
+                    (new Text('td', Html::escapeHTML($module->get('version'))))
+                        ->class('nowrap count'),
+                    (new Text('td', Html::escapeHTML($module->get('name'))))
+                        ->class('nowrap'),
+                    (new Text('td', dirname((string) Path::real($module->get('root'), false))))
+                        ->class('nowrap maximal'),
+                ]);
 
             $i++;
         }
 
         echo
-        '</table>' .
-        '<p class="checkboxes-helpers"></p>' .
-        (new Para())->items([
-            (new Hidden(['redir'], Html::escapeHTML($_REQUEST['redir'] ?? ''))),
-            (new Hidden(['p'], My::id())),
-            (new Hidden(['type'], $type)),
-            (new Hidden(['action'], 'packup')),
-            (new Submit(['packup']))->value(__('Pack up selected modules')),
-            dcCore::app()->formNonce(false),
-        ])->render() .
-        '</form>' .
-
-        '</div>';
+        (new Div('packman-' . $type))
+            ->class('multi-part')
+            ->title($title)
+            ->items([
+                (new Text('h3', $title)),
+                (new Form('packman-form-' . $type))
+                    ->method('post')
+                    ->action('plugin.php')
+                    ->fields([
+                        (new Para(null, 'table'))
+                            ->class('clear')
+                            ->items([
+                                (new Para(null, 'tr'))
+                                    ->items([
+                                        (new Text('th', Html::escapeHTML(__('Id'))))
+                                            ->class('nowrap'),
+                                        (new Text('th', Html::escapeHTML(__('Version'))))
+                                            ->class('nowrap'),
+                                        (new Text('th', Html::escapeHTML(__('Name'))))
+                                            ->class('nowrap'),
+                                        (new Text('th', Html::escapeHTML(__('Root'))))
+                                            ->class('nowrap'),
+                                    ]),
+                                (new Para(null, 'tbody'))
+                                    ->items($tbody),
+                            ]),
+                        (new Para())
+                            ->class('checkboxes-helpers'),
+                        (new Para())
+                            ->items([
+                                (new Hidden(['redir'], Html::escapeHTML($_REQUEST['redir'] ?? ''))),
+                                (new Hidden(['p'], My::id())),
+                                (new Hidden(['type'], $type)),
+                                (new Hidden(['action'], 'packup')),
+                                (new Submit(['packup']))
+                                    ->value(__('Pack up selected modules')),
+                                dcCore::app()->formNonce(false),
+                            ]),
+                    ]),
+            ])
+            ->render();
 
         return true;
     }
@@ -163,11 +184,6 @@ class Utils
         if (!in_array($type, ['plugins', 'themes', 'repository'])) {
             return null;
         }
-
-        echo
-        '<div class="multi-part" ' .
-        'id="packman-repository-' . $type . '" title="' . $title . '">' .
-        '<h3>' . $title . '</h3>';
 
         $combo_action = [__('delete') => 'delete'];
 
@@ -187,17 +203,7 @@ class Utils
             $combo_action[sprintf(__('move to %s directory'), __('repository'))] = 'move_to_repository';
         }
 
-        echo
-        '<form action="plugin.php" method="post">' .
-        '<table class="clear"><tr>' .
-        '<th class="nowrap">' . __('Id') . '</th>' .
-        '<th class="nowrap">' . __('Version') . '</th>' .
-        '<th class="nowrap">' . __('Name') . '</th>' .
-        '<th class="nowrap">' . __('File') . '</th>' .
-        '<th class="nowrap">' . __('Date') . '</th>' .
-        '</tr>';
-
-        $dup = [];
+        $dup = $tbody = [];
         $i   = 1;
         self::sort($modules);
         foreach ($modules as $module) {
@@ -207,51 +213,89 @@ class Utils
 
             $dup[$module->get('root')] = 1;
 
-            echo
-            '<tr class="line">' .
-            (new Para(null, 'td'))->class('nowrap')->items([
-                (new Checkbox(['modules[' . Html::escapeHTML($module->get('root')) . ']', 'r_modules_' . $type . $i], false))->value(Html::escapeHTML($module->getId())),
-                (new Label(Html::escapeHTML($module->getId()), Label::OUTSIDE_LABEL_AFTER))->for('r_modules_' . $type . $i)->class('classic')->title(Html::escapeHTML($module->get('root'))),
-
-            ])->render() .
-            '<td class="nowrap count">' .
-                Html::escapeHTML($module->get('version')) .
-            '</td>' .
-            '<td class="nowrap maximal">' .
-                __(Html::escapeHTML($module->get('name'))) .
-            '</td>' .
-            '<td class="nowrap">' .
-                '<a class="packman-download" href="' .
-                dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), [
-                    'package' => basename($module->get('root')),
-                    'repo'    => $type,
-                ]) . '" title="' . __('Download') . '">' .
-                Html::escapeHTML(basename($module->get('root'))) . '</a>' .
-            '</td>' .
-            '<td class="nowrap">' .
-                Html::escapeHTML(Date::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($module->get('root')))) .
-            '</td>' .
-            '</tr>';
+            $tbody[] = (new Para(null, 'tr'))
+                ->class('line')
+                ->items([
+                    (new Para(null, 'td'))
+                        ->class('nowrap')
+                        ->items([
+                            (new Checkbox(['modules[' . Html::escapeHTML($module->get('root')) . ']', 'r_modules_' . $type . $i], false))
+                                ->value(Html::escapeHTML($module->getId())),
+                            (new Label(Html::escapeHTML($module->getId()), Label::OUTSIDE_LABEL_AFTER))
+                                ->class('classic')
+                                ->for('r_modules_' . $type . $i)
+                                ->title(Html::escapeHTML($module->get('root'))),
+                        ]),
+                    (new Text('td', Html::escapeHTML($module->get('version'))))
+                        ->class('nowrap count'),
+                    (new Text('td', Html::escapeHTML($module->get('name'))))
+                        ->class('nowrap'),
+                    (new Para(null, 'td'))
+                        ->class('nowrap')
+                        ->items([
+                            (new Text('a', Html::escapeHTML(basename($module->get('root')))))
+                                ->class('packman-download')
+                                ->extra(
+                                    'href="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), [
+                                        'package' => basename($module->get('root')),
+                                        'repo'    => $type,
+                                    ]) . '"'
+                                )
+                                ->title(__('Download')),
+                        ]),
+                    (new Text('td', Html::escapeHTML(Date::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($module->get('root'))))))
+                        ->class('nowrap maximal'),
+                ]);
 
             $i++;
         }
 
         echo
-        '</table>' .
-        '<div class="two-cols">' .
-        '<p class="col checkboxes-helpers"></p>' .
-        (new Para())->class('col right')->items([
-            (new Text('', __('Selected modules action:') . ' ')),
-            (new Select(['action']))->items($combo_action),
-            (new Submit(['packup']))->value(__('ok')),
-            (new Hidden(['p'], My::id())),
-            (new Hidden(['tab'], 'repository')),
-            (new Hidden(['type'], $type)),
-            dcCore::app()->formNonce(false),
-        ])->render() .
-        '</div>' .
-        '</form>' .
-        '</div>';
+        (new Div('packman-repository-' . $type))
+            ->class('multi-part')
+            ->title($title)
+            ->items([
+                (new Text('h3', $title)),
+                (new Form('packman-form-repository-' . $type))
+                    ->method('post')
+                    ->action('plugin.php')
+                    ->fields([
+                        (new Para(null, 'table'))
+                            ->class('clear')
+                            ->items([
+                                (new Para(null, 'tr'))
+                                    ->items([
+                                        (new Text('th', Html::escapeHTML(__('Id'))))
+                                            ->class('nowrap'),
+                                        (new Text('th', Html::escapeHTML(__('Version'))))
+                                            ->class('nowrap'),
+                                        (new Text('th', Html::escapeHTML(__('Name'))))
+                                            ->class('nowrap'),
+                                        (new Text('th', Html::escapeHTML(__('File'))))
+                                            ->class('nowrap'),
+                                        (new Text('th', Html::escapeHTML(__('Date'))))
+                                            ->class('nowrap'),
+                                    ]),
+                                (new Para(null, 'tbody'))
+                                    ->items($tbody),
+                            ]),
+                        (new Para())
+                            ->class('checkboxes-helpers'),
+                        (new Para())->class('col right')
+                            ->items([
+                                (new Text(null, __('Selected modules action:') . ' ')),
+                                (new Select(['action']))
+                                    ->items($combo_action),
+                                (new Submit(['packup']))
+                                    ->value(__('ok')),
+                                (new Hidden(['p'], My::id())),
+                                (new Hidden(['tab'], 'repository')),
+                                (new Hidden(['type'], $type)),
+                                dcCore::app()->formNonce(false),
+                            ]),
+                    ]),
+            ])
+            ->render();
 
         return true;
     }

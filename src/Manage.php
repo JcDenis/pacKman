@@ -20,6 +20,10 @@ use dcPage;
 use dcThemes;
 use dcNsProcess;
 use Dotclear\Helper\File\Files;
+use Dotclear\Helper\Html\Form\{
+    Div,
+    Text
+};
 use Dotclear\Helper\Network\Http;
 use Exception;
 
@@ -293,9 +297,13 @@ class Manage extends dcNsProcess
 
         if (dcCore::app()->error->flag() || !$is_configured) {
             echo
-            '<div class="warning">' . __('pacKman is not well configured.') . ' ' .
-            '<a href="' . dcCore::app()->adminurl?->get('admin.plugins', ['module' => My::id(), 'conf' => '1', 'redir' => dcCore::app()->adminurl->get('admin.plugin.' . My::id())]) . '">' . __('Configuration') . '</a>' .
-            '</div>';
+            (new Div())
+                ->separator(' ')
+                ->class('warning')
+                ->items([
+                    (new Text(null, sprintf(__('Module "%s" is not well configured.'), My::name()))),
+                ])
+                ->render();
         } else {
             Utils::modules(
                 dcCore::app()->plugins->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),

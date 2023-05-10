@@ -22,7 +22,10 @@ $this->registerModule(
     'Jean-Christian Denis',
     '2023.04.27',
     [
-        'requires'    => [['core', '2.26']],
+        'requires'    => [
+            ['php', '8.1'],
+            ['core', '2.26'],
+        ],
         'permissions' => null,
         'type'        => 'plugin',
         'support'     => 'https://github.com/JcDenis/' . basename(__DIR__),

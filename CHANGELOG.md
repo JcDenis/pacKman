@@ -1,3 +1,9 @@
+2023.05.13
+- require dotclear 2.26
+- require php 8.1+
+- use define php_min
+- use html helper everywhere
+
 2023.04.27
 - require dotclear 2.26
 - require php 8.1+

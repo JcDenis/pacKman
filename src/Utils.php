@@ -24,6 +24,7 @@ use Dotclear\Helper\Html\Form\{
     Form,
     Hidden,
     Label,
+    Link,
     Para,
     Select,
     Submit,
@@ -203,13 +204,32 @@ class Utils
             $combo_action[sprintf(__('move to %s directory'), __('repository'))] = 'move_to_repository';
         }
 
+        $helpers_addon = [];
+        if ($type == 'repository') {
+            $helpers_addon[] = (new Link())
+                ->class('button')
+                ->href(dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['purge' => 1]) . '#packman-repository-' . $type)
+                ->text(__('Select non lastest versions'))
+            ;
+        }
+
+        $versions = [];
+        if (!empty($_REQUEST['purge']) && $type = 'repository') {
+            foreach ($modules as $module) {
+                if (!isset($versions[$module->getId()]) || version_compare($module->get('version'), $versions[$module->getId()], '>')) {
+                    $versions[$module->getId()] = $module->get('version');
+                }
+            }
+        }
+
         $dup = $tbody = [];
         $i   = 1;
         self::sort($modules);
         foreach ($modules as $module) {
             if (isset($dup[$module->get('root')])) {
-                continue;
+                //continue;
             }
+            $checked = isset($versions[$module->getId()]) && version_compare($versions[$module->getId()], $module->get('version'), '>');
 
             $dup[$module->get('root')] = 1;
 
@@ -219,7 +239,7 @@ class Utils
                     (new Para(null, 'td'))
                         ->class('nowrap')
                         ->items([
-                            (new Checkbox(['modules[' . Html::escapeHTML($module->get('root')) . ']', 'r_modules_' . $type . $i], false))
+                            (new Checkbox(['modules[' . Html::escapeHTML($module->get('root')) . ']', 'r_modules_' . $type . $i], $checked))
                                 ->value(Html::escapeHTML($module->getId())),
                             (new Label(Html::escapeHTML($module->getId()), Label::OUTSIDE_LABEL_AFTER))
                                 ->class('classic')
@@ -281,6 +301,8 @@ class Utils
                             ]),
                         (new Para())
                             ->class('checkboxes-helpers'),
+                        (new Para())
+                            ->items($helpers_addon),
                         (new Para())->class('col right')
                             ->items([
                                 (new Text(null, __('Selected modules action:') . ' ')),

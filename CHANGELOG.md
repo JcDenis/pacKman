@@ -1,3 +1,8 @@
+2023.05.24
+- require dotclear 2.26
+- require php 8.1+
+- add option to select non latest versions
+
 2023.05.13
 - require dotclear 2.26
 - require php 8.1+

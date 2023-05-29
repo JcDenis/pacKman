@@ -1,3 +1,9 @@
+2023.05.29
+- require dotclear 2.26
+- require php 8.1+
+- fix save settings
+- add option to separate themes and plugins repositories
+
 2023.05.24
 - require dotclear 2.26
 - require php 8.1+

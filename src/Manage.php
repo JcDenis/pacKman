@@ -43,13 +43,14 @@ class Manage extends dcNsProcess
             return false;
         }
 
+        # Settings
+        $s = new Settings();
+
         # Queries
         $action = $_POST['action'] ?? '';
-        $type   = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository']) ? $_POST['type'] : '';
-
-        # Settings
-        $s   = new Settings();
-        $dir = Utils::getRepositoryDir($s->pack_repository);
+        $type   = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository', 'repository-themes', 'repository-plugins']) ? $_POST['type'] : '';
+        $repo   = $s->pack_typedrepo ? (empty($_REQUEST['repo']) ? $type : (str_contains($_REQUEST['repo'], 'themes') ? 'themes' : 'plugins')) : null;
+        $dir    = Utils::getRepositoryDir($s->pack_repository, $repo);
 
         # Modules
         if (!(dcCore::app()->themes instanceof dcThemes)) {
@@ -268,14 +269,30 @@ class Manage extends dcNsProcess
         }
 
         # Settings
-        $s   = new Settings();
-        $dir = Utils::getRepositoryDir($s->pack_repository);
+        $s             = new Settings();
+        $is_configured = $is_plugins_configured = $is_themes_configured = true;
 
-        $is_configured = Utils::isConfigured(
-            $dir,
-            $s->pack_filename,
-            $s->secondpack_filename
-        );
+        if ($s->pack_typedrepo) {
+            $dir_plugins           = Utils::getRepositoryDir($s->pack_repository, 'plugins');
+            $is_plugins_configured = Utils::isConfigured(
+                $dir_plugins,
+                $s->pack_filename,
+                $s->secondpack_filename
+            );
+            $dir_themes           = Utils::getRepositoryDir($s->pack_repository, 'themes');
+            $is_themes_configured = Utils::isConfigured(
+                $dir_themes,
+                $s->pack_filename,
+                $s->secondpack_filename
+            );
+        } else {
+            $dir           = Utils::getRepositoryDir($s->pack_repository);
+            $is_configured = Utils::isConfigured(
+                $dir,
+                $s->pack_filename,
+                $s->secondpack_filename
+            );
+        }
 
         # Display
         dcPage::openModule(
@@ -294,7 +311,7 @@ class Manage extends dcNsProcess
         ]) .
         dcPage::notices();
 
-        if (dcCore::app()->error->flag() || !$is_configured) {
+        if (dcCore::app()->error->flag() || !$is_configured || !$is_plugins_configured || !$is_themes_configured) {
             echo
             (new Div())
                 ->separator(' ')
@@ -328,14 +345,33 @@ class Manage extends dcNsProcess
                 __('Themes root')
             );
 
-            Utils::repository(
-                array_merge(
-                    Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->pack_filename)),
-                    Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->secondpack_filename))
-                ),
-                'repository',
-                __('Packages repository')
-            );
+            if ($s->pack_typedrepo) {
+                Utils::repository(
+                    array_merge(
+                        Core::getPackages(dirname($dir_themes . DIRECTORY_SEPARATOR . $s->pack_filename)),
+                        Core::getPackages(dirname($dir_themes . DIRECTORY_SEPARATOR . $s->secondpack_filename))
+                    ),
+                    'repository-themes',
+                    __('Themes packages repository')
+                );
+                Utils::repository(
+                    array_merge(
+                        Core::getPackages(dirname($dir_plugins . DIRECTORY_SEPARATOR . $s->pack_filename)),
+                        Core::getPackages(dirname($dir_plugins . DIRECTORY_SEPARATOR . $s->secondpack_filename))
+                    ),
+                    'repository-plugins',
+                    __('Plugins packages repository')
+                );
+            } else {
+                Utils::repository(
+                    array_merge(
+                        Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->pack_filename)),
+                        Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->secondpack_filename))
+                    ),
+                    'repository',
+                    __('Packages repository')
+                );
+            }
         }
 
         # --BEHAVIOR-- packmanAdminTabs

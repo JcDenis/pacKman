@@ -36,6 +36,9 @@ class Settings
     // Path to package repository
     public readonly string $pack_repository;
 
+    // Seperate themes and plugins repository
+    public readonly bool $pack_typedrepo;
+
     // Extra files to exclude from package
     public readonly string $pack_excludefiles;
 
@@ -55,6 +58,7 @@ class Settings
         $this->pack_filename       = (string) ($s?->get('pack_filename') ?? '%type%-%id%');
         $this->secondpack_filename = (string) ($s?->get('secondpack_filename') ?? '%type%-%id%-%version%');
         $this->pack_repository     = (string) ($s?->get('pack_repository') ?? '');
+        $this->pack_typedrepo      = (bool) ($s?->get('pack_typedrepo') ?? false);
         $this->pack_excludefiles   = (string) ($s?->get('pack_excludefiles') ?? '*.zip,*.tar,*.tar.gz,.directory,.hg');
         $this->hide_distrib        = (bool) ($s?->get('hide_distrib') ?? false);
     }

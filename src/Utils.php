@@ -50,6 +50,7 @@ class Utils
 
     public static function isConfigured(string $repo, string $file_a, string $file_b): bool
     {
+        sleep(1);
         if (!is_writable($repo)) {
             dcCore::app()->error->add(
                 __('Path to repository is not writable.')
@@ -82,15 +83,15 @@ class Utils
         return !(empty($path) || empty($file) || !is_writable(dirname($path . DIRECTORY_SEPARATOR . $file)));
     }
 
-    public static function getRepositoryDir(?string $dir): string
+    public static function getRepositoryDir(?string $dir, ?string $typed = null): string
     {
-        if (empty($dir)) {
-            try {
-                $dir = DC_VAR . DIRECTORY_SEPARATOR . 'packman';
-                @Files::makeDir($dir, true);
-            } catch (Exception $e) {
-                $dir = '';
-            }
+        $typed = empty($typed) ? '' : DIRECTORY_SEPARATOR . ($typed == 'themes' ? 'themes' : 'plugins');
+        $dir   = empty($dir) ? DC_VAR . DIRECTORY_SEPARATOR . 'packman' . $typed : $dir . $typed;
+
+        try {
+            @Files::makeDir($dir, true);
+        } catch (Exception $e) {
+            $dir = '';
         }
 
         return $dir;
@@ -182,7 +183,7 @@ class Utils
         if (empty($modules)) {
             return null;
         }
-        if (!in_array($type, ['plugins', 'themes', 'repository'])) {
+        if (!in_array($type, ['plugins', 'themes', 'repository', 'repository-themes', 'repository-plugins'])) {
             return null;
         }
 
@@ -199,13 +200,13 @@ class Utils
             $combo_action[sprintf(__('copy to %s directory'), __('themes'))] = 'copy_to_themes';
             $combo_action[sprintf(__('move to %s directory'), __('themes'))] = 'move_to_themes';
         }
-        if ($type != 'repository') {
+        if (!str_contains($type, 'repository')) {
             $combo_action[sprintf(__('copy to %s directory'), __('repository'))] = 'copy_to_repository';
             $combo_action[sprintf(__('move to %s directory'), __('repository'))] = 'move_to_repository';
         }
 
         $helpers_addon = [];
-        if ($type == 'repository') {
+        if (str_contains($type, 'repository')) {
             $helpers_addon[] = (new Link())
                 ->class('button')
                 ->href(dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['purge' => 1]) . '#packman-repository-' . $type)
@@ -214,7 +215,7 @@ class Utils
         }
 
         $versions = [];
-        if (!empty($_REQUEST['purge']) && $type = 'repository') {
+        if (!empty($_REQUEST['purge']) && str_contains($type, 'repository')) {
             foreach ($modules as $module) {
                 if (!isset($versions[$module->getId()]) || version_compare($module->get('version'), $versions[$module->getId()], '>')) {
                     $versions[$module->getId()] = $module->get('version');

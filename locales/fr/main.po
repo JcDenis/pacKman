@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: pacKman 2023.05.13\n"
+"Project-Id-Version: pacKman 2023.05.24\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-05-24T20:51:11+00:00\n"
+"PO-Revision-Date: 2023-05-29T22:03:06+00:00\n"
 "Last-Translator: Jean-Christian Denis\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,12 @@ msgstr "Répertoire public du blog"
 
 msgid "Leave it empty to use Dotclear VAR directory"
 msgstr "Laisser vide pour utiliser le répertoire VAR de Dotclear"
+
+msgid "Seperate themes and plugins"
+msgstr "Séparer les thèmes des plugins"
+
+msgid "This creates one repository sub folder for themes and one for plugins"
+msgstr "Ceci créée un sous-dossier pour les thèmes et un pour les plugins"
 
 msgid "Files"
 msgstr "Fichiers"
@@ -79,11 +85,20 @@ msgstr "Paquetage copié avec succès."
 msgid "Package successfully moved."
 msgstr "Paquetage déplacé avec succès."
 
+msgid "Module \"%s\" is not well configured."
+msgstr "Le module \"%s\" est mal configuré"
+
 msgid "Plugins root"
 msgstr "Racine des plugins"
 
 msgid "Themes root"
 msgstr "Racine des thèmes"
+
+msgid "Themes packages repository"
+msgstr "Dépôt de paquetages de thèmes"
+
+msgid "Plugins packages repository"
+msgstr "Dépôt de paquetages de plugins"
 
 msgid "Packages repository"
 msgstr "Dépôt de paquetages"

@@ -16,9 +16,12 @@ namespace Dotclear\Plugin\pacKman;
 
 /* dotclear ns */
 use dcCore;
-use dcPage;
 use dcThemes;
-use dcNsProcess;
+use Dotclear\Core\Process;
+use Dotclear\Core\Backend\{
+    Notices,
+    Page
+};
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\Html\Form\{
     Div,
@@ -27,19 +30,16 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Network\Http;
 use Exception;
 
-class Manage extends dcNsProcess
+class Manage extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && dcCore::app()->auth?->isSuperAdmin();
-
-        return static::$init;
+        return self::status(My::checkContext(My::MANAGE));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -104,14 +104,14 @@ class Manage extends dcNsProcess
                 Http::head(404, 'Not Found');
                 exit;
             } elseif (!empty($action) && !$is_editable) {
-                dcPage::addErrorNotice(
+                Notices::addErrorNotice(
                     __('No modules selected.')
                 );
 
                 if (!empty($_POST['redir'])) {
                     Http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-' . $type);
+                    My::redirect([], '#packman-' . $type);
                 }
 
             # Pack
@@ -140,14 +140,14 @@ class Manage extends dcNsProcess
                     dcCore::app()->callBehavior('packmanAfterCreatePackage', $module->dump());
                 }
 
-                dcPage::addSuccessNotice(
+                Notices::addSuccessNotice(
                     __('Package successfully created.')
                 );
 
                 if (!empty($_POST['redir'])) {
                     Http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-' . $type);
+                    My::redirect([], '#packman-' . $type);
                 }
 
             # Delete
@@ -155,7 +155,7 @@ class Manage extends dcNsProcess
                 $del_success = false;
                 foreach ($_POST['modules'] as $root => $id) {
                     if (!file_exists($root) || !Files::isDeletable($root)) {
-                        dcPage::addWarningNotice(sprintf(__('Undeletable file "%s"', $root)));
+                        Notices::addWarningNotice(sprintf(__('Undeletable file "%s"', $root)));
                     } else {
                         $del_success = true;
                     }
@@ -164,7 +164,7 @@ class Manage extends dcNsProcess
                 }
 
                 if ($del_success) {
-                    dcPage::addSuccessNotice(
+                    Notices::addSuccessNotice(
                         __('Package successfully deleted.')
                     );
                 }
@@ -172,7 +172,7 @@ class Manage extends dcNsProcess
                 if (!empty($_POST['redir'])) {
                     Http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
+                    My::redirect([], '#packman-repository-' . $type);
                 }
 
             # Install
@@ -192,14 +192,14 @@ class Manage extends dcNsProcess
                     dcCore::app()->callBehavior('packmanAfterInstallPackage', $type, $id, $root);
                 }
 
-                dcPage::addSuccessNotice(
+                Notices::addSuccessNotice(
                     __('Package successfully installed.')
                 );
 
                 if (!empty($_POST['redir'])) {
                     Http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
+                    My::redirect([], '#packman-repository-' . $type);
                 }
 
             # Copy
@@ -218,14 +218,14 @@ class Manage extends dcNsProcess
                     );
                 }
 
-                dcPage::addSuccessNotice(
+                Notices::addSuccessNotice(
                     __('Package successfully copied.')
                 );
 
                 if (!empty($_POST['redir'])) {
                     Http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
+                    My::redirect([], '#packman-repository-' . $type);
                 }
 
             # Move
@@ -245,14 +245,14 @@ class Manage extends dcNsProcess
                     unlink($root);
                 }
 
-                dcPage::addSuccessNotice(
+                Notices::addSuccessNotice(
                     __('Package successfully moved.')
                 );
 
                 if (!empty($_POST['redir'])) {
                     Http::redirect($_POST['redir']);
                 } else {
-                    dcCore::app()->adminurl?->redirect('admin.plugin.' . My::id(), [], '#packman-repository-' . $type);
+                    My::redirect([], '#packman-repository-' . $type);
                 }
             }
         } catch (Exception $e) {
@@ -264,7 +264,7 @@ class Manage extends dcNsProcess
 
     public static function render(): void
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return;
         }
 
@@ -295,21 +295,21 @@ class Manage extends dcNsProcess
         }
 
         # Display
-        dcPage::openModule(
+        Page::openModule(
             My::name(),
-            dcPage::jsPageTabs() .
-            dcPage::jsModuleLoad(My::id() . '/js/backend.js') .
+            Page::jsPageTabs() .
+            My::jsLoad('backend') .
 
             # --BEHAVIOR-- packmanAdminHeader
             dcCore::app()->callBehavior('packmanAdminHeader')
         );
 
         echo
-        dcPage::breadcrumb([
+        Page::breadcrumb([
             __('Plugins') => '',
             My::name()    => '',
         ]) .
-        dcPage::notices();
+        Notices::GetNotices();
 
         if (dcCore::app()->error->flag() || !$is_configured || !$is_plugins_configured || !$is_themes_configured) {
             echo
@@ -377,7 +377,7 @@ class Manage extends dcNsProcess
         # --BEHAVIOR-- packmanAdminTabs
         dcCore::app()->callBehavior('packmanAdminTabs');
 
-        dcPage::helpBlock('pacKman');
-        dcPage::closeModule();
+        Page::helpBlock('pacKman');
+        Page::closeModule();
     }
 }

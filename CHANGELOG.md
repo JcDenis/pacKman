@@ -1,3 +1,8 @@
+2023.07.29
+- require Dotclear 2.27
+- require php 8.1+
+- update to Dotclear 2.27-dev
+
 2023.05.29
 - require dotclear 2.26
 - require php 8.1+

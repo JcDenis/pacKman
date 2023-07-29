@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-use dcCore;
-
 class Settings
 {
     // Remove comments from files
@@ -50,7 +48,7 @@ class Settings
      */
     public function __construct()
     {
-        $s = dcCore::app()->blog?->settings->get(My::id());
+        $s = My::settings();
 
         $this->pack_nocomment      = (bool) ($s?->get('pack_nocomment') ?? false);
         $this->pack_fixnewline     = (bool) ($s?->get('pack_fixnewline') ?? false);
@@ -79,8 +77,8 @@ class Settings
     public function writeSetting(string $key, mixed $value): bool
     {
         if (property_exists($this, $key) && settype($value, gettype($this->{$key})) === true) {
-            dcCore::app()->blog?->settings->get(My::id())->drop($key);
-            dcCore::app()->blog?->settings->get(My::id())->put($key, $value, gettype($this->{$key}), '', true, true);
+            My::settings()->drop($key);
+            My::settings()->put($key, $value, gettype($this->{$key}), '', true, true);
 
             return true;
         }

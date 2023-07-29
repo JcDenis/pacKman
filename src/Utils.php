@@ -140,7 +140,7 @@ class Utils
                 (new Text('h3', $title)),
                 (new Form('packman-form-' . $type))
                     ->method('post')
-                    ->action('plugin.php')
+                    ->action(My::manageUrl())
                     ->fields([
                         (new Para(null, 'table'))
                             ->class('clear')
@@ -163,13 +163,13 @@ class Utils
                             ->class('checkboxes-helpers'),
                         (new Para())
                             ->items([
-                                (new Hidden(['redir'], Html::escapeHTML($_REQUEST['redir'] ?? ''))),
-                                (new Hidden(['p'], My::id())),
-                                (new Hidden(['type'], $type)),
-                                (new Hidden(['action'], 'packup')),
                                 (new Submit(['packup']))
                                     ->value(__('Pack up selected modules')),
-                                dcCore::app()->formNonce(false),
+                                ... My::hiddenFields([
+                                    'type' => $type,
+                                    'action' => 'packup',
+                                    'redir' => Html::escapeHTML($_REQUEST['redir'] ?? ''),
+                                ]),
                             ]),
                     ]),
             ])
@@ -279,7 +279,7 @@ class Utils
                 (new Text('h3', $title)),
                 (new Form('packman-form-repository-' . $type))
                     ->method('post')
-                    ->action('plugin.php')
+                    ->action(My::manageUrl())
                     ->fields([
                         (new Para(null, 'table'))
                             ->class('clear')
@@ -311,10 +311,10 @@ class Utils
                                     ->items($combo_action),
                                 (new Submit(['packup']))
                                     ->value(__('ok')),
-                                (new Hidden(['p'], My::id())),
-                                (new Hidden(['tab'], 'repository')),
-                                (new Hidden(['type'], $type)),
-                                dcCore::app()->formNonce(false),
+                                ... My::hiddenFields([
+                                    'tab' => 'repository',
+                                    'type' => $type,
+                                ]),
                             ]),
                     ]),
             ])

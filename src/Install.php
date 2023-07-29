@@ -16,22 +16,19 @@ namespace Dotclear\Plugin\pacKman;
 
 use dcCore;
 use dcNamespace;
-use dcNsProcess;
+use Dotclear\Core\Process;
 use Exception;
 
-class Install extends dcNsProcess
+class Install extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && dcCore::app()->newVersion(My::id(), dcCore::app()->plugins->moduleInfo(My::id(), 'version'));
-
-        return static::$init;
+        return self::status(My::checkContext(My::INSTALL));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 

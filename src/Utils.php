@@ -166,9 +166,9 @@ class Utils
                                 (new Submit(['packup']))
                                     ->value(__('Pack up selected modules')),
                                 ... My::hiddenFields([
-                                    'type' => $type,
+                                    'type'   => $type,
                                     'action' => 'packup',
-                                    'redir' => Html::escapeHTML($_REQUEST['redir'] ?? ''),
+                                    'redir'  => Html::escapeHTML($_REQUEST['redir'] ?? ''),
                                 ]),
                             ]),
                     ]),
@@ -312,7 +312,7 @@ class Utils
                                 (new Submit(['packup']))
                                     ->value(__('ok')),
                                 ... My::hiddenFields([
-                                    'tab' => 'repository',
+                                    'tab'  => 'repository',
                                     'type' => $type,
                                 ]),
                             ]),

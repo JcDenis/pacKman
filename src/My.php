@@ -38,6 +38,6 @@ class My extends MyPlugin
 
     public static function checkCustomContext(int $context): ?bool
     {
-        return dcCore::app()->auth->isSuperAdmin();
+        return in_array($context, [My::BACKEND, My::MANAGE, My::MENU]) ? dcCore::app()->auth->isSuperAdmin() : null;
     }
 }

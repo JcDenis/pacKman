@@ -5,7 +5,7 @@
     <version>2023.08.06</version>
     <author>Jean-Christian Denis</author>
     <desc>Manage your Dotclear packages</desc>
-    <file>https://gitea.dotclear.watch/JcDenis/pacKman/releases/download/v2023.08.06/plugin-pacKman.zip</file>
+    <file>https://git.dotclear.watch/JcDenis/pacKman/releases/download/v2023.08.06/plugin-pacKman.zip</file>
     <da:dcmin>2.27</da:dcmin>
     <da:details>https://git.dotclear.watch/JcDenis/pacKman/src/branch/master/README.md</da:details>
     <da:support>https://git.dotclear.watch/JcDenis/pacKman/issues</da:support>

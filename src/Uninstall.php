@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Plugin\Uninstaller\Uninstaller;
 
@@ -27,7 +27,7 @@ class Uninstall extends Process
 
     public static function process(): bool
     {
-        if (!self::status() || !dcCore::app()->plugins->moduleExists('Uninstaller')) {
+        if (!self::status() || !App::plugins()->moduleExists('Uninstaller')) {
             return false;
         }
 

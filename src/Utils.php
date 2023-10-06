@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Helper\Date;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
@@ -45,37 +45,37 @@ class Utils
 
     public static function getThemesPath(): string
     {
-        return (string) dcCore::app()->blog?->themes_path;
+        return App::blog()->themesPath();
     }
 
     public static function isConfigured(string $repo, string $file_a, string $file_b): bool
     {
         sleep(1);
         if (!is_writable($repo)) {
-            dcCore::app()->error->add(
+            App::error()->add(
                 __('Path to repository is not writable.')
             );
         }
 
         if (empty($file_a)) {
-            dcCore::app()->error->add(
+            App::error()->add(
                 __('You must specify the name of package to export.')
             );
         }
 
         if (!is_writable(dirname($repo . DIRECTORY_SEPARATOR . $file_a))) {
-            dcCore::app()->error->add(
+            App::error()->add(
                 __('Path to first export package is not writable.')
             );
         }
 
         if (!empty($file_b) && !is_writable(dirname($repo . DIRECTORY_SEPARATOR . $file_b))) {
-            dcCore::app()->error->add(
+            App::error()->add(
                 __('Path to second export package is not writable.')
             );
         }
 
-        return !dcCore::app()->error->flag();
+        return !App::error()->flag();
     }
 
     public static function isWritable(string $path, string $file): bool
@@ -209,7 +209,7 @@ class Utils
         if (str_contains($type, 'repository')) {
             $helpers_addon[] = (new Link())
                 ->class('button')
-                ->href(dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), ['purge' => 1]) . '#packman-repository-' . $type)
+                ->href(App::backend()->url->get('admin.plugin.' . My::id(), ['purge' => 1]) . '#packman-repository-' . $type)
                 ->text(__('Select non lastest versions'))
             ;
         }
@@ -257,7 +257,7 @@ class Utils
                             (new Text('a', Html::escapeHTML(basename($module->get('root')))))
                                 ->class('packman-download')
                                 ->extra(
-                                    'href="' . dcCore::app()->adminurl?->get('admin.plugin.' . My::id(), [
+                                    'href="' . App::backend()->url->get('admin.plugin.' . My::id(), [
                                         'package' => basename($module->get('root')),
                                         'repo'    => $type,
                                     ]) . '"'

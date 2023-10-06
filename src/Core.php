@@ -14,12 +14,11 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-use dcCore;
-use dcModuleDefine;
-use dcModules;
+use Dotclear\App;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
 use Dotclear\Helper\File\Zip\Unzip;
+use Dotclear\Module\ModuleDefine;
 use Exception;
 
 class Core
@@ -59,8 +58,8 @@ class Core
         }
 
         $sandboxes = [
-            'theme'  => clone dcCore::app()->themes,
-            'plugin' => clone dcCore::app()->plugins,
+            'theme'  => clone App::themes(),
+            'plugin' => clone App::plugins(),
         ];
 
         $i = 0;
@@ -73,13 +72,13 @@ class Core
             if ($zip_root_dir != false) {
                 $target = dirname($zip_file);
                 $path   = $target . DIRECTORY_SEPARATOR . $zip_root_dir;
-                $define = $zip_root_dir . '/' . dcModules::MODULE_FILE_DEFINE;
-                $init   = $zip_root_dir . '/' . dcModules::MODULE_FILE_INIT;
+                $define = $zip_root_dir . '/' . App::plugins()::MODULE_FILE_DEFINE;
+                $init   = $zip_root_dir . '/' . App::plugins()::MODULE_FILE_INIT;
             } else {
                 $target = dirname($zip_file) . DIRECTORY_SEPARATOR . preg_replace('/\.([^.]+)$/', '', basename($zip_file));
                 $path   = $target;
-                $define = dcModules::MODULE_FILE_DEFINE;
-                $init   = dcModules::MODULE_FILE_INIT;
+                $define = App::plugins()::MODULE_FILE_DEFINE;
+                $init   = App::plugins()::MODULE_FILE_INIT;
             }
 
             if ($zip->isEmpty()) {
@@ -135,7 +134,7 @@ class Core
         return $res;
     }
 
-    public static function pack(dcModuleDefine $define, string $root, array $files, bool $overwrite = false, array $exclude = [], bool $nocomment = false, bool $fixnewline = false): bool
+    public static function pack(ModuleDefine $define, string $root, array $files, bool $overwrite = false, array $exclude = [], bool $nocomment = false, bool $fixnewline = false): bool
     {
         // check define
         if (!$define->isDefined()
@@ -195,7 +194,7 @@ class Core
         return true;
     }
 
-    private static function getFile(string $file, dcModuleDefine $define): string
+    private static function getFile(string $file, ModuleDefine $define): string
     {
         $file = str_replace(
             [

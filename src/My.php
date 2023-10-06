@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Module\MyPlugin;
 
 /**
@@ -38,6 +38,6 @@ class My extends MyPlugin
 
     public static function checkCustomContext(int $context): ?bool
     {
-        return in_array($context, [My::BACKEND, My::MANAGE, My::MENU]) ? dcCore::app()->auth->isSuperAdmin() : null;
+        return in_array($context, [My::BACKEND, My::MANAGE, My::MENU]) ? App::auth()->isSuperAdmin() : null;
     }
 }

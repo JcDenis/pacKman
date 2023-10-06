@@ -1,8 +1,8 @@
 # README
 
-[![Release](https://img.shields.io/badge/release-2023.08.06-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/pacKman/releases)
-[![Date](https://img.shields.io/badge/date-2023.08.06-c44d58.svg)](https://git.dotclear.watch/JcDenis/pacKman/releases)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.27-137bbb.svg)](https://fr.dotclear.org/download)
+[![Release](https://img.shields.io/badge/release-2023.10.06-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/pacKman/releases)
+[![Date](https://img.shields.io/badge/date-2023.10.07-c44d58.svg)](https://git.dotclear.watch/JcDenis/pacKman/releases)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/pacKman)
 [![License](https://img.shields.io/github/license/JcDenis/pacKman)](https://git.dotclear.watch/JcDenis/pacKman/blob/master/LICENSE)
 
@@ -19,7 +19,7 @@ themes and plugins from Dotclear administration pages.
 _pacKman_ requires: 
 
 * Super administrator permissions
-* Dotclear 2.27
+* Dotclear 2.28
 * PHP 8.1+
 * A writable cache directory 
 * A writable directory to put packages. (can be VAR dir)

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Core\Backend\Notices;
 use Dotclear\Helper\Html\Form\{
@@ -62,13 +62,13 @@ class Config extends Process
             Notices::addSuccessNotice(
                 __('Configuration has been successfully updated.')
             );
-            dcCore::app()->admin->url->redirect('admin.plugins', [
+            App::backend()->url->redirect('admin.plugins', [
                 'module' => My::id(),
                 'conf'   => '1',
-                'redir'  => dcCore::app()->admin->__get('list')->getRedir(),
+                'redir'  => App::backend()->__get('list')->getRedir(),
             ]);
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         return true;
@@ -119,8 +119,8 @@ class Config extends Process
                 (new Note())->class('form-note')->text(
                     sprintf(
                         __('Preconization: %s'),
-                        dcCore::app()->blog?->public_path ?
-                        dcCore::app()->blog->public_path : __("Blog's public directory")
+                        App::blog()->publicPath() ?
+                        App::blog()->publicPath() : __("Blog's public directory")
                     ) . ' ' . __('Leave it empty to use Dotclear VAR directory')
                 ),
                 // pack_overwrite

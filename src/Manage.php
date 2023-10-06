@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-/* dotclear ns */
-use dcCore;
-use dcThemes;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Core\Backend\{
     Notices,
@@ -53,12 +51,9 @@ class Manage extends Process
         $dir    = Utils::getRepositoryDir($s->pack_repository, $repo);
 
         # Modules
-        if (!(dcCore::app()->themes instanceof dcThemes)) {
-            dcCore::app()->themes = new dcThemes();
-            dcCore::app()->themes->loadModules((string) dcCore::app()->blog?->themes_path, null);
+        if (App::themes()->isEmpty()) {
+            App::themes()->loadModules(App::blog()->themesPath(), null);
         }
-        $themes  = dcCore::app()->themes;
-        $plugins = dcCore::app()->plugins;
 
         # Rights
         $is_writable = Utils::isWritable($dir, $s->pack_filename);
@@ -85,7 +80,7 @@ class Manage extends Process
                         && is_file($module->get('root')) && is_readable($module->get('root'))
                     ) {
                         # --BEHAVIOR-- packmanBeforeDownloadPackage
-                        dcCore::app()->callBehavior('packmanBeforeDownloadPackage', $module->dump(), $type);
+                        App::behavior()->callBehavior('packmanBeforeDownloadPackage', $module->dump(), $type);
 
                         header('Content-Type: application/zip');
                         header('Content-Length: ' . filesize($module->get('root')));
@@ -93,7 +88,7 @@ class Manage extends Process
                         readfile($module->get('root'));
 
                         # --BEHAVIOR-- packmanAfterDownloadPackage
-                        dcCore::app()->callBehavior('packmanAfterDownloadPackage', $module->dump(), $type);
+                        App::behavior()->callBehavior('packmanAfterDownloadPackage', $module->dump(), $type);
 
                         exit;
                     }
@@ -114,17 +109,25 @@ class Manage extends Process
                     My::redirect([], '#packman-' . $type);
                 }
 
-            # Pack
+                # Pack
             } elseif ($action == 'packup') {
                 foreach ($_POST['modules'] as $root => $id) {
-                    if (!dcCore::app()->{$type}->getDefine($id)->isDefined()) {
-                        throw new Exception('No such module');
+                    if ($type == 'themes') {
+                        if (!App::themes()->getDefine($id)->isDefined()) {
+                            throw new Exception('No such module');
+                        }
+
+                        $module = App::themes()->getDefine($id);
+                    } else {
+                        if (!App::plugins()->getDefine($id)->isDefined()) {
+                            throw new Exception('No such module');
+                        }
+
+                        $module = App::plugins()->getDefine($id);
                     }
 
-                    $module = dcCore::app()->{$type}->getDefine($id);
-
                     # --BEHAVIOR-- packmanBeforeCreatePackage
-                    dcCore::app()->callBehavior('packmanBeforeCreatePackage', $module->dump());
+                    App::behavior()->callBehavior('packmanBeforeCreatePackage', $module->dump());
 
                     Core::pack(
                         $module,
@@ -137,7 +140,7 @@ class Manage extends Process
                     );
 
                     # --BEHAVIOR-- packmanAfterCreatePackage
-                    dcCore::app()->callBehavior('packmanAfterCreatePackage', $module->dump());
+                    App::behavior()->callBehavior('packmanAfterCreatePackage', $module->dump());
                 }
 
                 Notices::addSuccessNotice(
@@ -150,7 +153,7 @@ class Manage extends Process
                     My::redirect([], '#packman-' . $type);
                 }
 
-            # Delete
+                # Delete
             } elseif ($action == 'delete') {
                 $del_success = false;
                 foreach ($_POST['modules'] as $root => $id) {
@@ -175,21 +178,20 @@ class Manage extends Process
                     My::redirect([], '#packman-repository-' . $type);
                 }
 
-            # Install
+                # Install
             } elseif ($action == 'install') {
                 foreach ($_POST['modules'] as $root => $id) {
                     # --BEHAVIOR-- packmanBeforeInstallPackage
-                    dcCore::app()->callBehavior('packmanBeforeInstallPackage', $type, $id, $root);
+                    App::behavior()->callBehavior('packmanBeforeInstallPackage', $type, $id, $root);
 
-                    if ($type == 'plugins') {
-                        $plugins->installPackage($root, $plugins);
-                    }
                     if ($type == 'themes') {
-                        $themes->installPackage($root, $themes);
+                        App::themes()->installPackage($root, App::themes());
+                    } else {
+                        App::plugins()->installPackage($root, App::plugins());
                     }
 
                     # --BEHAVIOR-- packmanAfterInstallPackage
-                    dcCore::app()->callBehavior('packmanAfterInstallPackage', $type, $id, $root);
+                    App::behavior()->callBehavior('packmanAfterInstallPackage', $type, $id, $root);
                 }
 
                 Notices::addSuccessNotice(
@@ -202,7 +204,7 @@ class Manage extends Process
                     My::redirect([], '#packman-repository-' . $type);
                 }
 
-            # Copy
+                # Copy
             } elseif (strpos($action, 'copy_to_') !== false) {
                 $dest = (string) $dir;
                 if ($action == 'copy_to_plugins') {
@@ -228,7 +230,7 @@ class Manage extends Process
                     My::redirect([], '#packman-repository-' . $type);
                 }
 
-            # Move
+                # Move
             } elseif (strpos($action, 'move_to_') !== false) {
                 $dest = (string) $dir;
                 if ($action == 'move_to_plugins') {
@@ -256,7 +258,7 @@ class Manage extends Process
                 }
             }
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         return true;
@@ -301,7 +303,7 @@ class Manage extends Process
             My::jsLoad('backend') .
 
             # --BEHAVIOR-- packmanAdminHeader
-            dcCore::app()->callBehavior('packmanAdminHeader')
+            App::behavior()->callBehavior('packmanAdminHeader')
         );
 
         echo
@@ -311,7 +313,7 @@ class Manage extends Process
         ]) .
         Notices::GetNotices();
 
-        if (dcCore::app()->error->flag() || !$is_configured || !$is_plugins_configured || !$is_themes_configured) {
+        if (App::error()->flag() || !$is_configured || !$is_plugins_configured || !$is_themes_configured) {
             echo
             (new Div())
                 ->separator(' ')
@@ -322,13 +324,13 @@ class Manage extends Process
                 ->render();
         } else {
             Utils::modules(
-                dcCore::app()->plugins->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),
+                App::plugins()->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),
                 'plugins',
                 __('Installed plugins')
             );
 
             Utils::modules(
-                dcCore::app()->themes->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),
+                App::themes()->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),
                 'themes',
                 __('Installed themes')
             );
@@ -375,7 +377,7 @@ class Manage extends Process
         }
 
         # --BEHAVIOR-- packmanAdminTabs
-        dcCore::app()->callBehavior('packmanAdminTabs');
+        App::behavior()->callBehavior('packmanAdminTabs');
 
         Page::helpBlock('pacKman');
         Page::closeModule();

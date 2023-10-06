@@ -25,14 +25,14 @@ class Zip extends \Dotclear\Helper\File\Zip\Zip
     /**
      * Replace clearbricks fileZip::writeFile
      *
-     * @param      string    $name   The name
-     * @param      string    $file   The file
-     * @param      string    $size   The size
-     * @param      int|null  $mtime  The mtime
+     * @param      string     $name   The name
+     * @param      string     $file   The file
+     * @param      float|int  $size   The size
+     * @param      float|int  $mtime  The mtime
      *
      * @return     void
      */
-    protected function writeFile($name, $file, $size, $mtime)
+    protected function writeFile(string $name, string $file, int|float $size, int|float $mtime): void
     {
         if (!isset($this->entries[$name])) {
             return;

@@ -56,7 +56,7 @@ class Install extends Process
 
             while ($record->fetch()) {
                 if (preg_match('/^packman_(.*?)$/', $record->f('setting_id'), $match)) {
-                    $cur = App::blogWorspace()->openBlogWorkspaceCursor();
+                    $cur = App::blogWorkspace()->openBlogWorkspaceCursor();
                     $cur->setField('setting_id', $match[1]);
                     $cur->setField('setting_ns', My::id());
                     $cur->update(

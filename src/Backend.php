@@ -38,7 +38,7 @@ class Backend extends Process
                 'title'      => My::name(),
                 'url'        => My::manageUrl(),
                 'small-icon' => My::icons(),
-                'large-icon' => My::icons()
+                'large-icon' => My::icons(),
             ]);
         });
 

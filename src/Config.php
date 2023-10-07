@@ -119,7 +119,7 @@ class Config extends Process
                 (new Note())->class('form-note')->text(
                     sprintf(
                         __('Preconization: %s'),
-                        App::blog()->publicPath() ?
+                        App::blog()->publicPath() == '' ?
                         App::blog()->publicPath() : __("Blog's public directory")
                     ) . ' ' . __('Leave it empty to use Dotclear VAR directory')
                 ),

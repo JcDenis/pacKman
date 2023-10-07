@@ -1,6 +1,6 @@
-pacKman 2023.10.06
+pacKman 2023.10.07
 ===========================================================
-* Require Dotclear 2.27
+* Require Dotclear 2.28
 * Require PHP 8.1+
 * Update to Dotclear 2.28-dev
 

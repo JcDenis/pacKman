@@ -1,23 +1,20 @@
 <?php
-/**
- * @brief pacKman, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
-use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Plugin\Uninstaller\Uninstaller;
 
+/**
+ * @brief   pacKman Uninstaller class.
+ * @ingroup pacKman
+ *
+ * @author      Jean-Christian Denis
+ * @copyright   Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Uninstall extends Process
 {
     public static function init(): bool
@@ -27,7 +24,7 @@ class Uninstall extends Process
 
     public static function process(): bool
     {
-        if (!self::status() || !App::plugins()->moduleExists('Uninstaller')) {
+        if (!self::status()) {
             return false;
         }
 

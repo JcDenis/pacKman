@@ -1,15 +1,5 @@
 <?php
-/**
- * @brief pacKman, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
@@ -18,11 +8,20 @@ use Dotclear\App;
 use Dotclear\Module\MyPlugin;
 
 /**
- * This module definitions.
+ * @brief   pacKman My plugin helper.
+ * @ingroup pacKman
+ *
+ * @author      Jean-Christian Denis
+ * @copyright   Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 class My extends MyPlugin
 {
-    /** @var    array   Excluded files */
+    /**
+     * Excluded files.
+     *
+     * @var    array<int,string>    EXCLUDED_FILES
+     */
     public const EXCLUDED_FILES = [
         '.',
         '..',
@@ -38,6 +37,7 @@ class My extends MyPlugin
 
     public static function checkCustomContext(int $context): ?bool
     {
-        return in_array($context, [My::BACKEND, My::MANAGE, My::MENU]) ? App::auth()->isSuperAdmin() : null;
+        // Only backend and super admin
+        return $context === self::INSTALL ? null : App::task()->checkContext('BACKEND') && App::auth()->isSuperAdmin();
     }
 }

@@ -1,19 +1,17 @@
 <?php
-/**
- * @brief pacKman, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
+/**
+ * @brief   pacKman settings class.
+ * @ingroup pacKman
+ *
+ * @author      Jean-Christian Denis
+ * @copyright   Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Settings
 {
     // Remove comments from files
@@ -44,30 +42,37 @@ class Settings
     public readonly bool $hide_distrib;
 
     /**
-     * Constructor set up plugin settings
+     * Constructor set up plugin settings.
      */
     public function __construct()
     {
         $s = My::settings();
 
-        $this->pack_nocomment      = (bool) ($s?->get('pack_nocomment') ?? false);
-        $this->pack_fixnewline     = (bool) ($s?->get('pack_fixnewline') ?? false);
-        $this->pack_overwrite      = (bool) ($s?->get('pack_overwrite') ?? false);
-        $this->pack_filename       = (string) ($s?->get('pack_filename') ?? '%type%-%id%');
-        $this->secondpack_filename = (string) ($s?->get('secondpack_filename') ?? '%type%-%id%-%version%');
-        $this->pack_repository     = (string) ($s?->get('pack_repository') ?? '');
-        $this->pack_typedrepo      = (bool) ($s?->get('pack_typedrepo') ?? false);
-        $this->pack_excludefiles   = (string) ($s?->get('pack_excludefiles') ?? '*.zip,*.tar,*.tar.gz,.directory,.hg');
-        $this->hide_distrib        = (bool) ($s?->get('hide_distrib') ?? false);
+        $this->pack_nocomment      = (bool) ($s->get('pack_nocomment') ?? false);
+        $this->pack_fixnewline     = (bool) ($s->get('pack_fixnewline') ?? false);
+        $this->pack_overwrite      = (bool) ($s->get('pack_overwrite') ?? false);
+        $this->pack_filename       = (string) ($s->get('pack_filename') ?? '%type%-%id%');
+        $this->secondpack_filename = (string) ($s->get('secondpack_filename') ?? '%type%-%id%-%version%');
+        $this->pack_repository     = (string) ($s->get('pack_repository') ?? '');
+        $this->pack_typedrepo      = (bool) ($s->get('pack_typedrepo') ?? false);
+        $this->pack_excludefiles   = (string) ($s->get('pack_excludefiles') ?? '*.zip,*.tar,*.tar.gz,.directory,.hg');
+        $this->hide_distrib        = (bool) ($s->get('hide_distrib') ?? false);
     }
 
-    public function getSetting(string $key): mixed
+    /**
+     * Get a setting.
+     *
+     * @param   string  $key    The key
+     *
+     * @return  null|bool|string    The value
+     */
+    public function getSetting(string $key): null|bool|string
     {
         return $this->{$key} ?? null;
     }
 
     /**
-     * Overwrite a plugin settings (in db)
+     * Overwrite a plugin settings (in db).
      *
      * @param   string  $key    The setting ID
      * @param   mixed   $value  The setting value
@@ -87,9 +92,9 @@ class Settings
     }
 
     /**
-     * List defined settings keys
+     * List defined settings keys.
      *
-     * @return  array   The settings keys
+     * @return  array<string,bool|string>   The settings keys
      */
     public function listSettings(): array
     {

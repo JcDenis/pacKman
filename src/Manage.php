@@ -1,15 +1,5 @@
 <?php
-/**
- * @brief pacKman, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
@@ -28,6 +18,14 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Network\Http;
 use Exception;
 
+/**
+ * @brief   pacKman manage page class.
+ * @ingroup pacKman
+ *
+ * @author      Jean-Christian Denis
+ * @copyright   Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Manage extends Process
 {
     public static function init(): bool
@@ -184,11 +182,8 @@ class Manage extends Process
                     # --BEHAVIOR-- packmanBeforeInstallPackage
                     App::behavior()->callBehavior('packmanBeforeInstallPackage', $type, $id, $root);
 
-                    if ($type == 'themes') {
-                        App::themes()->installPackage($root, App::themes());
-                    } else {
-                        App::plugins()->installPackage($root, App::plugins());
-                    }
+                    $mods = $type == 'themes' ? App::themes() : App::plugins();
+                    $mods->installPackage($root, $mods);
 
                     # --BEHAVIOR-- packmanAfterInstallPackage
                     App::behavior()->callBehavior('packmanAfterInstallPackage', $type, $id, $root);

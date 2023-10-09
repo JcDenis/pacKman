@@ -1,25 +1,34 @@
 <?php
-/**
- * @brief pacKman, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
+/**
+ * @brief   pacKman zip class.
+ * @ingroup pacKman
+ *
+ * This class extends dotclear zip class
+ * to tweak writeFile method.
+ *
+ * @author      Jean-Christian Denis
+ * @copyright   Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Zip extends \Dotclear\Helper\File\Zip\Zip
 {
-    /** @var boolean Remove comments from files content */
+    /**
+     * Remove comments from files content.
+     *
+     * @var     bool    $remove_comment
+     */
     public static $remove_comment = false;
 
-    /** @var boolean Fix newline from files content */
+    /**
+     * Fix newline from files content.
+     *
+     * @var     bool    $fix_newline
+     */
     public static $fix_newline = false;
 
     /**
@@ -59,8 +68,8 @@ class Zip extends \Dotclear\Helper\File\Zip\Zip
 
         unset($content);
 
-        $mdate = $this->makeDate($mtime);
-        $mtime = $this->makeTime($mtime);
+        $mdate = $this->makeDate((int) $mtime);
+        $mtime = $this->makeTime((int) $mtime);
 
         # Data descriptor
         $data_desc = "\x50\x4b\x03\x04" .

@@ -1,15 +1,5 @@
 <?php
-/**
- * @brief pacKman, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
@@ -21,8 +11,23 @@ use Dotclear\Helper\File\Zip\Unzip;
 use Dotclear\Module\ModuleDefine;
 use Exception;
 
+/**
+ * @brief   pacKman main class.
+ * @ingroup pacKman
+ *
+ * @author      Jean-Christian Denis
+ * @copyright   Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Core
 {
+    /**
+     * Quote excluded list.
+     *
+     * @param   array<int,string>   $exclude    The list
+     *
+     * @return  array<int,string>   $exclude    The list
+     */
     public static function quote_exclude(array $exclude): array
     {
         foreach ($exclude as $k => $v) {
@@ -36,6 +41,13 @@ class Core
         return $exclude;
     }
 
+    /**
+     * Get packages list.
+     *
+     * @param   string  $root   The path to scan
+     *
+     * @return  array<int,ModuleDefine>     The list
+     */
     public static function getPackages(string $root): array
     {
         $res = [];
@@ -134,6 +146,19 @@ class Core
         return $res;
     }
 
+    /**
+     * Pack a module.
+     *
+     * @param   ModuleDefine        $define         The module
+     * @param   string              $root           The package path
+     * @param   array<int,string>   $files          The files to pack
+     * @param   bool                $overwrite      Overwrite package
+     * @param   array<int,string>   $exclude        The files to exclude (regexp)
+     * @param   bool                $nocomment      Remove comment from files
+     * @param   bool                $fixnewline     Fix new lines in files
+     *
+     * @return  bool    True on success
+     */
     public static function pack(ModuleDefine $define, string $root, array $files, bool $overwrite = false, array $exclude = [], bool $nocomment = false, bool $fixnewline = false): bool
     {
         // check define

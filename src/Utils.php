@@ -1,15 +1,5 @@
 <?php
-/**
- * @brief pacKman, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
@@ -31,13 +21,22 @@ use Dotclear\Helper\Html\Form\{
     Text
 };
 use Dotclear\Helper\Html\Html;
+use Dotclear\Module\ModuleDefine;
 use Exception;
 
+/**
+ * @brief   pacKman utils class.
+ * @ingroup pacKman
+ *
+ * @author      Jean-Christian Denis
+ * @copyright   Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Utils
 {
     public static function getPluginsPath(): string
     {
-        $e = explode(PATH_SEPARATOR, DC_PLUGINS_ROOT);
+        $e = explode(PATH_SEPARATOR, App::config()->pluginsRoot());
         $p = array_pop($e);
 
         return (string) Path::real($p);
@@ -86,7 +85,7 @@ class Utils
     public static function getRepositoryDir(?string $dir, ?string $typed = null): string
     {
         $typed = empty($typed) ? '' : DIRECTORY_SEPARATOR . ($typed == 'themes' ? 'themes' : 'plugins');
-        $dir   = empty($dir) ? DC_VAR . DIRECTORY_SEPARATOR . 'packman' . $typed : $dir . $typed;
+        $dir   = empty($dir) ? App::config()->varRoot() . DIRECTORY_SEPARATOR . 'packman' . $typed : $dir . $typed;
 
         try {
             @Files::makeDir($dir, true);
@@ -97,6 +96,15 @@ class Utils
         return $dir;
     }
 
+    /**
+     * Get modules list form.
+     *
+     * @param   array<int,ModuleDefine>     $modules    The modules
+     * @param   string                      $type       The modules type
+     * @param   string                      $title      The list title
+     *
+     * @return  null|bool   True on render
+     */
     public static function modules(array $modules, string $type, string $title): ?bool
     {
         if (empty($modules)) {
@@ -178,6 +186,15 @@ class Utils
         return true;
     }
 
+    /**
+     * Get modules repository list form.
+     *
+     * @param   array<int,ModuleDefine>     $modules    The modules
+     * @param   string                      $type       The modules type
+     * @param   string                      $title      The list title
+     *
+     * @return  null|bool   True on render
+     */
     public static function repository(array $modules, string $type, string $title): ?bool
     {
         if (empty($modules)) {
@@ -323,6 +340,11 @@ class Utils
         return true;
     }
 
+    /**
+     * Sort modules by id.
+     *
+     * @param   array<int,ModuleDefine>     $modules    The modules
+     */
     protected static function sort(array &$modules): void
     {
         uasort($modules, fn ($a, $b) => $a->get('version') <=> $b->get('version'));

@@ -226,7 +226,7 @@ class Utils
         if (str_contains($type, 'repository')) {
             $helpers_addon[] = (new Link())
                 ->class('button')
-                ->href(App::backend()->url->get('admin.plugin.' . My::id(), ['purge' => 1]) . '#packman-repository-' . $type)
+                ->href(App::backend()->url()->get('admin.plugin.' . My::id(), ['purge' => 1]) . '#packman-repository-' . $type)
                 ->text(__('Select non lastest versions'))
             ;
         }
@@ -274,7 +274,7 @@ class Utils
                             (new Text('a', Html::escapeHTML(basename($module->get('root')))))
                                 ->class('packman-download')
                                 ->extra(
-                                    'href="' . App::backend()->url->get('admin.plugin.' . My::id(), [
+                                    'href="' . App::backend()->url()->get('admin.plugin.' . My::id(), [
                                         'package' => basename($module->get('root')),
                                         'repo'    => $type,
                                     ]) . '"'

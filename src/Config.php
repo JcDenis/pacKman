@@ -60,7 +60,7 @@ class Config extends Process
             Notices::addSuccessNotice(
                 __('Configuration has been successfully updated.')
             );
-            App::backend()->url->redirect('admin.plugins', [
+            App::backend()->url()->redirect('admin.plugins', [
                 'module' => My::id(),
                 'conf'   => '1',
                 'redir'  => App::backend()->__get('list')->getRedir(),

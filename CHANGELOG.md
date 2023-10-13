@@ -1,3 +1,9 @@
+pacKman 2023.10.13
+===========================================================
+* Require Dotclear 2.28
+* Require PHP 8.1+
+* Upgrade to last minute change to Dotclear 2.28
+
 pacKman 2023.10.09
 ===========================================================
 * Require Dotclear 2.28

@@ -12,7 +12,6 @@ namespace Dotclear\Plugin\pacKman;
  * to tweak writeFile method.
  *
  * @author      Jean-Christian Denis
- * @copyright   Jean-Christian Denis
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 class Zip extends \Dotclear\Helper\File\Zip\Zip

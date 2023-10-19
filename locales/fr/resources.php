@@ -1,19 +1,10 @@
 <?php
 /**
- * @brief pacKman, a plugin for Dotclear 2
+ * @file
+ * @brief       The plugin pacKman locales resources
+ * @ingroup     pacKman
  *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ * @author      Jean-Christian Denis
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_RC_PATH')) {
-    return null;
-}
-
-if (!isset(dcCore::app()->resources['help']['pacKman'])) {
-    dcCore::app()->resources['help']['pacKman'] = __DIR__ . '/help/help.html';
-}
+\Dotclear\App::backend()->resources()->set('help', 'pacKman', __DIR__ . '/help/help.html');

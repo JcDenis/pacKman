@@ -9,7 +9,6 @@
  * Manage your Dotclear packages.
  *
  * @author      Jean-Christian Denis
- * @copyright   Jean-Christian Denis
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -18,7 +17,7 @@ $this->registerModule(
     'Packages repository',
     'Manage your Dotclear packages',
     'Jean-Christian Denis',
-    '2023.10.13',
+    '2023.10.19',
     [
         'requires'   => [['core', '2.28']],
         'type'       => 'plugin',

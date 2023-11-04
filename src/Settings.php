@@ -5,39 +5,75 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\pacKman;
 
 /**
- * @brief   pacKman settings class.
- * @ingroup pacKman
+ * @brief       pacKman settings class.
+ * @ingroup     pacKman
  *
  * @author      Jean-Christian Denis
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 class Settings
 {
-    // Remove comments from files
+    /**
+     * Remove comments from files.
+     *
+     * @var     bool   $pack_nocomment
+     */
     public readonly bool $pack_nocomment;
 
-    // Remove comments from files
+    /**
+     * Remove comments from files.
+     *
+     * @var     bool    $pack_fixnewline
+     */
     public readonly bool $pack_fixnewline;
 
-    // Overwrite existing package
+    /**
+     * Overwrite existing package.
+     *
+     * @var     bool    $pack_overwrite
+     */
     public readonly bool $pack_overwrite;
 
-    // Name of package
+    /**
+     * Name of package.
+     *
+     * @var     string  $pack_filename
+     */
     public readonly string $pack_filename;
 
-    // Name of second package
+    /**
+     * Name of second package.
+     *
+     * @var     string  $secondpack_filename
+     */
     public readonly string $secondpack_filename;
 
-    // Path to package repository
+    /**
+     * Path to package repository.
+     *
+     * @var     string  $pack_repository
+     */
     public readonly string $pack_repository;
 
-    // Seperate themes and plugins repository
+    /**
+     * Seperate themes and plugins repository.
+     *
+     * @var     bool    $pack_typedrepo
+     */
     public readonly bool $pack_typedrepo;
 
-    // Extra files to exclude from package
+    /**
+     * Extra files to exclude from package.
+     *
+     * @var     string  $pack_excludefiles
+     */
     public readonly string $pack_excludefiles;
 
-    // Hide distributed modules from lists
+    /**
+     * Hide distributed modules from lists.
+     *
+     * @var     bool    $hide_distrib
+     */
     public readonly bool $hide_distrib;
 
     /**

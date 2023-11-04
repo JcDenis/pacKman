@@ -8,8 +8,8 @@ use Dotclear\Core\Process;
 use Dotclear\Plugin\Uninstaller\Uninstaller;
 
 /**
- * @brief   pacKman Uninstaller class.
- * @ingroup pacKman
+ * @brief       pacKman Uninstaller class.
+ * @ingroup     pacKman
  *
  * @author      Jean-Christian Denis
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html

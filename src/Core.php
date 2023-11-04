@@ -12,8 +12,8 @@ use Dotclear\Module\ModuleDefine;
 use Exception;
 
 /**
- * @brief   pacKman main class.
- * @ingroup pacKman
+ * @brief       pacKman main class.
+ * @ingroup     pacKman
  *
  * @author      Jean-Christian Denis
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html

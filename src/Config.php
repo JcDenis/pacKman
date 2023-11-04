@@ -21,8 +21,8 @@ use Dotclear\Helper\Html\Form\{
 use Exception;
 
 /**
- * @brief   pacKman configuration class.
- * @ingroup pacKman
+ * @brief       pacKman configuration class.
+ * @ingroup     pacKman
  *
  * @author      Jean-Christian Denis
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
@@ -111,7 +111,7 @@ class Config extends Process
                 // pack_repository
                 (new Para())->items([
                     (new Label($check_repo . __('Path to repository:')))->for('pack_repository'),
-                    (new Input('pack_repository'))->class('maximal')->size(65)->maxlenght(255)->value($s->pack_repository),
+                    (new Input('pack_repository'))->class('maximal')->size(65)->maxlength(255)->value($s->pack_repository),
                 ]),
                 (new Note())->class('form-note')->text(
                     sprintf(
@@ -131,13 +131,13 @@ class Config extends Process
                 // pack_filename
                 (new Para())->items([
                     (new Label($check_first . __('Name of exported package:')))->for('pack_filename'),
-                    (new Input('pack_filename'))->class('maximal')->size(65)->maxlenght(255)->value($s->pack_filename),
+                    (new Input('pack_filename'))->class('maximal')->size(65)->maxlength(255)->value($s->pack_filename),
                 ]),
                 (new Note())->text(sprintf(__('Preconization: %s'), '%type%-%id%'))->class('form-note'),
                 // secondpack_filename
                 (new Para())->items([
                     (new Label($check_second . __('Name of second exported package:')))->for('secondpack_filename'),
-                    (new Input('secondpack_filename'))->class('maximal')->size(65)->maxlenght(255)->value($s->secondpack_filename),
+                    (new Input('secondpack_filename'))->class('maximal')->size(65)->maxlength(255)->value($s->secondpack_filename),
                 ]),
                 (new Note())->text(sprintf(__('Preconization: %s'), '%type%-%id%-%version%'))->class('form-note'),
                 // pack_overwrite
@@ -150,7 +150,7 @@ class Config extends Process
                 // pack_excludefiles
                 (new Para())->items([
                     (new Label(__('Extra files to exclude from package:')))->for('pack_excludefiles'),
-                    (new Input('pack_excludefiles'))->class('maximal')->size(65)->maxlenght(255)->value($s->pack_excludefiles),
+                    (new Input('pack_excludefiles'))->class('maximal')->size(65)->maxlength(255)->value($s->pack_excludefiles),
                 ]),
                 (new Note())->text(sprintf(__('Preconization: %s'), '*.zip,*.tar,*.tar.gz'))->class('form-note'),
                 // pack_nocomment

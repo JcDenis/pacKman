@@ -25,8 +25,8 @@ use Dotclear\Module\ModuleDefine;
 use Exception;
 
 /**
- * @brief   pacKman utils class.
- * @ingroup pacKman
+ * @brief       pacKman utils class.
+ * @ingroup     pacKman
  *
  * @author      Jean-Christian Denis
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
@@ -98,7 +98,7 @@ class Utils
     /**
      * Get modules list form.
      *
-     * @param   array<int,ModuleDefine>     $modules    The modules
+     * @param   array<int|string, mixed>    $modules    The modules
      * @param   string                      $type       The modules type
      * @param   string                      $title      The list title
      *
@@ -116,6 +116,9 @@ class Utils
         $tbody = [];
         self::sort($modules);
         foreach ($modules as $module) {
+            if (!is_a($module, ModuleDefine::class)) {
+                continue;
+            }
             $tbody[] = (new Para(null, 'tr'))
                 ->class('line')
                 ->items([

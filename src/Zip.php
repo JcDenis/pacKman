@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\pacKman;
 
 /**
- * @brief   pacKman zip class.
- * @ingroup pacKman
+ * @brief       pacKman zip class.
+ * @ingroup     pacKman
  *
  * This class extends dotclear zip class
  * to tweak writeFile method.

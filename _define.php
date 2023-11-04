@@ -17,7 +17,7 @@ $this->registerModule(
     'Packages repository',
     'Manage your Dotclear packages',
     'Jean-Christian Denis',
-    '2023.10.19',
+    '2023.11.04',
     [
         'requires'    => [['core', '2.28']],
         'permissions' => 'My',

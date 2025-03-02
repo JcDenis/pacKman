@@ -4,7 +4,7 @@
 ![Date](https://img.shields.io/badge/date-2023.11.04-c44d58.svg)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/pacKman)
-[![License](https://img.shields.io/badge/license-GPL--2.0-ececec.svg)](https://github.com/JcDenis/pacKman/src/branch/master/LICENSE)
+[![License](https://img.shields.io/badge/license-GPL--2.0-ececec.svg)](https://github.com/JcDenis/pacKman/blob/master/LICENSE)
 
 ## ABOUT
 
@@ -33,7 +33,7 @@ Once it's done you can manage your packages from menu
 
 ## LINKS
 
-* [License](https://github.com/JcDenis/pacKman/src/branch/master/LICENSE)
+* [License](https://github.com/JcDenis/pacKman/blob/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/pacKman/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/pacKman))
 * [Sources & contributions](https://github.com/JcDenis/pacKman)
 * [Issues & security](https://github.com/JcDenis/pacKman/issues)

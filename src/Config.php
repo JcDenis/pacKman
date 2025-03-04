@@ -11,6 +11,7 @@ use Dotclear\Helper\Html\Form\{
     Checkbox,
     Div,
     Fieldset,
+    Img,
     Input,
     Label,
     Legend,
@@ -81,21 +82,13 @@ class Config extends Process
         $s = new Settings();
 
         # -- Check config --
-        $img     = '<img alt="%1$s" title="%1$s" src="images/%2$s" /> ';
-        $img_on  = sprintf($img, __('writable'), 'check-on.png');
-        $img_off = sprintf($img, __('not writable'), 'check-off.png');
+        $img_on  = (new Img('images/check-on.svg'))->class(['mark','mark-check-on'])->title(__('writable'))->render();
+        $img_off = (new Img('images/check-off.svg'))->class(['mark','mark-check-off'])->title(__('not writable'))->render();
 
         $repo         = Utils::getRepositoryDir($s->pack_repository);
         $check_repo   = Utils::isWritable($repo, '_.zip') ? $img_on : $img_off;
         $check_first  = !empty($s->pack_filename)       && Utils::isWritable($repo, $s->pack_filename) ? $img_on : $img_off;
         $check_second = !empty($s->secondpack_filename) && Utils::isWritable($repo, $s->secondpack_filename) ? $img_on : $img_off;
-
-        $is_configured = Utils::isConfigured(
-            $repo,
-            $s->pack_filename,
-            $s->secondpack_filename
-        );
-        $check_conf = $is_configured ? $img_on . sprintf(__('%s is well configured.'), My::name()) : $img_off . sprintf(__('%s is not well configured.'), My::name());
 
         # -- Display form --
         echo

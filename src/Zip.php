@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pacKman;
 
+use Dotclear\Helper\File\Zip\Zip as HelperZip;
+
 /**
  * @brief       pacKman zip class.
  * @ingroup     pacKman
@@ -14,7 +16,7 @@ namespace Dotclear\Plugin\pacKman;
  * @author      Jean-Christian Denis
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class Zip extends \Dotclear\Helper\File\Zip\Zip
+class Zip extends HelperZip
 {
     /**
      * Remove comments from files content.

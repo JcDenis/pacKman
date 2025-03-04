@@ -1,6 +1,8 @@
-$(function() {
-	// checkboxes selection
-	$('.checkboxes-helpers').each(function() {
-		dotclear.checkboxesHelpers(this);
-	});
+/*global $, dotclear */
+'use strict';
+
+dotclear.ready(() => {
+  $('.checkboxes-helpers').each(function () {
+    dotclear.checkboxesHelpers(this);
+  });
 });

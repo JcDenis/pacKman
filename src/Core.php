@@ -51,7 +51,7 @@ class Core
     {
         $res = [];
 
-        if (!is_dir($root) || !is_readable($root)) {
+        if (!is_dir($root) || !is_writable($root)) {
             return $res;
         }
 

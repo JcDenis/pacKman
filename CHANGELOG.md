@@ -1,3 +1,8 @@
+pacKman 2025.09.09
+===========================================================
+* Bump Dotclear from 2.33 to 2.36
+* Use TraitProcess
+
 pacKman 2025.06.01
 ===========================================================
 * Do not scan unwritable modules dir

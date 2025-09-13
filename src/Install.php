@@ -48,8 +48,8 @@ class Install
 
         // Update settings id, ns
         if ($current && version_compare($current, '2022.12.19.1', '<=')) {
-            $record = App::con()->select(
-                'SELECT * FROM ' . App::con()->prefix() . App::blogWorkspace()::NS_TABLE_NAME . ' ' .
+            $record = App::db()->con()->select(
+                'SELECT * FROM ' . App::db()->con()->prefix() . App::blogWorkspace()::NS_TABLE_NAME . ' ' .
                 "WHERE setting_ns = 'pacKman' "
             );
 
@@ -60,7 +60,7 @@ class Install
                     $cur->setField('setting_ns', My::id());
                     $cur->update(
                         "WHERE setting_id = '" . $record->f('setting_id') . "' and setting_ns = 'pacKman' " .
-                        'AND blog_id ' . (null === $record->f('blog_id') ? 'IS NULL ' : ("= '" . App::con()->escapeStr($record->f('blog_id')) . "' "))
+                        'AND blog_id ' . (null === $record->f('blog_id') ? 'IS NULL ' : ("= '" . App::db()->con()->escapeStr($record->f('blog_id')) . "' "))
                     );
                 }
             }

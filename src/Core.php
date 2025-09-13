@@ -55,7 +55,7 @@ class Core
             return $res;
         }
 
-        $files     = Files::scanDir($root);
+        $files     = Files::scandir($root);
         $zip_files = [];
         foreach ($files as $file) {
             if (!preg_match('#(^|/)(.*?)\.zip(/|$)#', $file)) {
@@ -235,7 +235,7 @@ class Core
                 $define->getId(),
                 $define->get('version'),
                 $define->get('author'),
-                time(),
+                (string) time(),
             ],
             $file
         );

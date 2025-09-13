@@ -8,18 +8,16 @@ use Dotclear\App;
 use Dotclear\Helper\Date;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
-use Dotclear\Helper\Html\Form\{
-    Checkbox,
-    Div,
-    Form,
-    Hidden,
-    Label,
-    Link,
-    Para,
-    Select,
-    Submit,
-    Text
-};
+use Dotclear\Helper\Html\Form\Checkbox;
+use Dotclear\Helper\Html\Form\Div;
+use Dotclear\Helper\Html\Form\Form;
+use Dotclear\Helper\Html\Form\Hidden;
+use Dotclear\Helper\Html\Form\Label;
+use Dotclear\Helper\Html\Form\Link;
+use Dotclear\Helper\Html\Form\Para;
+use Dotclear\Helper\Html\Form\Select;
+use Dotclear\Helper\Html\Form\Submit;
+use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Module\ModuleDefine;
 use Exception;
@@ -98,7 +96,7 @@ class Utils
     /**
      * Get modules list form.
      *
-     * @param   array<int|string, mixed>    $modules    The modules
+     * @param   array<int, ModuleDefine>    $modules    The modules
      * @param   string                      $type       The modules type
      * @param   string                      $title      The list title
      *
@@ -116,9 +114,6 @@ class Utils
         $tbody = [];
         self::sort($modules);
         foreach ($modules as $module) {
-            if (!is_a($module, ModuleDefine::class)) {
-                continue;
-            }
             $tbody[] = (new Para(null, 'tr'))
                 ->class('line')
                 ->items([

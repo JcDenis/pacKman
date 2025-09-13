@@ -6,15 +6,11 @@ namespace Dotclear\Plugin\pacKman;
 
 use Dotclear\App;
 use Dotclear\Helper\Process\TraitProcess;
-use Dotclear\Core\Backend\{
-    Notices,
-    Page
-};
+use Dotclear\Core\Backend\Notices;
+use Dotclear\Core\Backend\Page;
 use Dotclear\Helper\File\Files;
-use Dotclear\Helper\Html\Form\{
-    Div,
-    Text
-};
+use Dotclear\Helper\Html\Form\Div;
+use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Network\Http;
 use Exception;
 
@@ -61,11 +57,11 @@ class Manage
         # Actions
         try {
             # Download
-            if (isset($_REQUEST['package']) && empty($type)) {
+            if (isset($_REQUEST['package']) && !empty($type)) {
                 $modules = [];
-                if ($type == 'plugins') {
+                if ($type === 'plugins') {
                     $modules = Core::getPackages(Utils::getPluginsPath());
-                } elseif ($type == 'themes') {
+                } elseif ($type === 'themes') {
                     $modules = Core::getPackages(Utils::getThemesPath());
                 } else {
                     $modules = array_merge(
@@ -75,7 +71,7 @@ class Manage
                 }
 
                 foreach ($modules as $module) {
-                    if (preg_match('/' . preg_quote($_REQUEST['package']) . '$/', $module->get('root'))
+                    if (preg_match('/' . preg_quote($_REQUEST['package'], '/') . '$/', $module->get('root'))
                         && is_file($module->get('root')) && is_readable($module->get('root'))
                     ) {
                         # --BEHAVIOR-- packmanBeforeDownloadPackage
@@ -307,7 +303,7 @@ class Manage
             __('Plugins') => '',
             My::name()    => '',
         ]) .
-        Notices::GetNotices();
+        Notices::getNotices();
 
         if (App::error()->flag() || !$is_configured || !$is_plugins_configured || !$is_themes_configured) {
             echo
@@ -320,13 +316,13 @@ class Manage
                 ->render();
         } else {
             Utils::modules(
-                App::plugins()->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),
+                App::plugins()->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []), // @phpstan-ignore-line
                 'plugins',
                 __('Installed plugins')
             );
 
             Utils::modules(
-                App::themes()->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []),
+                App::themes()->getDefines((new Settings())->hide_distrib ? ['distributed' => false] : []), // @phpstan-ignore-line
                 'themes',
                 __('Installed themes')
             );

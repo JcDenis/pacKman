@@ -7,18 +7,16 @@ namespace Dotclear\Plugin\pacKman;
 use Dotclear\App;
 use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Core\Backend\Notices;
-use Dotclear\Helper\Html\Form\{
-    Checkbox,
-    Div,
-    Fieldset,
-    Img,
-    Input,
-    Label,
-    Legend,
-    Note,
-    Para,
-    Text
-};
+use Dotclear\Helper\Html\Form\Checkbox;
+use Dotclear\Helper\Html\Form\Div;
+use Dotclear\Helper\Html\Form\Fieldset;
+use Dotclear\Helper\Html\Form\Img;
+use Dotclear\Helper\Html\Form\Input;
+use Dotclear\Helper\Html\Form\Label;
+use Dotclear\Helper\Html\Form\Legend;
+use Dotclear\Helper\Html\Form\Note;
+use Dotclear\Helper\Html\Form\Para;
+use Dotclear\Helper\Html\Form\Text;
 use Exception;
 
 /**

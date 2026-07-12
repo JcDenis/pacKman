@@ -162,6 +162,7 @@ class Core
     {
         // check define
         if (!$define->isDefined()
+            || !is_string($define->get('root'))
             || empty($define->get('root'))
             || !is_dir($define->get('root'))
         ) {
@@ -231,10 +232,10 @@ class Core
             ],
             [
                 '/',
-                $define->get('type'),
+                is_string($define->get('type')) ? $define->get('type') : '',
                 $define->getId(),
-                $define->get('version'),
-                $define->get('author'),
+                is_string($define->get('version')) ? $define->get('version') : '',
+                is_string($define->get('author')) ? $define->get('author') : '',
                 (string) time(),
             ],
             $file

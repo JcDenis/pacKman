@@ -90,6 +90,10 @@ class Zip extends HelperZip
         pack('V', $c_len) .       # compressed filesize
         pack('V', $unc_len);     # uncompressed filesize
 
+        if (is_null($this->fp)) {
+            return;
+        }
+
         fwrite($this->fp, $data_desc);
         unset($zdata);
 

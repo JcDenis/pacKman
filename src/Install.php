@@ -54,13 +54,15 @@ class Install
             );
 
             while ($record->fetch()) {
-                if (preg_match('/^packman_(.*?)$/', $record->f('setting_id'), $match)) {
+                $sid  = is_string($record->f('setting_id')) ? $record->f('setting_id') : '';
+                $blog = is_string($record->f('blog_id')) ? $record->f('blog_id') : null;
+                if (preg_match('/^packman_(.*?)$/', $sid, $match)) {
                     $cur = App::blogWorkspace()->openBlogWorkspaceCursor();
                     $cur->setField('setting_id', $match[1]);
                     $cur->setField('setting_ns', My::id());
                     $cur->update(
-                        "WHERE setting_id = '" . $record->f('setting_id') . "' and setting_ns = 'pacKman' " .
-                        'AND blog_id ' . (null === $record->f('blog_id') ? 'IS NULL ' : ("= '" . App::db()->con()->escapeStr($record->f('blog_id')) . "' "))
+                        "WHERE setting_id = '" . $sid . "' and setting_ns = 'pacKman' " .
+                        'AND blog_id ' . (null === $blog ? 'IS NULL ' : ("= '" . App::db()->con()->escapeStr($blog) . "' "))
                     );
                 }
             }

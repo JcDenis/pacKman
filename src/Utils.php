@@ -114,23 +114,26 @@ class Utils
         $tbody = [];
         self::sort($modules);
         foreach ($modules as $module) {
+            $root = is_string($module->get('root')) ? $module->get('root') : '';
+            $vers = is_string($module->get('version')) ? $module->get('version') : '';
+            $name = is_string($module->get('name')) ? $module->get('name') : '';
             $tbody[] = (new Para(null, 'tr'))
                 ->class('line')
                 ->items([
                     (new Para(null, 'td'))
                         ->class('nowrap')
                         ->items([
-                            (new Checkbox(['modules[' . Html::escapeHTML($module->get('root')) . ']', 'modules_' . $type . $i], false))
+                            (new Checkbox(['modules[' . Html::escapeHTML($root) . ']', 'modules_' . $type . $i], false))
                                 ->value(Html::escapeHTML($module->getId())),
                             (new Label(Html::escapeHTML($module->getId()), Label::OUTSIDE_LABEL_AFTER))
                                 ->class('classic')
                                 ->for('modules_' . $type . $i),
                         ]),
-                    (new Text('td', Html::escapeHTML($module->get('version'))))
+                    (new Text('td', Html::escapeHTML($vers)))
                         ->class('nowrap count'),
-                    (new Text('td', Html::escapeHTML($module->get('name'))))
+                    (new Text('td', Html::escapeHTML($name)))
                         ->class('nowrap'),
-                    (new Text('td', dirname((string) Path::real($module->get('root'), false))))
+                    (new Text('td', dirname((string) Path::real($root, false))))
                         ->class('nowrap maximal'),
                 ]);
 
@@ -173,7 +176,7 @@ class Utils
                                 ... My::hiddenFields([
                                     'type'   => $type,
                                     'action' => 'packup',
-                                    'redir'  => Html::escapeHTML($_REQUEST['redir'] ?? ''),
+                                    'redir'  => Html::escapeHTML(isset($_REQUEST['redir']) && is_string($_REQUEST['redir']) ? $_REQUEST['redir'] : ''),
                                 ]),
                             ]),
                     ]),
@@ -231,8 +234,9 @@ class Utils
         $versions = [];
         if (!empty($_REQUEST['purge']) && str_contains($type, 'repository')) {
             foreach ($modules as $module) {
-                if (!isset($versions[$module->getId()]) || version_compare($module->get('version'), $versions[$module->getId()], '>')) {
-                    $versions[$module->getId()] = $module->get('version');
+                $vers = is_string($module->get('version')) ? $module->get('version') : '';
+                if (!isset($versions[$module->getId()]) || version_compare($vers, $versions[$module->getId()], '>')) {
+                    $versions[$module->getId()] = $vers;
                 }
             }
         }
@@ -241,12 +245,15 @@ class Utils
         $i   = 1;
         self::sort($modules);
         foreach ($modules as $module) {
-            if (isset($dup[$module->get('root')])) {
+            $root = is_string($module->get('root')) ? $module->get('root') : '';
+            $vers = is_string($module->get('version')) ? $module->get('version') : '';
+            $name = is_string($module->get('name')) ? $module->get('name') : '';
+            if (isset($dup[$root])) {
                 //continue;
             }
-            $checked = isset($versions[$module->getId()]) && version_compare($versions[$module->getId()], $module->get('version'), '>');
+            $checked = isset($versions[$module->getId()]) && version_compare($versions[$module->getId()], $vers, '>');
 
-            $dup[$module->get('root')] = 1;
+            $dup[$root] = 1;
 
             $tbody[] = (new Para(null, 'tr'))
                 ->class('line')
@@ -254,31 +261,31 @@ class Utils
                     (new Para(null, 'td'))
                         ->class('nowrap')
                         ->items([
-                            (new Checkbox(['modules[' . Html::escapeHTML($module->get('root')) . ']', 'r_modules_' . $type . $i], $checked))
+                            (new Checkbox(['modules[' . Html::escapeHTML($root) . ']', 'r_modules_' . $type . $i], $checked))
                                 ->value(Html::escapeHTML($module->getId())),
                             (new Label(Html::escapeHTML($module->getId()), Label::OUTSIDE_LABEL_AFTER))
                                 ->class('classic')
                                 ->for('r_modules_' . $type . $i)
-                                ->title(Html::escapeHTML($module->get('root'))),
+                                ->title(Html::escapeHTML($root)),
                         ]),
-                    (new Text('td', Html::escapeHTML($module->get('version'))))
+                    (new Text('td', Html::escapeHTML($vers)))
                         ->class('nowrap count'),
-                    (new Text('td', Html::escapeHTML($module->get('name'))))
+                    (new Text('td', Html::escapeHTML($name)))
                         ->class('nowrap'),
                     (new Para(null, 'td'))
                         ->class('nowrap')
                         ->items([
-                            (new Text('a', Html::escapeHTML(basename($module->get('root')))))
+                            (new Text('a', Html::escapeHTML(basename($root))))
                                 ->class('packman-download')
                                 ->extra(
                                     'href="' . App::backend()->url()->get('admin.plugin.' . My::id(), [
-                                        'package' => basename($module->get('root')),
+                                        'package' => basename($root),
                                         'repo'    => $type,
                                     ]) . '"'
                                 )
                                 ->title(__('Download')),
                         ]),
-                    (new Text('td', Html::escapeHTML(Date::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($module->get('root'))))))
+                    (new Text('td', Html::escapeHTML(Date::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($root)))))
                         ->class('nowrap maximal'),
                 ]);
 
@@ -345,6 +352,6 @@ class Utils
     protected static function sort(array &$modules): void
     {
         uasort($modules, fn ($a, $b) => $a->get('version') <=> $b->get('version'));
-        uasort($modules, fn ($a, $b) => strtolower($a->get('id')) <=> strtolower($b->get('id')));
+        uasort($modules, fn ($a, $b) => strtolower(is_string($a->get('id')) ? $a->get('id') : '') <=> strtolower(is_string($b->get('id')) ? $b->get('id') : ''));
     }
 }

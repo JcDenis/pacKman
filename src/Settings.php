@@ -86,11 +86,11 @@ class Settings
         $this->pack_nocomment      = (bool) ($s->get('pack_nocomment') ?? false);
         $this->pack_fixnewline     = (bool) ($s->get('pack_fixnewline') ?? false);
         $this->pack_overwrite      = (bool) ($s->get('pack_overwrite') ?? false);
-        $this->pack_filename       = (string) ($s->get('pack_filename') ?? '%type%-%id%');
-        $this->secondpack_filename = (string) ($s->get('secondpack_filename') ?? '%type%-%id%-%version%');
-        $this->pack_repository     = (string) ($s->get('pack_repository') ?? '');
+        $this->pack_filename       = is_string($s->get('pack_filename')) ? $s->get('pack_filename') : '%type%-%id%';
+        $this->secondpack_filename = is_string($s->get('secondpack_filename')) ? $s->get('secondpack_filename') : '%type%-%id%-%version%';
+        $this->pack_repository     = is_string($s->get('pack_repository')) ? $s->get('pack_repository') : '';
         $this->pack_typedrepo      = (bool) ($s->get('pack_typedrepo') ?? false);
-        $this->pack_excludefiles   = (string) ($s->get('pack_excludefiles') ?? '*.zip,*.tar,*.tar.gz,.directory,.hg');
+        $this->pack_excludefiles   = is_string($s->get('pack_excludefiles')) ? $s->get('pack_excludefiles') : '*.zip,*.tar,*.tar.gz,.directory,.hg';
         $this->hide_distrib        = (bool) ($s->get('hide_distrib') ?? false);
     }
 
@@ -103,7 +103,7 @@ class Settings
      */
     public function getSetting(string $key): null|bool|string
     {
-        return $this->{$key} ?? null;
+        return is_bool($this->{$key}) || is_string($this->{$key}) ? $this->{$key} : null;
     }
 
     /**
@@ -129,10 +129,10 @@ class Settings
     /**
      * List defined settings keys.
      *
-     * @return  array<string,bool|string>   The settings keys
+     * @return  array<string, mixed>   The settings keys
      */
     public function listSettings(): array
     {
-        return get_object_vars($this);
+        return array_filter(get_object_vars($this), fn (mixed $k): bool => is_string($k), ARRAY_FILTER_USE_KEY);
     }
 }

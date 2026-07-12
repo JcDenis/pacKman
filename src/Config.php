@@ -63,7 +63,7 @@ class Config
             App::backend()->url()->redirect('admin.plugins', [
                 'module' => My::id(),
                 'conf'   => '1',
-                'redir'  => App::backend()->__get('list')->getRedir(),
+                'redir'  => App::backend()->modulesList()->getRedir(),
             ]);
         } catch (Exception $e) {
             App::error()->add($e->getMessage());

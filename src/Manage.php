@@ -40,10 +40,12 @@ class Manage
         $s = new Settings();
 
         # Queries
-        $action = $_POST['action'] ?? '';
-        $type   = isset($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository', 'repository-themes', 'repository-plugins']) ? $_POST['type'] : '';
-        $repo   = $s->pack_typedrepo ? (empty($_REQUEST['repo']) ? $type : (str_contains($_REQUEST['repo'], 'themes') ? 'themes' : 'plugins')) : null;
-        $dir    = Utils::getRepositoryDir($s->pack_repository, $repo);
+        $modules = isset($_POST['modules']) && is_array($_POST['modules']) ? $_POST['modules'] : [];
+        $redir   = isset($_POST['redir']) && is_string($_POST['redir']) ? $_POST['redir'] : '';
+        $action  = isset($_POST['action']) && is_string($_POST['action']) ? $_POST['action'] : '';
+        $type    = isset($_POST['type']) && is_string($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository', 'repository-themes', 'repository-plugins']) ? $_POST['type'] : '';
+        $repo    = $s->pack_typedrepo ? (empty($_REQUEST['repo']) || !is_string($_REQUEST['repo']) ? $type : (str_contains($_REQUEST['repo'], 'themes') ? 'themes' : 'plugins')) : null;
+        $dir     = Utils::getRepositoryDir($s->pack_repository, $repo);
 
         # Modules
         if (App::themes()->isEmpty()) {
@@ -52,7 +54,7 @@ class Manage
 
         # Rights
         $is_writable = Utils::isWritable($dir, $s->pack_filename);
-        $is_editable = !empty($type) && !empty($_POST['modules']) && is_array($_POST['modules']);
+        $is_editable = !empty($type) && !empty($modules);
 
         # Actions
         try {
@@ -71,16 +73,18 @@ class Manage
                 }
 
                 foreach ($modules as $module) {
-                    if (preg_match('/' . preg_quote($_REQUEST['package'], '/') . '$/', $module->get('root'))
-                        && is_file($module->get('root')) && is_readable($module->get('root'))
+                    $root = is_string($module->get('root')) ? $module->get('root') : '';
+                    $pkg  = is_string($_REQUEST['package']) ? $_REQUEST['package'] : '';
+                    if (preg_match('/' . preg_quote($pkg, '/') . '$/', $root)
+                        && is_file($root) && is_readable($root)
                     ) {
                         # --BEHAVIOR-- packmanBeforeDownloadPackage
                         App::behavior()->callBehavior('packmanBeforeDownloadPackage', $module->dump(), $type);
 
                         header('Content-Type: application/zip');
-                        header('Content-Length: ' . filesize($module->get('root')));
-                        header('Content-Disposition: attachment; filename="' . basename($module->get('root')) . '"');
-                        readfile($module->get('root'));
+                        header('Content-Length: ' . filesize($root));
+                        header('Content-Disposition: attachment; filename="' . basename($root) . '"');
+                        readfile($root);
 
                         # --BEHAVIOR-- packmanAfterDownloadPackage
                         App::behavior()->callBehavior('packmanAfterDownloadPackage', $module->dump(), $type);
@@ -98,15 +102,18 @@ class Manage
                     __('No modules selected.')
                 );
 
-                if (!empty($_POST['redir'])) {
-                    Http::redirect($_POST['redir']);
+                if (!empty($redir)) {
+                    Http::redirect($redir);
                 } else {
                     My::redirect([], '#packman-' . $type);
                 }
 
                 # Pack
             } elseif ($action == 'packup') {
-                foreach ($_POST['modules'] as $root => $id) {
+                foreach ($modules as $root => $id) {
+                    if (!is_string($root) || !is_string($id)) {
+                        continue;
+                    }
                     if ($type == 'themes') {
                         if (!App::themes()->getDefine($id)->isDefined()) {
                             throw new Exception('No such module');
@@ -142,8 +149,8 @@ class Manage
                     __('Package successfully created.')
                 );
 
-                if (!empty($_POST['redir'])) {
-                    Http::redirect($_POST['redir']);
+                if (!empty($redir)) {
+                    Http::redirect($redir);
                 } else {
                     My::redirect([], '#packman-' . $type);
                 }
@@ -151,7 +158,10 @@ class Manage
                 # Delete
             } elseif ($action == 'delete') {
                 $del_success = false;
-                foreach ($_POST['modules'] as $root => $id) {
+                foreach ($modules as $root => $id) {
+                    if (!is_string($root) || !is_string($id)) {
+                        continue;
+                    }
                     if (!file_exists($root) || !Files::isDeletable($root)) {
                         Notices::addWarningNotice(sprintf(__('Undeletable file "%s"', $root)));
                     } else {
@@ -167,15 +177,18 @@ class Manage
                     );
                 }
 
-                if (!empty($_POST['redir'])) {
-                    Http::redirect($_POST['redir']);
+                if (!empty($redir)) {
+                    Http::redirect($redir);
                 } else {
                     My::redirect([], '#packman-repository-' . $type);
                 }
 
                 # Install
             } elseif ($action == 'install') {
-                foreach ($_POST['modules'] as $root => $id) {
+                foreach ($modules as $root => $id) {
+                    if (!is_string($root) || !is_string($id)) {
+                        continue;
+                    }
                     # --BEHAVIOR-- packmanBeforeInstallPackage
                     App::behavior()->callBehavior('packmanBeforeInstallPackage', $type, $id, $root);
 
@@ -190,8 +203,8 @@ class Manage
                     __('Package successfully installed.')
                 );
 
-                if (!empty($_POST['redir'])) {
-                    Http::redirect($_POST['redir']);
+                if (!empty($redir)) {
+                    Http::redirect($redir);
                 } else {
                     My::redirect([], '#packman-repository-' . $type);
                 }
@@ -205,7 +218,10 @@ class Manage
                     $dest = Utils::getThemesPath();
                 }
 
-                foreach ($_POST['modules'] as $root => $id) {
+                foreach ($modules as $root => $id) {
+                    if (!is_string($root) || !is_string($id)) {
+                        continue;
+                    }
                     file_put_contents(
                         $dest . DIRECTORY_SEPARATOR . basename($root),
                         file_get_contents($root)
@@ -216,8 +232,8 @@ class Manage
                     __('Package successfully copied.')
                 );
 
-                if (!empty($_POST['redir'])) {
-                    Http::redirect($_POST['redir']);
+                if (!empty($redir)) {
+                    Http::redirect($redir);
                 } else {
                     My::redirect([], '#packman-repository-' . $type);
                 }
@@ -231,7 +247,10 @@ class Manage
                     $dest = Utils::getThemesPath();
                 }
 
-                foreach ($_POST['modules'] as $root => $id) {
+                foreach ($modules as $root => $id) {
+                    if (!is_string($root) || !is_string($id)) {
+                        continue;
+                    }
                     file_put_contents(
                         $dest . DIRECTORY_SEPARATOR . basename($root),
                         file_get_contents($root)
@@ -243,8 +262,8 @@ class Manage
                     __('Package successfully moved.')
                 );
 
-                if (!empty($_POST['redir'])) {
-                    Http::redirect($_POST['redir']);
+                if (!empty($redir)) {
+                    Http::redirect($redir);
                 } else {
                     My::redirect([], '#packman-repository-' . $type);
                 }

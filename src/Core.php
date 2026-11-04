@@ -21,6 +21,15 @@ use Exception;
 class Core
 {
     /**
+     * Legacy module init file name.
+     *
+     * Some old modules may still have one.
+     *
+     * @var     string  MODULE_FILE_INIT
+     */
+    private const MODULE_FILE_INIT = '_init.php';
+
+    /**
      * Quote excluded list.
      *
      * @param   array<int,string>   $exclude    The list
@@ -84,12 +93,12 @@ class Core
                 $target = dirname($zip_file);
                 $path   = $target . DIRECTORY_SEPARATOR . $zip_root_dir;
                 $define = $zip_root_dir . '/' . App::plugins()::MODULE_FILE_DEFINE;
-                $init   = $zip_root_dir . '/' . App::plugins()::MODULE_FILE_INIT;
+                $init   = $zip_root_dir . '/' . self::MODULE_FILE_INIT;
             } else {
                 $target = dirname($zip_file) . DIRECTORY_SEPARATOR . preg_replace('/\.([^.]+)$/', '', basename($zip_file));
                 $path   = $target;
                 $define = App::plugins()::MODULE_FILE_DEFINE;
-                $init   = App::plugins()::MODULE_FILE_INIT;
+                $init   = self::MODULE_FILE_INIT;
             }
 
             if ($zip->isEmpty()) {

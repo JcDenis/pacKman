@@ -44,5 +44,6 @@ Once it's done you can manage your packages from menu
 * Jean-Christian Denis (author)
 * Philippe aka Dissitou
 * franck-paul
+* Claude (AI assistant by Anthropic)
 
 You are welcome to contribute to this code.

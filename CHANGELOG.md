@@ -1,6 +1,5 @@
 pacKman 2026.11.15
 ===========================================================
-* Add Claude to contributors
 * [fix] Repository: download, duplicated packages, dates time zone, delete action, duplicated errors
 * [new] Confirm before deleting or moving packages
 * [fix] Configuration: repository preconization

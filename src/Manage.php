@@ -43,7 +43,9 @@ class Manage
         $modules = isset($_POST['modules']) && is_array($_POST['modules']) ? $_POST['modules'] : [];
         $redir   = isset($_POST['redir']) && is_string($_POST['redir']) ? $_POST['redir'] : '';
         $action  = isset($_POST['action']) && is_string($_POST['action']) ? $_POST['action'] : '';
-        $type    = isset($_POST['type']) && is_string($_POST['type']) && in_array($_POST['type'], ['plugins', 'themes', 'repository', 'repository-themes', 'repository-plugins']) ? $_POST['type'] : '';
+        // Download link sends its type as "repo" in query string
+        $type    = isset($_REQUEST['package']) ? ($_REQUEST['repo'] ?? '') : ($_POST['type'] ?? '');
+        $type    = is_string($type) && in_array($type, ['plugins', 'themes', 'repository', 'repository-themes', 'repository-plugins']) ? $type : '';
         $repo    = $s->pack_typedrepo ? (empty($_REQUEST['repo']) || !is_string($_REQUEST['repo']) ? $type : (str_contains($_REQUEST['repo'], 'themes') ? 'themes' : 'plugins')) : null;
         $dir     = Utils::getRepositoryDir($s->pack_repository, $repo);
 
@@ -66,10 +68,7 @@ class Manage
                 } elseif ($type === 'themes') {
                     $modules = Core::getPackages(Utils::getThemesPath());
                 } else {
-                    $modules = array_merge(
-                        Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->pack_filename)),
-                        Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->secondpack_filename))
-                    );
+                    $modules = Utils::getRepositoryPackages($dir, $s);
                 }
 
                 foreach ($modules as $module) {
@@ -162,13 +161,11 @@ class Manage
                     if (!is_string($root) || !is_string($id)) {
                         continue;
                     }
-                    if (!file_exists($root) || !Files::isDeletable($root)) {
-                        Notices::addWarningNotice(sprintf(__('Undeletable file "%s"', $root)));
+                    if (!file_exists($root) || !Files::isDeletable($root) || !unlink($root)) {
+                        Notices::addWarningNotice(sprintf(__('Undeletable file "%s"'), basename($root)));
                     } else {
                         $del_success = true;
                     }
-
-                    unlink($root);
                 }
 
                 if ($del_success) {
@@ -311,6 +308,10 @@ class Manage
         Page::openModule(
             My::name(),
             Page::jsPageTabs() .
+            Page::jsJson('packman', [
+                'confirm_delete' => __('Are you sure you want to delete selected packages?'),
+                'confirm_move'   => __('Are you sure you want to move selected packages?'),
+            ]) .
             My::jsLoad('backend') .
 
             # --BEHAVIOR-- packmanAdminHeader
@@ -360,27 +361,18 @@ class Manage
 
             if ($s->pack_typedrepo) {
                 Utils::repository(
-                    array_merge(
-                        Core::getPackages(dirname($dir_themes . DIRECTORY_SEPARATOR . $s->pack_filename)),
-                        Core::getPackages(dirname($dir_themes . DIRECTORY_SEPARATOR . $s->secondpack_filename))
-                    ),
+                    Utils::getRepositoryPackages($dir_themes, $s),
                     'repository-themes',
                     __('Themes packages repository')
                 );
                 Utils::repository(
-                    array_merge(
-                        Core::getPackages(dirname($dir_plugins . DIRECTORY_SEPARATOR . $s->pack_filename)),
-                        Core::getPackages(dirname($dir_plugins . DIRECTORY_SEPARATOR . $s->secondpack_filename))
-                    ),
+                    Utils::getRepositoryPackages($dir_plugins, $s),
                     'repository-plugins',
                     __('Plugins packages repository')
                 );
             } else {
                 Utils::repository(
-                    array_merge(
-                        Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->pack_filename)),
-                        Core::getPackages(dirname($dir . DIRECTORY_SEPARATOR . $s->secondpack_filename))
-                    ),
+                    Utils::getRepositoryPackages($dir, $s),
                     'repository',
                     __('Packages repository')
                 );

@@ -48,30 +48,60 @@ class Utils
     {
         sleep(1);
         if (!is_writable($repo)) {
-            App::error()->add(
+            self::addError(
                 __('Path to repository is not writable.')
             );
         }
 
         if (empty($file_a)) {
-            App::error()->add(
+            self::addError(
                 __('You must specify the name of package to export.')
             );
         }
 
         if (!is_writable(dirname($repo . DIRECTORY_SEPARATOR . $file_a))) {
-            App::error()->add(
+            self::addError(
                 __('Path to first export package is not writable.')
             );
         }
 
         if (!empty($file_b) && !is_writable(dirname($repo . DIRECTORY_SEPARATOR . $file_b))) {
-            App::error()->add(
+            self::addError(
                 __('Path to second export package is not writable.')
             );
         }
 
         return !App::error()->flag();
+    }
+
+    /**
+     * Get packages from repository folders of both packages names, without duplicates.
+     *
+     * @return  array<int,ModuleDefine>     The packages
+     */
+    public static function getRepositoryPackages(string $dir, Settings $s): array
+    {
+        $dirs = [dirname($dir . DIRECTORY_SEPARATOR . $s->pack_filename)];
+        if ($s->secondpack_filename !== '') {
+            $dirs[] = dirname($dir . DIRECTORY_SEPARATOR . $s->secondpack_filename);
+        }
+
+        $modules = [];
+        foreach (array_unique($dirs) as $path) {
+            $modules = array_merge($modules, Core::getPackages($path));
+        }
+
+        return $modules;
+    }
+
+    /**
+     * Add an error only once.
+     */
+    private static function addError(string $msg): void
+    {
+        if (!in_array($msg, App::error()->dump(), true)) {
+            App::error()->add($msg);
+        }
     }
 
     public static function isWritable(string $path, string $file): bool
@@ -159,7 +189,7 @@ class Utils
                                             ->class('nowrap'),
                                         (new Text('th', Html::escapeHTML(__('Version'))))
                                             ->class('nowrap'),
-                                        (new Text('th', Html::escapeHTML(__('Name'))))
+                                        (new Text('th', Html::escapeHTML(__('Module name'))))
                                             ->class('nowrap'),
                                         (new Text('th', Html::escapeHTML(__('Root'))))
                                             ->class('nowrap'),
@@ -227,7 +257,7 @@ class Utils
             $helpers_addon[] = (new Link())
                 ->class('button')
                 ->href(App::backend()->url()->get('admin.plugin.' . My::id(), ['purge' => 1]) . '#packman-repository-' . $type)
-                ->text(__('Select non lastest versions'))
+                ->text(__('Select non latest versions'))
             ;
         }
 
@@ -285,7 +315,7 @@ class Utils
                                 )
                                 ->title(__('Download')),
                         ]),
-                    (new Text('td', Html::escapeHTML(Date::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($root)))))
+                    (new Text('td', Html::escapeHTML(Date::str(__('%Y-%m-%d %H:%M'), (int) @filemtime($root), is_string($tz = App::auth()->getInfo('user_tz')) ? $tz : null))))
                         ->class('nowrap maximal'),
                 ]);
 
@@ -311,7 +341,7 @@ class Utils
                                             ->class('nowrap'),
                                         (new Text('th', Html::escapeHTML(__('Version'))))
                                             ->class('nowrap'),
-                                        (new Text('th', Html::escapeHTML(__('Name'))))
+                                        (new Text('th', Html::escapeHTML(__('Module name'))))
                                             ->class('nowrap'),
                                         (new Text('th', Html::escapeHTML(__('File'))))
                                             ->class('nowrap'),

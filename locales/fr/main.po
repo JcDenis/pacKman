@@ -56,7 +56,7 @@ msgid "Remove comments from files"
 msgstr "Retirer les commentaires des fichiers"
 
 msgid "Fix newline style from files content"
-msgstr "Corriger les retour chariot du contenu des fichiers"
+msgstr "Corriger les retours chariot du contenu des fichiers"
 
 msgid "Failed to get module info"
 msgstr "Impossible de retrouver les informations du module"
@@ -122,13 +122,13 @@ msgid "install"
 msgstr "installer"
 
 msgid "copy to %s directory"
-msgstr "copier dans le répertoire des %s"
+msgstr "copier dans le dossier « %s »"
 
 msgid "plugins"
 msgstr "extensions"
 
 msgid "move to %s directory"
-msgstr "déplacer dans le repertoire des %s"
+msgstr "déplacer dans le dossier « %s »"
 
 msgid "themes"
 msgstr "thèmes"
@@ -136,7 +136,7 @@ msgstr "thèmes"
 msgid "repository"
 msgstr "dépôt"
 
-msgid "Select non lastest versions"
+msgid "Select non latest versions"
 msgstr "Sélectionner les versions anciennes"
 
 msgid "File"
@@ -145,3 +145,14 @@ msgstr "Fichier"
 msgid "Selected modules action:"
 msgstr "Action sur les modules sélectionnés :"
 
+msgid "delete"
+msgstr "supprimer"
+
+msgid "Module name"
+msgstr "Nom du module"
+
+msgid "Are you sure you want to delete selected packages?"
+msgstr "Êtes-vous sûr de vouloir supprimer les paquetages sélectionnés ?"
+
+msgid "Are you sure you want to move selected packages?"
+msgstr "Êtes-vous sûr de vouloir déplacer les paquetages sélectionnés ?"

@@ -382,7 +382,7 @@ class Manage
         # --BEHAVIOR-- packmanAdminTabs
         App::behavior()->callBehavior('packmanAdminTabs');
 
-        Page::helpBlock('pacKman');
+        Page::helpBlock(My::id() . '-index');
         Page::closeModule();
     }
 }

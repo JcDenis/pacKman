@@ -12,6 +12,8 @@ _pacKman_ is a plugin for the open-source web publishing software called [Dotcle
 
 > Create and manage packages of themes and plugins from Dotclear administration pages.
 
+A [user guide in French](https://github.com/JcDenis/pacKman/blob/master/docs/fr/utilisation.md) is available.
+
 ## REQUIREMENTS
 
 * Dotclear 2.39
@@ -33,6 +35,7 @@ Once it's done you can manage your packages from menu
 
 ## LINKS
 
+* [User guide (in French)](https://github.com/JcDenis/pacKman/blob/master/docs/fr/utilisation.md)
 * [License](https://github.com/JcDenis/pacKman/blob/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/pacKman/releases) (or on [Repository](https://dotclear.org/plugin/detail/pacKman))
 * [Sources & contributions](https://github.com/JcDenis/pacKman)

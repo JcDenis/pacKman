@@ -1,3 +1,13 @@
+pacKman 2026.11.15
+===========================================================
+* Add Claude to contributors
+* [fix] Repository: download, duplicated packages, dates time zone, delete action, duplicated errors
+* [new] Confirm before deleting or moving packages
+* [fix] Configuration: repository preconization
+* [lang] Fix typos and missing translations
+* [docs] Add a user guide in French, with screenshots
+* [docs] Add the admin help in English and French
+
 pacKman 2026.11.05
 ===========================================================
 * Bump Dotclear from 2.36 to 2.39

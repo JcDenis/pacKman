@@ -31,14 +31,14 @@ msgstr "Répertoire public du blog"
 msgid "Leave it empty to use Dotclear VAR directory"
 msgstr "Laisser vide pour utiliser le répertoire VAR de Dotclear"
 
-msgid "Seperate themes and plugins"
+msgid "Separate themes and plugins"
 msgstr "Séparer les thèmes des plugins"
 
 msgid "This creates one repository sub folder for themes and one for plugins"
 msgstr "Ceci créée un sous-dossier pour les thèmes et un pour les plugins"
 
-msgid "Files"
-msgstr "Fichiers"
+msgid "Package files"
+msgstr "Fichiers des paquets"
 
 msgid "Name of exported package:"
 msgstr "Nom du paquetage exporté :"

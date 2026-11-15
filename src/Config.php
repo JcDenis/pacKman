@@ -116,11 +116,11 @@ class Config
                 // pack_overwrite
                 (new Para())->items([
                     (new Checkbox('pack_typedrepo', $s->pack_typedrepo))->value(1),
-                    (new Label(__('Seperate themes and plugins'), Label::OUTSIDE_LABEL_AFTER))->for('pack_typedrepo')->class('classic'),
+                    (new Label(__('Separate themes and plugins'), Label::OUTSIDE_LABEL_AFTER))->for('pack_typedrepo')->class('classic'),
                 ]),
                 (new Note())->class('form-note')->text(__('This creates one repository sub folder for themes and one for plugins')),
             ]),
-            (new Fieldset())->class('fieldset')->legend((new Legend(__('Files'))))->fields([
+            (new Fieldset())->class('fieldset')->legend((new Legend(__('Package files'))))->fields([
                 // pack_filename
                 (new Para())->items([
                     (new Label($check_first . __('Name of exported package:')))->for('pack_filename'),

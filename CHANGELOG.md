@@ -1,3 +1,7 @@
+pacKman 2026.11.15.1 - 2026.11.15
+===========================================================
+* [lang] Do not override core translations
+
 pacKman 2026.11.15
 ===========================================================
 * [fix] Repository: download, duplicated packages, dates time zone, delete action, duplicated errors
